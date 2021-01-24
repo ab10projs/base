@@ -30,6 +30,31 @@ this will make the changes appear in local repository
 git status
 git add -A   This will add all files (new and modified) to index
 git commit -a -m "commited two files in one go"
+10) To see log 
+git log
+
+11) branching
+brances are of two types (local and remote)
+run   git branch firstbranch   this will make a new branch which contains all files of master, as we were in master when command ran
+12) To switch to new branch run   git checkout firstbranch
+run ls to see all files and folders in new branch
+13 Now we are in firstbranch and we will add a new file.
+run   git add FileAfterFirstBranchWasCreated
+run   git commit -m "this will add the new file to firstbranch only , and not to master branch"
+
+14) Merge
+combining work of different branches to one. So now we will merge firstbranch to master
+So first checkout to destination branch    git checkout master
+now git merge firstbranch
+
+if you now checkout firstbranch and make any change to a file, then the change will be in firstbranch only and not masterbranch
+if a file is already tracked, then no need to run  git add fileneamealreadyinIndex   . You can directly run git commit -a -m "comment"
+cat filename.txt will show the content on file.
+
+git pull = git fetch + git merge
+
+15) Rebase (to reduce number of branches)
+
 
 
    
