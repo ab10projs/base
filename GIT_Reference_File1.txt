@@ -1,6 +1,9 @@
 1) Github new user account is created. The name of main branch is also main
 2) main branch is created with a README.md file.
 3) GIT software is installed. type "exit" in bash terminal to close it when needed.
+also run these two commands
+git config --global user.name "ab"
+git config --global user.email "analytsprojects10@gmail.com"
 4) and in folder E:\Anupam\GITProjects\ the "local repository" is to be created (initialize).
 so open this foder and do GIT Bash here. Then write git init in bash and hit enter. It will create  a .git folder and the local repository is created(initialize).
 5) Now this local repository needs to be linked to Github main repository. So we need to add origin. The remote repository is called origin
@@ -17,6 +20,18 @@ To see if files are in index or not, use command      git status
 After you have added chnages in index you can use comman    git commit   to make changes in local repository
 A git commit is a snapshot of latest changes.
 Now add a new file in your working folder and name it File1
+Now to see what all files are in index, run command    git status
+New files will be called untracked files.
+Now add the new file to index by command   git add GIT_Reference_File1.txt
+again run   git status    and it will show changes ready to be committed...
+8) To commit command is  git commit -m "this is the comment on the changes that will add context of changes"
+this will make the changes appear in local repository
+9) To show multiple files to be added, create 2 files
+git status
+git add -A   This will add all files (new and modified) to index
+git commit -a -m "commited two files in one go"
+
+
    
 
 
