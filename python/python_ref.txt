@@ -1,0 +1,64 @@
+A) NUMPY
+1) Create Array
+my_list = [1,2,3]
+ar1= np.array(my_list)
+
+2) Create Array using arange
+ar1 = np.arange(1, 10 , 2)  (start, stop, steps)
+
+3) Arrays of all Zeros
+ar1 = np.zeros((3,3))
+ar1 = np.zeros(3)
+
+4) Linspace
+ar1 = np.linspace(0,5,10)  (starts at 0, goes to 5 , creates 10 equispaced points)
+
+5) Random
+ar1 = np.random.rand (5)   random 5 numbers from 0 to 1
+
+6) Random 2 dim array  
+ar1 = np.random.rand (5,5)  random numbers from 0 to 1 in  2 dim
+
+7) Random numders from Normal distribution centerd around 0.... (not from 0 to 1) 
+ar1 = np.random.randn (5)
+ar1 = np.random.randn (100, 10)  ... two dimensional
+
+8) Random integers
+ar1 = np.random.randint(1, 100, 10)  ... 
+
+9) Slicing
+arr[1:6]
+arr[1:5] = 100  .. will make 1 to 5th value = 100
+
+10) if one slice is taken then numpy makes a view and a change in slice will be reflected in orignal array also.
+arr = np.arange(0,15)
+ar2 = arr[0:7]
+ar2[2] = 9  .. this will change arr also....
+
+11) if you want the original array should not be changed, the take a copy.
+arr_copy = arr.copy()
+
+12) Single bracket with comma OR double brackets give same results
+print(arr2d[0][0])
+print(arr2d[0,0])
+
+13) Row 0 and second column onwards 
+arr2d[:1 , 1:]
+
+14) bool values of array
+arr>5  this will give an array of True and False of equal length of array
+
+15) this will return all elements that meet a criteria
+arr[arr>5] 
+
+16) a 2 d array
+arr2d = np.arange(0,25).reshape(5,5)
+
+17) arr + arr each element operated (+) on other 
+
+18) will square root each element of array
+np.sqrt( arr)
+
+B) PANDAS
+
+
