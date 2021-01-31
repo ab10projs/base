@@ -60,5 +60,387 @@ arr2d = np.arange(0,25).reshape(5,5)
 np.sqrt( arr)
 
 B) PANDAS
+library buit on top of Numpy. Builtin data-vis..
+
+Series
+1) creating a series from a list 
+label = ["a","b", "c", "d", "e"]
+mdata = [10 ,20, 30 , 40 ,50]
+S1 = pd.Series(data=mdata, index=label)
+
+2) creating series from a dictionary
+dict = {"a":10, "b":20, "c":30, "e":40 ,"f":50}
+S1 = pd.Series(dict)
+
+3) creating series with input as data and index
+S1 = pd.Series([1,2,3,4,5],["a","b", "c", "d", "e"])
+
+4) Addition of 2 series
+S1 = pd.Series([1,2,3,4,5],["a","b", "c", "d", "e"])
+S2 = pd.Series([1,2,3,4,5],["f","b", "c", "d", "e"])
+S1+S2
+
+5) series is 1 dim data. The index of series do not have to be necessarily numeric
+
+Attributes ... is is attribute so no () at end of values
+6) 
+s1.values  
+s1.index
+s1.dtype
+
+Methods ... manipulates object .. () is needed at end
+7) 
+s1.sum()  if all elements are integers
+s1.product()  .. multiply
+s1.mean()
+
+8) Parameters and Arguments
+pd.Series(data= s1, index= s2) ... both s1 and s2 should be same length of lists.. and index may not be always unique..
+
+
+9) converting a df to series if we only select one column by using squeeze
+s1 = pd.read_csv("F:\\\Automation\\del.csv", usecols= ['SYMBOL'] , squeeze=True)
+
+10) a sorted list
+print(sorted(s1))
+
+11) a list 
+list(s1)
+
+12) to a dictionary
+dict(s1) 
+
+Attributes
+13) 
+s1.is_unique
+s1.ndim .. number of dimensions ... as series is a 1 dim , it will give 1
+s1.size  ..number of total elements
+
+Method chaining
+14)
+s1.sort_values().head()
+print((s1.sort_values(ascending= False)))
+
+15)
+s1.sort_index() .. will sort values by index
+
+16)
+print( 'ACC' in s1)   .. will gives False as by default the search is on index and not value
+so use print( 'ACC' in s1.values) 
+
+17) series by index position
+print(s1[2])
+print(s1[[2,3,4]])
+print(s1[2:20])
+
+18)
+create a series by setting index on a column
+s1 = pd.read_csv("F:\\\Automation\\del.csv", usecols= ['DATE1','SYMBOL'] , index_col=['DATE1'], squeeze=True)
+print(s1['ZOTA'])
+print(s1[['ZOTA','ZUARI']])
+print(s1['ACC':'ZUARI'])
+
+19) get method  .. in this method, even if one values does not exist, None is returned
+print(s1.get(0))
+print(s1.get('ZOTA'))
+print(s1.get('ZOTAss', default='Not found'))  
+
+20) count and len .. count excludes null values
+s1.coun()
+len(s1)
+s1.value_counts() ... how many times each item occurs
+
+
+
+
+
+
+DataFrame
+
+1) Create Df using randn
+df = pd.DataFrame(randn(5,4),['A','B','C','D','E'],['w','x','y','z']) ... here ['A','B','C','D','E'] are index.. and w,x columns
+
+2) extracting a column from df
+print(df['w'])
+print(df.w)
+
+3) multiple column extract
+print(df[['w','x','y']])
+
+4) new column
+df['newcol']= df['w']*2
+
+5) drop column
+df.drop('newcol', axis=1, inplace= True)
+
+6) drop row
+df.drop('B' , inplace= True)  ... no need for axis.. 
+
+7) selecting rows using loc
+print(df.loc[['B','C','D'],['x','y']])
+print(df.loc[:,['x','y']])
+print(df.loc['B','y'])
+
+8) seledcting rows usings iloc
+print(df.iloc[0:2,[0,1]])
+print(df.iloc[3])
+ 
+9) conditions in df
+print(df<0)   will return true false in each cell of matrix
+
+10) passing conditions will give df with NaN where values don't match
+print(df[df<0])
+
+11) now take a column and make condition  and pass the result.. it will only return rows where column was True (no NaN)
+print(df[df['w']>0])
+
+12) multiple conditions  (use brackets and & or | .... don't use 'and' 'or' )
+print(df[ (df['w']>0) & (df['y']>0)])
+
+13) since the result of 12 is a df, you can use [['y','z']] at the end to get onlt limited columns
+print(df[ (df['w']>0) & (df['y']>0)][['y','z']]) 
+
+14) reset index
+print(df.reset_index())    .. This will reset index as a column
+
+15) set index on a column
+print(df.set_index('w'))
+
+16) Multiindex
+outside = ['G1','G1','G1','G2','G2','G2']
+inside = [1,2,3,1,2,3]
+hier_index = list(zip(outside,inside))
+print(hier_index)
+hier_index = pd.MultiIndex.from_tuples(hier_index)
+print(hier_index)
+
+df = pd.DataFrame( np.random.randn(6,2), hier_index, ['A','B']) ... this is a 6 by 2 df with multi index and columns A and B
+
+17) extracting a row from multiindex df 
+print(df.loc['G1'].loc[1])
+
+18) you can name the columns of multiindex
+df.index.names=['Gr','Num']
+
+19) now we can grab a value
+print(df.loc['G2'].loc[2]['B'])
+
+20)
+Group By
+dict = {'company':['goog','goog','msft','msft','fb','fb'],'person':['A','B','C','D','E','B'], 'sales':[10,12,1,2,1,3]}
+df = pd.DataFrame(dict)
+dfbycomp= df.groupby('company')
+print(dfbycomp.mean())
+dfbycomp= df.groupby(['company','person'])
+df.groupby('company').describe
+print(dfbycomp.describe())
+
+
+21) Merge, join concatination
+
+22)
+df['col1'].unique()
+df['col1'].nunique()
+df['col1'].values_counts()
+df['col1'].apply(yourfunction)
+df['col1'].apply(lambda x: x*2)
+df.columns
+df.index
+df.sort_values(['col2','col1'],ascending=[True, False])
+
+
+23)  from csv which has column names
+df = pd.read_csv("F:\\\Automation\\del.csv", usecols= ['SYMBOL', 'SERIES','DATE1','PREV_CLOSE','DELIV_QTY','DELIV_PER'] )
+
+
+24) common methos of df and series
+head()
+
+25) common attribues of df and series
+.index
+.values
+.shape
+.dtype
+
+26) only df attributes
+.columns
+.axes
+.info
+
+27) sum of integers along row or column (axis 0 or 1)
+df = pd.read_csv("F:\\\Automation\\del.csv", usecols= ['SYMBOL', 'SERIES','DATE1','PREV_CLOSE','DELIV_QTY','DELIV_PER'], index_col='SYMBOL' )  
+df.sum(axis = 0)  or df.sum(axis = 'columns')
+
+28) New col at 4th position
+df.insert(3, 'new_col_at_4thPosition', df['PREV_CLOSE']*2 )
+
+29) add a number to eacg element of a column 
+print(df['PREV_CLOSE'].add(4))  or also   df['PREV_CLOSE'] + 4 
+
+30) Null
+.dropna() this method removes the rwo were any one value is null
+
+31) remove only those rows where all values are null
+.dropna(how = 'all')
+
+32) remove columns where there are null values
+.dropna(axis =1)
+
+33) remove na from a specific column
+.dropna(subset=['colname', 'column2'])
+
+34) fill na
+.fillna(0 , inplace) .. will replace 0  .. if col is a string, then also nulls will be 0
+
+35) convert datatypes
+the column should not have null values
+df['PREV_CLOSE']= df['PREV_CLOSE'].astype('int')  .... there is no inplace for this method
+
+36) category .. when there are a lot of data belonging to few unique values, converting to category will save space
+df['gender']= df['gender'].astype('category')
+
+37)rank
+print(df['DELIV_QTY'].head())
+df['rnk']= df['DELIV_QTY'].rank(ascending= False)
+print(df.sort_values('DELIV_QTY').tail())
+
+38) converting a column to datetime
+pd.to_datetime(df['coldate'])
+
+39)
+df['TrueTalse'].astype('bool')
+
+40) parse date columns as dates while reading csv
+df=  pd.read_csv("filename.csv",  parse_dates = ['datecol1', 'datecol2'])
+
+41) .isin
+print(df['SYMBOL'].isin(['ACC','AMBIKCO']))
+
+42) extractng rows where value is null 
+print(df['DELIV_QTY'].isnull())
+print(df['DELIV_QTY'].notnull())
+
+43) between method
+df['salary'].between(1000, 3000)
+also works on datetime
+
+44) duplicated   on a series
+df['scrip'].duplicated(keep ='first')    .. will not mark first occurance as duplicate.. rest will be marked duplicate
+keep= False will remove all occurances if there are repeats
+
+45) ~  this ~ if put before the df of bool will reverse the bool entries..
+~ df['scrip'].duplicated(keep ='false')    .. will give only unique values
+
+46) drop_duplicates  is for dfs
+df.drop_duplicates() will drop only those rows which are duplicate in df (all values..)..
+
+47) keep first occurance of a specific column's duplicate value
+df.drop_duplicates ( subset =['colToCheckDuplicate']  keep = 'first')
+
+49) unique
+df['team'].unique() ...  list of unique values
+
+50)nunique .. count of unique values
+df['team'].nunique()  .. by default does not count NA.. and gives count of non NA unique values
+df['team'].nunique(dropna= False) .. now will count NA also..
+ 
+51) rename columns and rows
+print(df.columns) .... gives column of a df
+
+52) df for a file with no column names
+
+
+53)
+File with No header.. 1) rename columns by mapper and axis, 2) then set index, 3) rename one row name  4) rename one column
+1) set column names
+df = pd.read_csv("F:\\\Automation\\del_wo_h.csv", header=None)  ... specify there is no column row
+print(df.columns) ... gives [0,1,2,3,4] as columns
+df.rename(mapper={0:'SYMBOL',1:'SERIES',2:'DATE1',3:'PREV_CLOSE',4:'DELIV_QTY',5:'DELIV_PER'}, inplace=True, axis=1)
+2) set index
+df.set_index('SYMBOL', inplace=True)
+3) rename one row name that was set as index
+df.rename(mapper ={'3PLAND': 'WWWWW'}, inplace=True , axis=0 )   ... axis=0, axis ='rows', axis ='index'  all will give same result
+df.rename(index={'3PLAND': 'WWWWW'}, inplace=True)  will also give same resul
+4) rename a column this time..
+df.rename(mapper={"DATE1":"DATE_1"}, inplace=True, axis= 1)
+
+Second way of rename can be by giving full list of all columns , changing where you want and keeping same old name if no change needed
+df.columns =['SYMBOL_New', 'SERIES_New','DATE1_New','PREV_CLOSE_New','DELIV_QTY_New','DELIV_PER_New']
+
+
+54) popped_column =  df.pop['columnToPop] 
+
+55) where clause
+print(df.where(df['SYMBOL']=='3PLAND'))  ... gives full df with other values as NaN
+
+56) query method  This method only works if there are no spaces in column names
+print(df.query (' SYMBOL=="3PLAND"  and PREV_CLOSE >200'))   ... use 'and' or  & |  'or' ... all work
+print(df.query (' SYMBOL in ["3PLAND", "ACC"]  and PREV_CLOSE >200'))   or 'not in'... 
+
+57) copy
+if you take a column from df and make a change in a value of series, the original df also gets changed..
+if you do not want this behavior, then take  a copy.
+df2= df.copy()
+
+TEXT
+58)
+str.upper()
+str.title()
+len(str)
+df['colname'].str.lower()
+df['colname'].str.len()
+str.replace('whattoreplace', 'bywhat')
+df['colname'].str.replace('whattoreplace', 'bywhat')
+df['colname'].str.lower().str.contains("acc") .. will return bool
+df['colname'].str.lower().str.startswith("acc") .. will return bool
+df['colname'].str.lower().str.endswith("acc") .. will return bool
+st.lstrip()
+st.strip()
+st.rstrip()
+df.index.str.lower().str.strip()
+str.split(',')  .. list is returned
+df['colname'].str.split(',').str.get(0).value_counts()   .. takes a column, splits based on , , gets first element of resulting list, then returns count of values for that entire column
+
+MERGE CANCAT, JOIN on DF
+Concat (dimensions of dfs should match)
+print(pd.concat([df1,df2,df3]))
+print(pd.concat([df1,df2,df3], axis=1))   
+
+pd.merge(leftdf,rightdf,how='inner' , on='keycolpresentInBothleftAndRightDf')   //outer right left
+pd.merge(leftdf,rightdf,how='inner' , on=['leftDFKey','rightDfKey'])		//outer right left
+
+JOIN
+keys are on index of DFs
+leftDF.join(rightDF)   .. inner join... here both leftFD and rightDF have index and will be used as key for join
+leftDF.join(rightDF, how ='outer')
+
+DATE TIME
+
+
+					
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+   
 
 
