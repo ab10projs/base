@@ -1,0 +1,8 @@
+1) head contains metadata
+<!--  comments-->
+
+2) HTML ELEMENST
+
+-- divs and spans are used to group blocks of code 
+-- span is in a line 
+
