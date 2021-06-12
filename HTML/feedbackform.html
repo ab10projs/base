@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Forms </title>
+</head>
+<body>
+
+		<form  method="get" action="tables.html">
+			<h3>Are you from Inside US or Outside?</h3>
+			<label for = "radioInside">Inside</label>
+			<input type="radio" name="nameradio" id="radioInside" value="InsideUS" >  <!-- the name of two radio buttons need to be same for On-Off effect -->
+			<label for = "radioOutside">Outside</label>
+			<input type="radio" name="nameradio" id="radioOutside" value="OutsideUS" >
+
+			<h3>How was the service?</h3>
+			<select name="Stars">
+				<option value=10>Great</option>
+				<option value=5>Nice</option>
+				<option value=1>Hummm</option>
+			</select>
+
+			<h3>Any other feedback?</h3>
+			<textarea name="textarea" cols="50" rows="8"></textarea>
+
+			<input type="submit" name="Sub">
+
+		</form>
+
+</body>
+</html>
