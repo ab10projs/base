@@ -6,4 +6,5 @@
 -- divs and spans are used to group blocks of code 
 -- span is in a line 
 -- Added this line to test GIT commit
+-- Added a comment
 
