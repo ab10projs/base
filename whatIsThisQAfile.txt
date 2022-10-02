@@ -1,1 +1,0 @@
-This qa file is the pwd file for the SSH
