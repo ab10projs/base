@@ -1,0 +1,22 @@
+--------------Series Start---------------
+1) One dimension lables array
+2) Series combines the best of list and dictionary
+	List stores objects in order and associates each values a numeric position in line called index position.
+	Dictionary is able to establish association between two objects (key, and value)
+	A series combines best of both. It can preserve values in order and also preserve a numeric value for each position.
+	A serties also associates a identifier lable with each value like key.
+	The lable in Series can be duplicate (non unique)
+3) Series also provide many methods for maths, statistics and data analytics
+4) Create a series with a list
+	lst = ['l1','l2','l3','l4']
+	SeriesFromList = pd. Series(lst) # Series is a class that takes an object and creates a Series
+
+5) Create a series with a dictionary
+	myDict = {'k1':1,'k2':2,'k3':3,'k4':4,'k5':5 }
+	SeriesFromDict = pd.Series(myDict)
+6) 
+
+--------------Series End-----------------
+
+
+	
