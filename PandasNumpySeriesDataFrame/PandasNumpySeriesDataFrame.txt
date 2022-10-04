@@ -1,3 +1,28 @@
+---------------- Pandas from Stackoverflow ----------------------
+1) Appending to a DF
+df2 = df2.append(df1, ignore_index= True)  # This will create a df with common columns and adds columns that are on eiter dfs.
+The ignore_index = True means that the index will be recreated.
+
+2) Update 0th row and column'Rev' value to 1
+df2.loc[0,'Rev']=1
+
+3) Changing EP column of df2 to category
+df2['EP']= df2['EP'].astype('category')
+
+4) Creating dataframes from a dictionary
+df3 = pd.DataFrame({"SecondCol2":[1,2,3], "FirstCol1":[4,5,6]} , columns=['FirstCol1','SecondCol2'])  # if you want to specify column order
+
+5) Creating df from numbers
+df = pd.DataFrame(np.arange(0,25).reshape(5,5), columns=list('ABCDE')) 
+
+6) Creating df with list of tuples
+listOfTuples = [('p1','t1',1,2,3),('p2','t2',1,2,3),('p3','t3',1,2,3)]
+df = pd.DataFrame(data= listOfTuples , columns=['c1','c2','c3','c4','c5'])
+
+---------------- Pandas from Stackoverflow ----------------------
+
+
+
 --------------Series Start---------------
 1) One dimension lables array
 2) Series combines the best of list and dictionary
@@ -17,6 +42,7 @@
 6) 
 
 --------------Series End-----------------
+
 
 
 	
