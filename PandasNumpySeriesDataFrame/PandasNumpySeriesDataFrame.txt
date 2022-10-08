@@ -63,7 +63,13 @@ print(df.loc[(slice(None),['R1_1','R2_3']),()]) # for sub rows and all columns
 5) Create a series with a dictionary
 	myDict = {'k1':1,'k2':2,'k3':3,'k4':4,'k5':5 }
 	SeriesFromDict = pd.Series(myDict)
-6) 
+6) Create a series by reading csv 
+	if you have only one column in usecols and then you use squeeze, then it returns a Series, else dataframe is returned
+		df = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv", usecols=['Date'])
+		df = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv", usecols=['Date']).squeeze()
+
+7) Series with builtin functions
+	
 
 --------------Series End-----------------
 
