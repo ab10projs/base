@@ -19,6 +19,30 @@ df = pd.DataFrame(np.arange(0,25).reshape(5,5), columns=list('ABCDE'))
 listOfTuples = [('p1','t1',1,2,3),('p2','t2',1,2,3),('p3','t3',1,2,3)]
 df = pd.DataFrame(data= listOfTuples , columns=['c1','c2','c3','c4','c5'])
 
+7) Using JSON
+import json
+ob = [{"Name":"N1", "Age":50},{"Name":"N2", "Age":55}]
+with open('myjson.json', 'w', ) as output:
+    json.dump(ob,output, indent=4)   # creates a json file
+df= pd.read_json("myjson.json")      # reads the json file.
+ 
+8) Multi indexing 
+
+cols = [['C1','C1','C1','C2','C2','C2'],['C1_1','C1_2','C1_3','C2_1','C2_2','C2_3']]
+rows = [['R1','R1','R1','R2','R2','R2'],['R1_1','R1_2','R1_3','R2_1','R2_2','R2_3']]
+col_t = list(zip(*cols))  # This makes tuples from list-of-lists
+row_t = list(zip(*rows)) # This makes tuples from list-of-lists
+mult_idx_col = pd.MultiIndex.from_tuples(col_t)
+mult_idx_row = pd.MultiIndex.from_tuples(row_t)
+data = np.arange(36).reshape(6,6)
+df = pd.DataFrame(data=data, index=mult_idx_row, columns=mult_idx_col)
+print(df.loc[('R1')])  # For only R1 all sub rows and columns
+print(df.loc[(),('C1')]) # For only C1 all  sub columns and rows
+print(df.loc[(),('C1','C1_2')]) # all rows for col C1 and subcol C1_2
+print(df.loc[(),(slice(None),'C1_2')]) # all rows for subcol C1_2
+print(df.loc[(slice(None),['R1_1','R2_3']),()]) # for sub rows and all columns
+
+
 ---------------- Pandas from Stackoverflow ----------------------
 
 
