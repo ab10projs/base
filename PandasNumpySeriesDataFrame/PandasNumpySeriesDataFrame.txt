@@ -69,7 +69,34 @@ print(df.loc[(slice(None),['R1_1','R2_3']),()]) # for sub rows and all columns
 		df = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv", usecols=['Date']).squeeze()
 
 7) Series with builtin functions
-	
+	len(SeriesObject)
+	sum(SeriesObject) # will sum all items in SeriesObject
+	min(SeriesObject)
+	max(SeriesObject)
+
+8) Check for inclusion
+	8 in SeriesObject  		#this will check if 8 is in the 'index' of SeriesObject and not in 'values' of SeriesObject
+	8 in SeriesObject.values   	#this will check if 8 is in the 'values'. There is no bracket after values
+
+
+9) Extracting values from Series using index position
+	print(s_c[-1])  # this will not work in series
+	print(s_c[-1:-2:-1]) # this works in series to get only last element
+	print(s_c[:-1:-1]) # This works in series
+	print(s_c[-1:-5:-1]) # Start from last element and move back 4
+	print(s_c[-7:])  # This is same as (s_c.tail(7))
+	print(s_c[-1:])  # This gives last element only
+	print(s_c[:5])  # This is same as s_c.head(5)
+	print(s_c[[10,11,15]]) # This gives values at specific index positions
+
+  
+10) Extracting values from Seris using index label 
+	s_c = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv", index_col=['date'], usecols=['date','c']).squeeze()  # This will craete a series object s_c
+	print(s_c['19-Dec-19'])  # extracts value using label.  
+	# The index lable can be non unique
+	print(s_c['19-Dec-19']) # Here there are 2 values which are related with label '19-Dec-19'
+	print(s_c[30])
+	s_c[['19-Dec-19','20-Dec-19']] # multiple values
 
 --------------Series End-----------------
 
