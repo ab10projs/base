@@ -97,6 +97,61 @@ print(df.loc[(slice(None),['R1_1','R2_3']),()]) # for sub rows and all columns
 	print(s_c['19-Dec-19']) # Here there are 2 values which are related with label '19-Dec-19'
 	print(s_c[30])
 	s_c[['19-Dec-19','20-Dec-19']] # multiple values
+	guitars = pd.Series(guitars_dict)  # craetes a series using a dictionary as source
+
+11) get method on Series
+	if an index position or label is not found, then regular square bracket gives error. The get method provides fallback mechanism in case of error
+	print(s_c.get('26-Dec-19'))
+	print(s_c.get('30-Dec-19'))  # By default, None is returned if label is not found, which we can overwrite by passing another argument
+	print(s_c.get('30-Dec-19', "If 30-Dec-19 does not exist, this is returned"))
+
+12) overwrite a Series value
+	s_c[['13-Dec-19','14-Dec-19']] =[200,200]
+	Even if one of the values from list is not found, then None is returned
+ 
+13) copy method
+	df = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv", index_col=['date'], usecols=['date','c'])
+	series_from_df = df.squeeze() # This is a view and not a new object. 
+	series_from_df[0] =99 #This operation will also affect df from where this series is created
+
+	if you do not want the original data source (df in this case), then use copy 
+	series_from_df = df.squeeze().copy()  # This will craete a new series object separate from dataframe and will NOT impact df if series value is changed
+
+
+14) inplace parameter
+	series_from_df = pd.read_csv("C:\\Users\\Dell\\Desktop\\ACC.csv",index_col=['date'],usecols=['date','c']).squeeze().copy()
+	series_from_df.sort_values(ascending=False, inplace= True) # If the .copy() in above is not used, then this inplace=True will give error
+
+
+15) Math methods on Series
+	print(s_c.count()) #count ignores missing data
+	print(s_c.describe())
+
+
+16) Broadcast
+	How to apply a consistant mathematical operation to every value in a Series is called breadcasting
+	s_c=s_c.add(10)  # or s_c = s_c +10  # This will add 10 to all values of series
+
+
+
+17) value_count()
+	print(s_c.value_counts())  # number of occurance of each unique value
+	print(s_c.value_counts(normalize=True)) *100  # gives % of each value
+
+
+18) map method
+	map method associates each value in a series to another value
+	difference between a map and apply is that apply acceps a function whereas map accepts an associative object such as a dictionary.
+	if a mapping is not found, then the value in series is replaced with NaN
+	
+	example
+	mappings_dic = { 229.35: 'top val1', 163.85:'top val2' }
+	s_c= s_c.map(mappings_dic )
+	print(s_c.head())
+	 
+	map acceps wide varity of inputs like dictionary, series 
+		
+
 
 --------------Series End-----------------
 
