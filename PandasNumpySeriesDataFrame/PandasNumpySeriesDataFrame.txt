@@ -151,9 +151,11 @@ print(df.loc[(slice(None),['R1_1','R2_3']),()]) # for sub rows and all columns
 	 
 	map acceps wide varity of inputs like dictionary, series 
 		
-
-
 --------------Series End-----------------
+
+--------------DataFrame 1----------------
+
+--------------DataFrame 1----------------
 
 
 
