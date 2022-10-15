@@ -27,6 +27,16 @@
     plt.plot(x1, y1)
     plt.show() # plots second line with given values of both x and y axis
 
+---- Default Environment variables set and reset -----
+	print(matplotlib.rcParams) 
+	matplotlib.rcdefaults()  # to reset default
+---- Default Environment variables set and reset -----
+
+---- Full view of default output window ----
+	wm = plt.get_current_fig_manager()
+	wm.window.state('zoomed')
+---- Full view of default output window ----
+
 5 creating a plot with style defined
     df = pd.read_csv ("C:\\Users\\Dell\\Desktop\\ACC.csv")
     matplotlib.rc('lines',linewidth=1, linestyle='-', marker= '*')
@@ -59,3 +69,49 @@
     plt.show()
 
 6)  ---- line plot using dataframe ends   here ------
+
+
+
+7) ----  bar plot simple ----
+    import matplotlib.pyplot as plt
+    month_num =[1,2,3,4,5,6,7,8,9,10,11,12]
+    ut_sld = [100,200,300,400,555,666,777,888,999,1000,1100,1200]
+    plt.bar(month_num, ut_sld)
+    plt.show()
+7) ----  bar plot simple ----
+
+8) ---- bar plot with values on top of bar and how the position of text is worked out -------
+    
+    month_num =[1,2,3,4,5,6,7,8,9,10,11,12]
+    ut_sld = [100,200,300,400,555,666,777,888,999,1000,1100,1200]
+    fig, ax= plt.subplots() #plt.subplots allow us to define the layout of figure in terms of number of figues and how to organize
+    plt.xticks(month_num,calendar.month_name[1:13], rotation=20)
+    plot = ax.bar(month_num, ut_sld)
+    for rect in plot:
+        height = rect.get_height() # gets the value of bar that needs to be shown
+        ax.text(rect.get_x() + rect.get_width()/2, 1.0002*height,'%d' %int(height), ha="center", va= "bottom")
+        # above value will get text and place it just above the height of each bar
+    plt.show()
+8) ---- bar plot with values on top of bar and how the position of text is worked out -------
+
+9) ----- bar horizontal ------------
+    month_num =[1,2,3,4,5,6,7,8,9,10,11,12]
+    ut_sld = [100,200,300,400,555,666,777,888,999,1000,1100,1200]
+    fig, ax= plt.subplots() #plt.subplots allow us to define the layout of figure in terms of number of figues and how to organize
+    plt.yticks(month_num,calendar.month_name[1:13], rotation=20)
+    plot = ax.barh(month_num, ut_sld)
+    plt.show()
+9) ----- bar horizontal ------------
+
+10) ------- Scatter plot ---------
+    plt.figure(figsize=(10,6))
+    df = pd.read_csv ("C:\\Users\\aadya\\OneDrive\\Desktop\\ACC.csv")
+    df = df[df['Symbol']=='SAIL']
+    print(df.head())
+    x = df['d']
+    y = df['Underlying Value']
+    print(x)
+    plt.scatter(x,y)
+    plt.xticks(rotation = 20)
+    plt.show()
+10) ------- Scatter plot ---------
