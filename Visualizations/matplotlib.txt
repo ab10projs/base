@@ -1,3 +1,6 @@
+https://github.com/PacktPublishing/Matplotlib-3.0-Cookbook
+
+
 1) simple plot
 	import matplotlib as mpl
 	import matplotlib.pyplot as plt
@@ -280,6 +283,70 @@
     plt.show()
 18) ------- Boxplot -----------------
 
-19) ------- Path (custom charts)--------------------
+19) ------- Multiple Charts on same figure--------------------
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    fpr_KNN = pd.read_excel('ROC_Curves.xlsx', 'fpr_KNN')
+    tpr_KNN = pd.read_excel('ROC_Curves.xlsx', 'tpr_KNN')
+    fpr_MLP = pd.read_excel('ROC_Curves.xlsx', 'fpr_MLP')
+    tpr_MLP = pd.read_excel('ROC_Curves.xlsx', 'tpr_MLP')
+    fpr_SGD = pd.read_excel('ROC_Curves.xlsx', 'fpr_SGD')
+    tpr_SGD = pd.read_excel('ROC_Curves.xlsx', 'tpr_SGD')
+    fpr_RF = pd.read_excel('ROC_Curves.xlsx', 'fpr_RF')
+    tpr_RF = pd.read_excel('ROC_Curves.xlsx', 'tpr_RF')
+    fpr_DT = pd.read_excel('ROC_Curves.xlsx', 'fpr_DT')
+    tpr_DT = pd.read_excel('ROC_Curves.xlsx', 'tpr_DT')
+    plt.plot([0, 1], [0, 1], 'k--')  # plots a line at 45 degree
+    plt.plot(fpr_KNN, tpr_KNN, label='KNN',color='green')
+    plt.plot(fpr_DT, tpr_DT, label='DecisionTree', color='orange')
+    plt.plot(fpr_RF, tpr_RF, label='Random Forest',color='yellow')
+    plt.plot(fpr_MLP, tpr_MLP, label='MLP',color='red')
+    plt.plot(fpr_SGD, tpr_SGD, label='SGD', color='pink')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curve')
+    plt.legend(loc='best')
+    plt.show()
+19) ------- Multiple Charts on same figure--------------------
 
-19) ------- Path (custom charts)--------------------
+20) ------- Subplots on Same figure ---------------------
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    fig = plt.figure()
+    ax1 = plt.subplot(2,2,1) #(row,col, number)
+    ax2 = plt.subplot(2,2,2)
+    ax3 = plt.subplot(2,1,2)
+    ax1.plot([1,2])
+    ax2.plot([2,1])
+    ax3.plot([3,1])
+    plt.show()
+20) ------- Subplots on Same figure ---------------------
+
+21) -------- More on Subplots on Same figure -------------
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    wine_qty= pd.read_csv("winequality.csv", delimiter=";")
+    iris = pd.read_csv("iris_dataset.csv", delimiter=',')
+    iris_mean = iris.mean()
+    iris_std = iris.std()
+    fig, axs = plt.subplots(2,2,figsize=(8,8))
+    axs[0,0].hist(wine_qty['alcohol'])
+    axs[0,0].set_title("Title Alcohol Frequency")
+    axs[0,0].set_xlabel('Alcohol Bin')
+    axs[0,0].set_ylabel("Frequency")
+    axs[0,1].plot(iris['sepal_length'])
+    axs[0,1].set_title("Sepal L Frequency")
+    axs[0,1].set_xlabel('sepal_length')
+    axs[0,1].set_ylabel("sepal frequency")
+    axs[1,0].scatter(iris['petal_length'],iris['petal_width'], c=iris['species'].map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
+    axs[1,0].set(title = 'Scatter', xlabel = 'Petal Len', ylabel = 'Petal Wd' )
+    axs[1,1].bar(['sepal_l', 'sepal_w', 'petal_l', 'petal_w'],iris_mean, yerr= iris_std )
+    axs[1,1].set(title = 'Bar', xlabel = 'category', ylabel = 'Category Mean')
+    plt.suptitle("Subplots Demo")
+    plt.tight_layout(pad=3, w_pad=1, h_pad=1)
+    plt.show()
+21) -------- More on Subplots on Same figure -------------  
+
+22) -------- Multiple figures in single session ----------
+
+22) -------- Multiple figures in single session ----------
