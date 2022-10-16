@@ -155,5 +155,131 @@
 12) ------- Bubble plot ----------------
 
 13) ------- Stacked --------------------
-
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import calendar
+    import pandas as pd
+    import numpy as np
+    x = np.array([1,2,3,4,5,6])  # This is x axis values
+    apr= [5,2,3,1,6,2]
+    may= [1,3,1,6,2,3]
+    jun= [6,2,3,1,3,1]
+    labels = ['apr','may','jun']
+    fig,ax = plt.subplots()
+    ax.stackplot(x,apr,may,jun, labels= labels)
+    ax.legend(loc=1) # places legend at right-top
+    plt.title("tile")
+    plt.xlabel("months")
+    plt.ylabel('defects')
+    plt.show()
 13) ------- Stacked --------------------
+
+14) ------- Pie Plot ------------------
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import calendar
+    import pandas as pd
+    import numpy as np
+    # autopct tells the number of decimal places in % and start angle is where first slice starts and reset anticlockwise
+    labels = ['SciFi','Drama','Thriller','Suspense','Comedy', 'Action' ]
+    siz = [10,30,10, 15, 15 ,20] # should add to 100
+    explode = (0,0,0,0,.1,0)
+    plt.pie(siz,labels= labels, explode=explode, autopct='%1.1f%%', shadow=True,startangle=90 )
+    plt.axis('equal') # equal means pie will be a circle
+    plt.show()
+14) ------- Pie Plot ------------------
+
+15) ------- Table Chart --------------
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    rows = ['2001','2002','2003','2004','2005']
+    columns = ['7Ah','35Ah','40Ah','50Ah','70Ah']
+    data = np.arange(100, 125).reshape(5,5)
+    print(data)
+    values = np.arange(0,600,100)
+    colors = plt.cm.OrRd(np.linspace(0,0.5,len(rows)))
+    index = np.arange(len(columns))+.3
+    bar_width = .5
+    y_offset = np.zeros(len(columns))
+    
+    fig,ax = plt.subplots()
+    cell_text= []
+    n_rows = len(data)
+    for row in range(n_rows):
+        plot = plt.bar(index,data[row], bar_width, bottom=y_offset, color= colors[row])
+        y_offset = y_offset + data[row]
+        cell_text.append(['%1.1f'% (x) for x in y_offset])
+        i=0
+        for rect in plot:
+            height = rect.get_height()
+            ax.text(rect.get_x() + rect.get_width()/2,y_offset[i], '%d' %int(y_offset[i]), ha='center', va= 'bottom')
+        i=i+1
+    
+    the_table = plt.table(cellText=cell_text, rowLabels=rows, rowColours=colors, colLabels=columns, loc='bottom')
+    plt.ylabel("Unsold")
+    
+    plt.xticks([])
+    plt.title('Number Of Batteries Sold/Year')
+    plt.show()
+15) ------- Table Chart --------------
+
+16) ------- Histogram ----------------
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    import random
+    lst =[]
+    randomNumbers = 1200
+    for i in range(0,randomNumbers):
+        lst.append(random.randint(1,randomNumbers))
+    grp_exp = np.array(lst)
+    nbins = 10
+    n, bin, patches = plt.hist(grp_exp,bins=nbins)
+    plt.xlabel("Experiments Per Year")
+    plt.ylabel("Frequency")
+    plt.title("Distribution of Training")
+    plt.axvline(x=grp_exp.mean(),linewidth= 2, color= 'r')
+    plt.show()
+16) ------- Histogram ----------------
+
+17) ------- Histogram with std dev line plot -------------
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    import random
+    lst =[]
+    randomNumbers = 120
+    for i in range(0,randomNumbers):
+        lst.append(random.randint(1,randomNumbers))
+    grp_exp = np.array(lst)
+    nbins = 21
+    fig, ax = plt.subplots()
+    n, bins, patches = plt.hist(grp_exp,bins=nbins)
+    plt.xlabel("Experiments Per Year")
+    plt.ylabel("Frequency")
+    plt.title("Distribution of Training")
+    mu= grp_exp.mean()
+    sigma = grp_exp.std()
+    y = ((1/np.sqrt(2*np.pi)*sigma))* np.exp(-0.5*(1/sigma *(bins -mu)**2))
+    plt.plot(bins, y, "--")
+    plt.show()
+17) ------- Histogram with std dev line plot -------------
+
+18) ------- Boxplot -----------------
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    df = pd.read_csv("ACC.csv")
+    data = [df['h'], df['l'],df['c']]
+    plt.boxplot(data)
+    plt.show()
+18) ------- Boxplot -----------------
+
+19) ------- Path (custom charts)--------------------
+
+19) ------- Path (custom charts)--------------------
