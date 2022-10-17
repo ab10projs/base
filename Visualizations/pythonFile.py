@@ -1,28 +1,25 @@
-import matplotlib.pyplot as plt
 import pandas as pd
-iris = pd.read_csv("iris_dataset.csv", sep=',')
-plt.close('all') # canvas cleaned
-fig= plt.figure(1, figsize=(10,10))
-ax1 = plt.subplot2grid((3,3),(0,0))
-ax2 = plt.subplot2grid((3,3),(0,1), colspan=2)
-ax3 = plt.subplot2grid((3,3),(1,0), colspan=2, rowspan=2)
-ax4 = plt.subplot2grid((3,3),(1,2), rowspan=2)
-ax1.hist(iris['petal_width'])
-ax2.scatter(iris['petal_length'],iris['petal_width'], s=50*iris['petal_length']*iris['petal_width'],
-            alpha=.26, c= iris['species'].map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
-ax3.scatter(iris['petal_length'],iris['petal_width'], c= iris['species'].map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
-ax4.violinplot(iris['petal_length'])
-plt.suptitle("Fig 1: Grid Plotting Demo", fontsize =20)
-plt.tight_layout(pad=5, w_pad=1, h_pad=1)
-plt.figure(2, figsize=(12,5))
-names= ['gp_a','gp_b','gp_c','gp_d','gp_e','gp_f']
-values = [1,2,3,4,5,6]
-plt.subplot(131)
-plt.bar(names, values, color='orange')
-plt.subplot(132)
-plt.scatter(names, values, color='orange')
-plt.subplot(133)
-plt.plot(names, values, color='orange')
-plt.suptitle("Fig 2: Row Plotting Demo", fontsize =20)
-plt.tight_layout(pad=5, w_pad=1, h_pad=1)
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+pd.set_option("display.max_columns",50)
+pd.set_option("display.width", 500)
+df = pd.read_csv("iris_dataset.csv")
+
+#print(df[df['species']=='setosa']['sepal_length'].sum())
+
+allSpecies=[]
+allSpeciesSepal_length=[]
+for x in (df['species'].unique()):
+    allSpecies.append(x)
+
+for x in allSpecies:
+    allSpeciesSepal_length.append(df[df['species']=='{}'.format(x)]['sepal_length'].sum())
+
+
+print(allSpecies, allSpeciesSepal_length)
+totalSepalLength = np.sum(allSpeciesSepal_length)
+print(totalSepalLength)
+plt.bar(allSpecies,allSpeciesSepal_length)
+plt.pie(allSpeciesSepal_length, labels=allSpecies, autopct='%1.1f%%', shadow=True,startangle=90 )
 plt.show()

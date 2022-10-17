@@ -1,5 +1,6 @@
 https://github.com/PacktPublishing/Matplotlib-3.0-Cookbook
-
+pd.set_option("display.max_columns",50)
+pd.set_option("display.width", 500)
 
 1) simple plot
 	import matplotlib as mpl
@@ -379,5 +380,41 @@ https://github.com/PacktPublishing/Matplotlib-3.0-Cookbook
 22) -------- Multiple figures in single session ----------
 
 23) -------- Logarithmic scale -------
-
+import matplotlib.pyplot as plt
+    import pandas as pd
+    fig , (ax1,ax2,ax3) = plt.subplots(1,3) # defines layout and axis, with three axes to be plotted in as row
+    ax1.plot([0.1,5,10,500], [0.01,25,50,10000], "x-") # due to large differences, values are not visible.
+    ax1.set(title= "Linear Scale with no chart", xlim= (1e1, 1e3), ylim=(1e2, 1e3))
+    ax2.set(title= "adjustable=box", xscale="log", yscale="log", xlim= (1e1, 1e3), ylim=(1e2, 1e3), aspect=2 )
+    #aspect=2 above means ratio of y values is twice the values of x
+    ax3.plot([0.1,5,10,500], [0.01,25,50,10000], "o-")
+    ax3.set(title="adjustable=datalim",xscale="log",yscale="log",adjustable="datalim",xlim=(1e-1,1e3), ylim=(1e-1,1e4), aspect=1 )
+    plt.tight_layout()
+    plt.show()
 23) -------- Logarithmic scale -------
+
+24) ------- More on Logarithmic scale-----
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    menMeans= [3,10,100,500,50]
+    menStd=[.75,2.5,25,125,12.5]
+    womenMeans=[1000,3,30,800,1]
+    womenStd= [500,.75,8,200,.25]
+    fig, ax = plt.subplots()
+    ind= np.arange(len(menMeans))
+    width = 0.35
+    p1 = ax.bar(ind,menMeans,width,color= 'lightblue', bottom= 0, yerr= menStd)
+    p2= ax.bar(ind+width, womenMeans,width, color ='orange',  bottom= 0, yerr= womenStd)
+    ax.set_title('Scores by category and gender')
+    ax.set_xticks(ind + width/2)
+    ax.set_xticklabels(('C1','C2','C3','C4','C5'))
+    ax.set_yscale('log')
+    ax.legend((p1[0],p2[0]),('Men','Women')) 
+    plt.show() 
+24) ------- More on Logarithmic scale-----
+------------------------------------------------------ Visualizations for publishing Quality --------------------------------------------
+25) -------  -------------
+
+25) -------  -------------
+------------------------------------------------------ Visualizations for publishing Quality --------------------------------------------
