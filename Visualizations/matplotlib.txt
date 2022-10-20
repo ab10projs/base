@@ -413,6 +413,74 @@ import matplotlib.pyplot as plt
     ax.legend((p1[0],p2[0]),('Men','Women')) 
     plt.show() 
 24) ------- More on Logarithmic scale-----
+
+---------------------------------------------------------- Excercise1 -------------------------------------------------------
+1) ---- A scatter plot of flowers -------------
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+pd.set_option("display.max_columns",50)
+pd.set_option("display.width", 500)
+df = pd.read_csv("iris_dataset.csv")
+print(df.head())
+s_sepal_length = df['sepal_length'].squeeze()
+s_sepal_width =df['sepal_width'].squeeze()
+s_petal_length = df['petal_length'].squeeze()
+s_petal_width = df['petal_width'].squeeze()
+s_species = df['species'].squeeze()
+fig, (ax1,ax2,ax3,ax4) = plt.subplots(1,4)
+ax1.scatter(s_petal_width, s_petal_length , c= s_species.map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
+ax3.scatter(s_sepal_width, s_sepal_length , c= s_species.map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
+ax1.set(title ='petal category')
+plt.show()
+1) ---- A scatter plot of flowers -------------
+
+2) ---- 
+  
+---------------------------------------------------------- Excercise1 -------------------------------------------------------
+
+---------------------------------------------------------- Excercise2 -------------------------------------------------------
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import pandas as pd
+pd.set_option("display.max_columns",50)
+pd.set_option("display.width", 500)
+mpl.rc('lines',linewidth=1, linestyle='-')
+df= pd.read_csv('datafile.csv')
+print(df.head())
+fig,(ax) = plt.subplots(2,2)
+ax[0,0].set(title ="UV")
+ax[0,0].scatter( df[df['Symbol']=='SAIL']['Date'], df[df['Symbol']=='SAIL']['Underlying Value'],c='green', alpha=.6 ,s=1*df[df['Symbol']=='SAIL']['Underlying Value'] )
+ax[0,0].scatter( df[df['Symbol']=='BHEL']['Date'], df[df['Symbol']=='BHEL']['Underlying Value'],c='violet', alpha=.6 ,s=1*df[df['Symbol']=='BHEL']['Underlying Value'])
+ax[0,0].plot( df[df['Symbol']=='SAIL']['Date'], df[df['Symbol']=='SAIL']['Underlying Value'])
+ax[0,0].plot( df[df['Symbol']=='BHEL']['Date'], df[df['Symbol']=='BHEL']['Underlying Value'])
+ax[0,0].set_xticklabels(df[df['Symbol']=='SAIL']['Date'],rotation =20, fontsize = 5)
+ax[0,0].set(title="Line Scatter")
+ax[0,0].set_yticklabels(df[df['Symbol']=='SAIL']['Underlying Value'],rotation =20, fontsize = 7)
+ax[0,1].plot(df['Underlying Value'])
+ax[0,1].plot(df['LTP'])
+ax[1,0].plot(df['LTP'])
+ax[1,0].plot(df['Settle'])
+o_sum = df['Open'].sum()
+h_sum = df['High'].sum()
+l_sun = df['Low'].sum()
+c_sum = df['Close'].sum()
+x_buckets =["O","H","L","C"]
+p= ax[1,1].bar(x_buckets, [o_sum,h_sum,l_sun,c_sum]) # use this p assignment as it is barContainer class
+print(type(p))
+for rect in p:
+    print(rect)
+    height = rect.get_height()
+    print("---", rect.get_y())
+    ax[1,1].text(rect.get_x() + rect.get_width() / 2, .7 * height, int(height), ha="center", va="bottom" , fontsize=10)
+plt.tight_layout(pad=3, w_pad=1, h_pad=1)
+plt.show()
+---------------------------------------------------------- Excercise2 -------------------------------------------------------
+
+
+
+
 ------------------------------------------------------ Visualizations for publishing Quality --------------------------------------------
 25) -------  -------------
 
