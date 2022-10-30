@@ -668,3 +668,101 @@ ax[1,1].set_title("Axis[1,1] Random", color = 'blue')
 fig.tight_layout()
 plt.show()
 -----------------------------------------------------1 Workshop -Create a figure that has multiple plots with Title and formating--------------------------------
+
+
+
+---------------------------------  Interactive Plotting Starts ------------------
+1) Event and callback
+	1.1) Exception Handeling
+	1.2) Keypress and release events
+	1.3) Button press for zoom
+	1.4) Motion notification and button press event for tracking coordinates
+	1.5) Pick event to make an artist active on clicking its label 
+	1.6) Figure and axes enter and leave
+	1.7) Twin axis
+2) Widgets
+	2.1) Cursor, Button, Checkbox, Radio button, Text
+3) Animaton
+	3.1) Animated sigmode
+	3.2) Saving animation tp MP4
+	3.3) Exponentially decaying tan function
+	3.4) Animated bubble plot
+	3.5) Animated multiple line plots
+	3.6) Animation of images
+
+---------------------------------  Interactive Plotting Ends ------------------
+----------------1--------------------
+import matplotlib
+matplotlib.use('nbAgg')
+import time
+
+class EventLoop:
+    def __init__(self):
+        self.status = None
+        self.event_handlers= {"interrupt":self.handle_interrupt, "DivideByZero":self.handle_DivideByZero}
+    def start(self):
+        try:
+            self.loop()
+        except KeyboardInterrupt:
+            self.handle_event("interrupt")
+        except ZeroDivisionError:
+            self.handle_event("DivideByZero")
+        finally:
+            print("Ending Program")
+    def loop(self):
+        self.status= "loop"
+        strt_time = time.time()
+        while self.status=='loop':
+            elapsed_time = time.time()- strt_time
+            if elapsed_time >30:
+                5/0
+    def handle_event(self, event:str):
+        self.event_handlers[event]()
+
+    def handle_interrupt(self):
+        print("Stopping program due to keyboard interupt")
+    def handle_DivideByZero(self):
+        print("Stopping due to Divide by Zero")
+
+el = EventLoop()
+el.start()
+print("done")
+----------------1--------------------
+
+----------------2--------------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.switch_backend('Qt5Agg')
+from time import time
+
+def press(event):
+    global prst
+    prst= time()
+    print("press", event.key)
+def release(event):
+    relt = time()
+    ht = relt - prst
+    print("hold Time", round(ht,2))
+    if event.key=='x':
+        visible = lg.get_visible()
+        lg.set_visible(not visible)
+        tm = 'hold time: ' + str(round(ht,2))
+        t = plt.text(np.random.randint(1,4), np.random.randint(-3,4),tm)
+        plt.setp(t,color='r', size= 15, weight= 'bold')
+        ax.add_artist(t)
+        fig.canvas.draw()
+x = np.arange(1,2.6,0.1)
+y = 3*np.sin(2*np.pi*x)
+y1= 3*np.cos(2*np.pi*x)
+
+fig, ax = plt.subplots()
+ax.plot(x, y, 'go- ', label= 'sin')
+ax.plot(x, y1, 'bd- ', label= 'cos')
+lg = ax.legend(loc= 'upper center', fontsize = 15)
+ax.set_titel('Press a key', size= 25)
+fig.canvas.mpl_connect('key_press_event', press)
+fig.canvas.mpl_connect('key_release_event', release)
+plt.show()
+----------------2--------------------
+-------------------------
+
