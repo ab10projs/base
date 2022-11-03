@@ -480,9 +480,487 @@ plt.show()
 
 
 
+---------------------------------------------------------- Excercise3 -------------------------------------------------------
+import matplotlib.pyplot as plt
+import pandas as pd
 
------------------------------------------------------- Visualizations for publishing Quality --------------------------------------------
-25) -------  -------------
+wine_qty = pd.read_csv("winequality.csv", delimiter=";")
+iris = pd.read_csv("iris_dataset.csv", delimiter=',')
+iris_mean = iris.mean()
+iris_std = iris.std()
+fig, axs = plt.subplots(2, 3, figsize=(10, 8))
+axs[0, 0].hist(wine_qty['alcohol'])
+axs[0, 0].set_title("Title Alcohol Frequency")
+axs[0, 0].set_xlabel('Alcohol Bin')
+axs[0, 0].set_ylabel("Frequency")
+axs[0, 1].plot(iris['sepal_length'])
+axs[0, 1].set_title("Sepal L Frequency")
+axs[0, 1].set_xlabel('sepal_length')
+axs[0, 1].set_ylabel("sepal frequency")
+axs[1, 0].scatter(iris['petal_length'], iris['petal_width'],
+                  c=iris['species'].map({'setosa': 0, 'versicolor': 1, 'virginica': 2}))
+axs[1, 0].set(title='Scatter', xlabel='Petal Len', ylabel='Petal Wd')
+axs[1, 1].bar(['sepal_l', 'sepal_w', 'petal_l', 'petal_w'], iris_mean, yerr=iris_std)
+axs[1, 1].set(title='Bar', xlabel='category', ylabel='Category Mean')
+plt.suptitle("Subplots")
+plt.tight_layout(pad=3, w_pad=1, h_pad=1)
+plt.show()
+---------------------------------------------------------- Excercise3 -------------------------------------------------------
+---------------------------------------------------------- Twin Axis -------------------------------------------------------
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.ticker import MultipleLocator
+x= [0,1,2,3,4,5]
+y= [19,12,6,4,3,2]
+y1= [41,67,80,89,96,100]
+fig = plt.figure(figsize=(10,6))
+ax1= plt.subplot(121)
+ax2= ax1.twinx()
+ax3= plt.subplot(122)
+ax4= ax3.twiny()
+b= ax1.bar(x,y,label= 'Number Of Defects')
+l= ax2.plot(x,y1,color='g',lw=5, label='Cumulative Defects %')
+majorLocator= MultipleLocator(2)
+ax1.yaxis.set_major_locator(majorLocator)
+ax1.set(xlabel='Defect Reason Code', ylabel='Number Of Defects')
+ax2.set(ylabel='Cumulative Defects as %')
+ax1.legend([b,l],['Number Of Defects','Cumulative Defects as %'],loc=5)
+b1= ax3.barh(x,y, label= 'Number of Defects')
+l1= ax4.plot(y1,x,color='g', lw=5, label= 'Cumulative Defects as %')
+ax3.xaxis.set_major_locator(majorLocator)
+ax3.set(xlabel='Number of Defects', ylabel='Defects')
+ax4.set(xlabel='Cumulative Defects as %')
+ax3.legend([b1,l1],['Number Of Defects','Cumulative Defects as %'],loc=1)
+plt.suptitle("Product Defect", fontsize= 20, fontweight='bold')
+plt.tight_layout(pad=3, w_pad=1, h_pad=1)
+plt.show()
+---------------------------------------------------------- Twin Axis -------------------------------------------------------
+---------------------------------------------- x key press event --------------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.switch_backend('Qt5Agg')
+from time import time
 
-25) -------  -------------
------------------------------------------------------- Visualizations for publishing Quality --------------------------------------------
+def press(event):
+    global prst
+    prst = time()
+    print("press ", event.key)
+
+def release(event):
+    relt = time()
+    ht = relt - prst
+    print("hold time ", round(ht,2))
+    if event.key == 'x':
+        visible = lg.get_visible()
+        lg.set_visible(not visible)
+        tm = 'hold time ' + str(round(ht, 2))
+        t = plt.text(np.random.randint(1, 4), np.random.randint(-3, 4), tm)
+        plt.setp(t, color='r', size=15, weight='bold')
+        ax.add_artist(t)
+        fig.canvas.draw()
+
+
+x= np.arange(1,2.6,.1)
+y= 3*np.sin(2*np.pi*x)
+y1= 3*np.cos(2*np.pi*x)
+fig, ax = plt.subplots()
+
+ax.plot(x,y,'go-', label ='sin')
+ax.plot(x,y1,'bd-', label ='cos')
+
+lg= ax.legend(loc= 'upper center', fontsize =15)
+ax.set_title ('Press a key', size=25)
+fig.canvas.mpl_connect('key_press_event', press)
+fig.canvas.mpl_connect('key_release_event', release)
+plt.show()
+---------------------------------------------- x key press event --------------------------------------
+
+########################################################  GIT Notes Start ##############################################################
+----------------------------------------------------- Chapter 1 ----------------------------------------------------------- Starts
+0) ---- Some terms -------
+1) Figure : Entire Picture
+2) Axes : A subsection of figure where a graph is plotted. Has Title, xlabel, ylabel. A figure can have many Axes, each for a figure.
+3) Axis : These are number lines representing scle of graph. A 3D plt will have 3 Axis. Axis is part of Axes
+4) Label : A name given to various elements of a Figure. e.g x-axis label, y-axis label, graph label 
+5) 
+0) ---- Some terms -------
+
+1)-------plot two lines and add title and x and y labels ----------
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+plt.plot([1.5,1.3])
+plt.xlabel("plt_xlabel")
+plt.ylabel("plt_ylabel")
+plt.title("Title")
+plt.plot([2,2.1])
+plt.show()
+1)-------plot two lines and add title and x and y labels ----------
+2)------- Numpy file x and y values and titles ----------
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+plt.title("plt TITLE Numpy File X,Y")
+plt.xlabel('plt.xlabel')
+plt.ylabel('plt.ylabel')
+txt= np.loadtxt('test.txt', delimiter=',')
+txt= txt.reshape(5,2)
+x= txt[:,0]
+y= txt[:,1]
+print(txt)
+print(x, y)
+plt.plot(x,y)
+plt.show()
+2)------- Numpy file x and y values and titles ----------
+3)------- Reading a csv and defining font and style at plt level-----------
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+x,y = np.loadtxt("test.csv", unpack= True, usecols=(0,1), delimiter=',')
+print(x,y)
+mpl.rc('lines',linewidth=1, linestyle='-', marker ='*')
+mpl.rcParams['lines.markersize']= 7
+mpl.rcParams['font.size'] = '8' # This will set the fonts of plt's x,y and title
+plt.title("plt TITLE Numpy File X,Y")
+plt.xlabel('plt.xlabel')
+plt.ylabel('plt.ylabel')
+plt.plot(x,y)
+plt.show()
+3)------- Reading a csv and defining font and style at plt level-----------
+
+----------------------------------------------------- Chapter 1 ----------------------------------------------------------- Ends
+----------------------------------------------------- Chapter 2 ----------------------------------------------------------- Starts
+1)------ Basic line plot with rotation of x axis-------------
+import matplotlib.pyplot as plt
+import pandas as pd
+#Load Google Stock Price file into x, y co-ordinates
+stock = pd.read_csv('GOOG.csv', header=None, delimiter=',')
+# add column names
+stock.columns = ['Date','Price']
+#convert the Pandas DataFrame into a time series
+stock['Date'] = pd.to_datetime(stock['Date'], format='%d-%m-%Y')
+#setting date as index for the pandas dataframe
+indexed_stock = stock.set_index('Date')
+ts = indexed_stock['Price']
+# plot the graph
+plt.plot(ts)
+plt.xticks(rotation=20)     # new line added for 3.0
+# Display the graph on the screen
+plt.tight_layout()
+plt.show()
+1)------ Basic line plot with rotation of x axis-------------
+2)------ Basic bar plot wih values at desired position on chart-------------
+import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import calendar
+# matplotlib accepts only floating point data types as its arguments for data.
+# So months have to be represented in numerical format
+month_num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+units_sold = [500, 600, 750, 900, 1100, 1050, 1000, 950, 800, 700, 550, 450]
+fig, ax = plt.subplots()
+# change the month format from number to corresponding month name on x-axis.
+plt.xticks(month_num, calendar.month_name[1:13], rotation=20)
+# plot the bar graph
+plot = ax.bar(month_num, units_sold)
+for rect in plot:
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width()/2., 1.002*height,'%d' % int(height), ha='center', va='bottom')
+plt.tight_layout()
+plt.show()
+2)------ Basic bar plot wih values at desired position on chart-------------
+3)------ Basic horizontal bar chart ------------
+# import numpy and calendar packages
+import matplotlib.pyplot as plt
+import numpy as np
+import calendar
+# matplotlib accepts only floating point data types as its arguments for data.
+# So months have to be represented in numerical format
+month_num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+units_sold = [500, 600, 750, 900, 1100, 1050, 1000, 950, 800, 700, 550, 450]
+fig, ax = plt.subplots()
+# change the month format from number to corresponding month name on x-axis.
+plt.yticks(month_num, calendar.month_name[1:13], rotation=20)
+# plot horizontal bar graph
+plot = plt.barh(month_num, units_sold)
+plt.tight_layout()
+plt.show()
+3)------ Basic horizontal bar chart ------------
+4)------ BAsic Scatter plot -------
+import matplotlib.pyplot as plt
+import pandas as pd
+plt.figure(figsize=(10,6))
+age_weight = pd.read_excel('scatter_ex.xlsx', 'age_weight')
+x = age_weight['age']
+y = age_weight['weight']
+plt.scatter(x, y)
+plt.tight_layout()
+plt.show()
+4)------ Basic Scatter plot -------
+5)------ Basic Scatter plot with colors---
+import matplotlib.pyplot as plt
+import pandas as pd
+iris = pd.read_csv('iris_dataset.csv', delimiter=',')
+iris['species'] = iris['species'].map({"setosa" : 0, "versicolor" : 1, "virginica" : 2})
+plt.scatter(iris.petal_length, iris.petal_width, c=iris.species)
+plt.tight_layout()
+plt.show()
+5)------ Basic Scatter plot with colors---
+6)------ Basic Bubble --------
+import matplotlib.pyplot as plt
+import pandas as pd
+iris = pd.read_csv('iris_dataset.csv', delimiter=',')
+iris['species'] = iris['species'].map({"setosa" : 0, "versicolor" : 1, "virginica" : 2})
+plt.scatter(iris.petal_length, iris.petal_width, s=50*iris.petal_length*iris.petal_width,
+            c=iris.species, alpha=0.3)
+plt.tight_layout()
+plt.show()
+6)------ Basic Bubble --------
+7)------ Stacked -------
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.array([1, 2, 3, 4, 5, 6], dtype=np.int32)
+Apr = [5, 7, 6, 8, 7, 9]
+May = [0, 4, 3, 7, 8, 9]
+June = [6, 7, 4, 5, 6, 8]
+labels = ["April ", "May", "June"]
+fig, ax = plt.subplots()
+ax.stackplot(x, Apr, May, June, labels=labels)
+ax.legend(loc=2)
+plt.xlabel('defect reason code')
+plt.ylabel('number of defects')
+plt.title('Product Defects - Q1 FY2019')
+plt.tight_layout()
+plt.show()
+7)------ Stacked -------
+8)------ Pie -------
+import matplotlib.pyplot as plt
+# Pie chart, where the slices will be ordered and plotted counter-clockwise:
+labels = ['SciFi', 'Drama', 'Thriller', 'Comedy', 'Action', 'Romance']
+sizes = [5, 15, 10, 20, 40, 10]   # Add upto 100%
+explode = (0, 0, 0, 0, 0.1, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+# Below line not required for 3.0, for ellptical shape use ax1.axis('auto') or ax1.set_aspect('auto')
+#ax1.axis('equal') # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.tight_layout()
+plt.show()
+import matplotlib.pyplot as plt
+# Pie chart, where the slices will be ordered and plotted counter-clockwise:
+labels = ['SciFi', 'Drama', 'Thriller', 'Comedy', 'Action', 'Romance']
+sizes = [5, 15, 10, 20, 40, 10]   # Add upto 100%
+explode = (0, 0, 0, 0, 0.1, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+# Below line not required for 3.0, for ellptical shape use ax1.axis('auto') or ax1.set_aspect('auto')
+#ax1.axis('equal') # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.tight_layout()
+plt.show()
+8)------ Pie ------- 
+9)------ Histogram ------
+import matplotlib.pyplot as plt
+import numpy as np
+# Define group experience variable as a numpy array
+grp_exp = np.array([12,  15,  13,  20,  19,  20,  11,  19,  11,  12,  19,  13,
+                    12,  10,  6,  19,  3,  1,  1,  0,  4,  4,  6,  5,  3,  7,
+                    12,  7,  9,  8,  12,  11,  11,  18,  19,  18,  19,  3,  6,
+                     5,  6,  9,  11,  10,  14,  14,  16,  17,  17,  19,  0,  2,
+                     0,  3,  1,  4,  6,  6,  8,  7,  7,  6,  7,  11,  11,  10,
+                    11,  10,  13,  13,  15,  18,  20,  19,  1,  10,  8,  16,
+                    19,  19,  17,  16,  11,  1,  10,  13,  15,  3,  8,  6,  9,
+                    10,  15,  19,  2,  4,  5,  6,  9,  11,  10,  9,  10,  9,
+                    15,  16,  18,  13])
+# Plot the distribution of Experience
+nbins = 21
+n, bins, patches = plt.hist(grp_exp, bins = nbins)
+# Add axis labels
+plt.xlabel("Experience in years")
+plt.ylabel("Frequency")
+plt.title("Distribution of Experience in a Lateral Training Program")
+# Draws the red vertical line in graph at the average experience
+plt.axvline(x=grp_exp.mean(), linewidth=2, color = 'r')
+# Statistics of DSS Batch experience
+print("Mean Experience of DSS Batch: {:4.3f}".format(grp_exp.mean()))
+print("Std Deviation of Experience of DSS Batch: {:4.3f}".format(grp_exp.std()))
+plt.tight_layout()
+plt.show()
+9)------ Histogram ------
+10)------ Histogram with Mean -----------
+import matplotlib.pyplot as plt
+import numpy as np
+# Define group experience variable as a numpy array
+grp_exp = np.array([12,  15,  13,  20,  19,  20,  11,  19,  11,  12,  19,  13,
+                    12,  10,  6,  19,  3,  1,  1,  0,  4,  4,  6,  5,  3,  7,
+                    12,  7,  9,  8,  12,  11,  11,  18,  19,  18,  19,  3,  6,
+                     5,  6,  9,  11,  10,  14,  14,  16,  17,  17,  19,  0,  2,
+                     0,  3,  1,  4,  6,  6,  8,  7,  7,  6,  7,  11,  11,  10,
+                    11,  10,  13,  13,  15,  18,  20,  19,  1,  10,  8,  16,
+                    19,  19,  17,  16,  11,  1,  10,  13,  15,  3,  8,  6,  9,
+                    10,  15,  19,  2,  4,  5,  6,  9,  11,  10,  9,  10,  9,
+                    15,  16,  18,  13])
+# Plot the distribution of Experience
+nbins = 21
+n, bins, patches = plt.hist(grp_exp, bins = nbins, density=1)
+# Add axis labels
+plt.xlabel("Experience in years")
+plt.ylabel("Percentage")
+plt.title("Distribution of Experience in a Lateral Training Program")
+mu = grp_exp.mean()
+sigma = grp_exp.std()
+# add a 'best fit' line
+y = ((1 / (np.sqrt(2 * np.pi) * sigma)) *
+     np.exp(-0.5 * (1 / sigma * (bins - mu))**2))
+plt.plot(bins, y, '--')
+plt.tight_layout()
+plt.show()
+10)------ Histogram with Mean -----------
+----------------------------------------------------- Chapter 2 ----------------------------------------------------------- Ends
+----------------------------------------------------- Chapter 3 Multiple Charts ----------------------------------------------------------- Starts
+***** Try working with arrays and not df with matplotlib *******
+1) ---Multiple line plots in same figure with legends, colors and plt level title and x,y axis specified ----
+import  matplotlib.pyplot as plt
+import pandas as pd
+fpr_KNN = pd.read_excel('ROC_Curves.xlsx', 'fpr_KNN')
+tpr_KNN = pd.read_excel('ROC_Curves.xlsx', 'tpr_KNN')
+fpr_MLP = pd.read_excel('ROC_Curves.xlsx', 'fpr_MLP')
+tpr_MLP = pd.read_excel('ROC_Curves.xlsx', 'tpr_MLP')
+fpr_SGD = pd.read_excel('ROC_Curves.xlsx', 'fpr_SGD')
+tpr_SGD = pd.read_excel('ROC_Curves.xlsx', 'tpr_SGD')
+fpr_RF = pd.read_excel('ROC_Curves.xlsx', 'fpr_RF')
+tpr_RF = pd.read_excel('ROC_Curves.xlsx', 'tpr_RF')
+fpr_DT = pd.read_excel('ROC_Curves.xlsx', 'fpr_DT')
+tpr_DT = pd.read_excel('ROC_Curves.xlsx', 'tpr_DT')
+#  below converts df to array .. It is important  #
+fpr_KNN = fpr_KNN.iloc[:,:].values
+tpr_KNN = tpr_KNN.iloc[:,:].values
+fpr_MLP = fpr_MLP.iloc[:,:].values
+tpr_MLP = tpr_MLP.iloc[:,:].values
+fpr_SGD = fpr_SGD.iloc[:,:].values
+tpr_SGD = tpr_SGD.iloc[:,:].values
+fpr_RF = fpr_RF.iloc[:,:].values
+tpr_RF = tpr_RF.iloc[:,:].values
+fpr_DT = fpr_DT.iloc[:,:].values
+tpr_DT = tpr_DT.iloc[:,:].values
+#  above converts df to array .. It is important  #
+plt.plot(fpr_KNN, tpr_KNN, label='KNN',color='green')
+plt.plot(fpr_DT, tpr_DT, label='DecisionTree', color='orange')
+plt.plot(fpr_RF, tpr_RF, label='Random Forest',color='yellow')
+plt.plot(fpr_MLP, tpr_MLP, label='MLP',color='red')
+plt.plot(fpr_SGD, tpr_SGD, label='SGD', color='pink')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC curve')
+plt.legend(loc='best')
+plt.show()
+1) ---Multiple line plots in same figure with legends, colors and plt level title and x,y axis specified ----
+2) ---Grid with row,col defined and charts of equal size ploted with each chart having title,X,Y and Size and Title of Fig defined ----
+import pandas as pd
+import matplotlib.pyplot as plt
+wine_quality = pd.read_csv('winequality.csv', delimiter=';')
+iris = pd.read_csv('iris_dataset.csv', delimiter=',')
+iris_mean = iris.mean()
+iris_std = iris.std()
+fig, axs = plt.subplots(2, 2, figsize=(8, 8))
+axs[0, 0].hist(wine_quality['alcohol'])
+axs[0, 0].set(title='Histogram', xlabel='Alcohol Bins', ylabel='Frequency')
+axs[0, 1].plot(iris['sepal_length'], iris['sepal_width'])
+axs[0, 1].set(title='Line', xlabel='Sepal Length', ylabel='Sepal Width')
+axs[1, 0].scatter(iris['petal_length'], iris['petal_width'])
+axs[1, 0].set(title='Scatter', xlabel='Petal Length', ylabel='Petal Width')
+axs[1, 1].bar(['sepal_l','sepal_w', 'petal_l', 'petal_w'], iris_mean, yerr=iris_std)
+#axs[1, 1].bar([0, 1, 2, 3], iris_mean, yerr=iris_std) for older versions of matplotlib
+axs[1, 1].set(title='Bar', xlabel='Category', ylabel='Category Mean')
+plt.suptitle('Subplots Demo')
+plt.tight_layout(pad=3, w_pad=1.0, h_pad=1.0)
+plt.show()
+2) ---Grid with row,col defined and charts of equal size ploted with each chart having title,X,Y and Size and Title of Fig defined ----
+
+3) --- 2 Figures are plotted..  subplot2grid used... colspan and rowspan... 
+import matplotlib.pyplot as plt
+import pandas as pd
+plt.close('all')
+iris = pd.read_csv('iris_dataset.csv', delimiter=',')
+fig = plt.figure(1, figsize=(12, 9))
+ax1 = plt.subplot2grid((3, 3), (0, 0))
+# ax2 = plt.subplot2grid((3, 3), (0, 1), colspan=2)
+# ax3 = plt.subplot2grid((3, 3), (1, 0), colspan=2, rowspan=2)
+# ax4 = plt.subplot2grid((3, 3), (1, 2), rowspan=2)
+ax2 = plt.subplot2grid((3, 3), (0, 1))
+ax3 = plt.subplot2grid((3, 3), (1, 0))
+ax4 = plt.subplot2grid((3, 3), (1, 2))
+ax5 = plt.subplot2grid((3,3),(0,2)) # This will be empty on first row and 3rd col
+ax6 = plt.subplot2grid((3,3),(1,1),rowspan=2)
+ax7 = plt.subplot2grid((3,3),(2,2))
+ax1.hist(iris['petal_width'])
+ax2.scatter(iris['petal_length'], iris['petal_width'],
+            s=50*iris['petal_length']*iris['petal_width'], alpha=0.3)
+ax3.scatter(iris['sepal_length'], iris['sepal_width'])
+ax4.violinplot(iris['petal_length'])
+plt.suptitle('Figure 1: Grid Plotting Demo', fontsize=20)
+plt.tight_layout(pad=5, w_pad=0.5, h_pad=1.0)
+plt.figure(2, figsize=(12, 5))
+names = ['group_a', 'group_b', 'group_c', 'group_d', 'group_e']
+values = [1, 10, 50, 100, 500]
+plt.subplot(131)
+plt.bar(names, values, color='orange')
+plt.subplot(132)
+plt.scatter(names, values, color='orange')
+plt.subplot(133)
+plt.plot(names, values, color='orange')
+plt.suptitle('Figure 2: Row Plotting Demo', fontsize=20)
+plt.show()
+3) --- 2 Figures are plotted..  subplot2grid used... colspan and rowspan... 
+
+4) --- Three plots .. Diffrenet x axis and scales (log, linear) .... 
+import matplotlib.pyplot as plt
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+ax1.plot([0.1, 5, 10, 500], [0.01, 25, 100, 10000], "x-")
+ax1.set(title="Linear Scale", xlim=(1e1, 1e3), ylim=(1e2, 1e4))
+ax2.set(title="adjustable = box", xscale="log", yscale="log", xlim=(1e1, 1e3),
+        ylim=(1e2, 1e3), aspect=2)
+ax3.plot([0.1, 5, 10, 500], [0.01, 25, 100, 10000], "*-")
+ax3.set(title="adjustable = datalim", xscale="log", yscale="log", adjustable="datalim",
+        xlim=(1e-1, 1e3), ylim=(1e-2, 1e4), aspect=1)
+plt.tight_layout()
+plt.show()
+4) --- Three plots .. Diffrenet x axis and scales (log, linear) .... 
+
+5) --- Use basic unit from basic_unit and use in x axis -----
+import numpy as np
+from basic_units import cm, inch
+import matplotlib.pyplot as plt
+
+cms = cm * np.arange(0, 21, 3)
+bottom = 0 * cm
+width = 0.8 * cm
+
+fig, axs = plt.subplots(2, 2)
+
+axs[0, 0].bar(cms, cms, bottom=bottom)
+axs[0, 0].set_xticks(cm * np.arange(0, 21, 3))
+
+axs[0, 1].bar(cms, cms, bottom=bottom, width=width, xunits=cm, yunits=inch)
+axs[0, 1].set_xticks(cm * np.arange(0, 21, 3))
+
+axs[1, 0].bar(cms, cms, bottom=bottom, width=width, xunits=inch, yunits=cm)
+axs[1, 0].set_xticks(cm * np.arange(0, 21, 3))
+axs[1, 0].set_xlim(2, 6)  # scalars are interpreted in current units
+
+axs[1, 1].bar(cms, cms, bottom=bottom, width=width, xunits=inch, yunits=inch)
+axs[1, 1].set_xticks(cm * np.arange(0, 21, 3))
+axs[1, 1].set_xlim(2 * cm, 6 * cm)  # cm are converted to inches
+
+fig.tight_layout()
+plt.show()
+5) --- Use basic unit from basic_unit and use in x axis -----
+
+
+----------------------------------------------------- Chapter 3 Multiple Charts----------------------------------------------------------- Ends
+----------------------------------------------------- Chapter 4 Publishing Quality-------------------------------------------------------- Starts
+
+
+----------------------------------------------------- Chapter 4 Publishing Quality-------------------------------------------------------- Ends
+
+########################################################  GIT Notes Ends ##############################################################
