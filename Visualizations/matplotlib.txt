@@ -1245,5 +1245,155 @@ fig.canvas.mpl_connect('key_press_event', press)
 fig.canvas.mpl_connect('key_release_event', release)
 plt.show()
 ----------------2--------------------
--------------------------
+----------------------------------------------------------- GIT 1----------------------------------------------------------------- Start
+1) ---------------Basic figure plot with two lines and a bit of formatting -------------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+plt.figure(figsize=(8,3))
+plt.plot(x,y, 'o', label='Data', zorder=100)
+plt.plot(x2,y2, label='Fit')
+plt.xlabel('Time [s]', fontsize=16)
+plt.ylabel('Voltage [V]')
+plt.title('Voltage in 3rd Electrode')
+plt.legend(loc='upper right', fontsize=12, ncol=2)
+plt.ylim(top=2)
+plt.show()
+1) ---------------Basic figure plot with two lines and a bit of formatting -------------------
+2) --------------- Simple Histogram --------------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+res = np.random.randn(1000)
+res2 = np.random.randn(1000)*0.2 + 0.4
+plt.hist(res, bins= 21, density=True )
+plt.show()
+2) --------------- Simple Histogram --------------------
+3) ---------------  Two Histogram plots -----------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+res = np.random.randn(1000)
+res2 = np.random.randn(1000)*0.2 + 0.4
+plt.figure(figsize=(8,3))
+plt.hist(res, bins=30, density=True, histtype='step')
+plt.hist(res2, bins=30, density=True, histtype='step')
+plt.xlabel('$\hat{E}-E$', fontsize=10)
+plt.ylabel('Frequency')
+plt.show()
+3) ---------------  Two Histogram plots -----------------
+4) -------------  Line plot with format ---------------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+res = np.random.randn(1000)
+res2 = np.random.randn(1000)*0.2 + 0.4
+
+fig, ax = plt.subplots(1, 1, figsize=(12,4))
+ax.plot(x, y, 'o--', color='r', lw=0.4, ms=3)
+ax.text(0.1, 0.1, 'text here', transform=ax.transAxes)
+ax.set_xlabel('Time [s]',fontsize=15)
+ax.set_ylabel(r'$\frac{d}{dx} f(x)$', fontsize=15)
+plt.show()
+4) -------------  Line plot with format ---------------------
+5) ------------- Miltiple figures with formatting ---------------
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+res = np.random.randn(1000)
+res2 = np.random.randn(1000)*0.2 + 0.4
+
+fig, axes = plt.subplots(3, 2, figsize=(8,8))
+ax = axes[0][0]
+ax.plot(x, y, 'o--', color='r', lw=0.4, ms=3)
+ax.text(0.1, 0.1, 'text here', transform=ax.transAxes)
+ax = axes[1][1]
+ax.hist(res, bins=30, density=True, histtype='step', label='C1')
+ax.hist(res2, bins=30, density=True, histtype='step', label='C1')
+ax.set_xlabel('$\hat{E}-E$')
+ax.legend()
+fig.tight_layout()
+fig.suptitle('Title of All Plots', y=1.03, fontsize=25)
+plt.show()
+5) ------------- Miltiple figures with formatting ---------------
+6) ------------- To make x and y axis tick formatting, use below----
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use(['science','notebook','grid'])
+x= np.linspace(0,15,30)
+y = np.sin(x) +.1*np.random.randint(len(x))
+x2 = np.linspace(0, 15, 100)
+y2 = np.sin(x2)
+res = np.random.randn(1000)
+res2 = np.random.randn(1000)*0.2 + 0.4
+
+plt.style.use(['science', 'notebook', 'grid'])
+fig, ax = plt.subplots(1, 1, figsize=(8,3))
+ax.plot(x, y, 'o--', color='r', lw=1, ms=5)
+ax.text(0.1, 0.1, 'text here', transform=ax.transAxes)
+ax.set_xlabel('Time [s]')
+ax.set_ylabel(r'$\frac{d}{dx} f(x)$', fontsize=15)
+ax.tick_params(axis='both', which='major', labelsize=10)  #             <----------------------
+ax.grid('minor')
+plt.show()
+6) ------------- To make x and y axis tick formatting, use below----
+7) ------------ Hist with formatting----------------
+import numpy as np
+import matplotlib.pyplot as plt
+
+res_a1 = 0.2*np.random.randn(1000)+0.4
+res_b1 = 0.25*np.random.randn(1000)+0.4
+res_a2 = 0.21*np.random.randn(1000)+0.3
+res_b2 = 0.22*np.random.randn(1000)+0.3
+
+textstr1 = '\n'.join((
+    r'$\sigma_a=%.4f$' % (np.std(res_a1)),
+    r'$\sigma_b=%.4f$' % (np.std(res_b1))))
+
+textstr2 = '\n'.join((
+    r'$\sigma_a=%.4f$' % (np.std(res_a2)),
+    r'$\sigma_b=%.4f$' % (np.std(res_b2))))
+fig, axes = plt.subplots(1, 2, figsize=(10,3.5))
+ax = axes[0]
+ax.hist(res_a1, bins=30, density=True, histtype='step', label='Method a', color='blue')
+ax.hist(res_b1, bins=30, density=True, histtype='step', label='Method b', color='red')
+ax.text(0.05, 0.81, textstr1, transform=ax.transAxes,
+       bbox=dict(facecolor='white', edgecolor='black'), size=12)
+
+ax.legend(fontsize=10, fancybox=False, edgecolor='black')
+ax.set_ylabel('Frequency')
+ax.set_title('Trial 1')
+ax = axes[1]
+ax.hist(res_a2, bins=30, density=True, histtype='step', label='Method 1', color='blue')
+ax.hist(res_b2, bins=30, density=True, histtype='step', label='Method 2', color='red')
+ax.text(0.05, 0.81, textstr2, transform=ax.transAxes,
+       bbox=dict(facecolor='white', edgecolor='black'), size=12)
+ax.set_title('Trial 2')
+fig.text(0.5, -0.04, '$\Delta E$ [Joules]', ha='center', size=20)
+plt.savefig('trial.png', dpi=200)
+plt.show()
+7) ------------ Hist with formatting----------------
+
+----------------------------------------------------------- GIT 1----------------------------------------------------------------- Start
+
 
