@@ -1729,6 +1729,66 @@ button.on_clicked(resetSlider)
 plt.show()
 13) ------------ Slider more --------------------
 
+14) ------------ RangeSlider -----------------
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import RangeSlider
+
+fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+fig.subplots_adjust(bottom=0.25)
+
+# Create the RangeSlider
+slider_ax = fig.add_axes([0.20, 0.1, 0.60, 0.03])
+slider = RangeSlider(slider_ax, "Threshold",0,100)
+
+
+
+def update(val):
+    # The val passed to a callback by the RangeSlider will
+    # be a tuple of (min, max)
+
+    # Update the image's colormap
+    axs[0].plot(np.arange(val[0], val[1]))
+    # Redraw the figure to ensure it updates
+    fig.canvas.draw_idle()
+
+
+slider.on_changed(update)
+plt.show()
+14) ------------ RangeSlider -----------------
+
+15) ------------ X asis control via Slide bar --------------------
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import RangeSlider
+x= np.arange(0,100)
+xData = x**2
+fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+fig.subplots_adjust(bottom=0.25)
+axs[1].plot(x,xData)
+axs[1].set_title('pixel intensities')
+# Create the RangeSlider
+slider_ax = fig.add_axes([0.20, 0.1, 0.60, 0.03])
+slider = RangeSlider(slider_ax, "Threshold", x.min(), x.max())
+# Create the Vertical lines on the histogram
+lower_limit_line = axs[1].axvline(slider.val[0], color='k')
+upper_limit_line = axs[1].axvline(slider.val[1], color='k')
+def update(val):
+    # The val passed to a callback by the RangeSlider will
+    # be a tuple of (min, max)
+    # Update the image's colormap
+    axs[0].clear()
+    x = np.arange(val[0], val[1])
+    xData = x ** 2
+    axs[0].plot(x,xData)
+    plt.show()
+    # Update the position of the vertical lines
+    lower_limit_line.set_xdata([val[0], val[0]])
+    upper_limit_line.set_xdata([val[1], val[1]])
+slider.on_changed(update)
+plt.show()
+15) ------------ X asis control via Slide bar --------------------
+
 ----------------------------------------------------------- GIT 1----------------------------------------------------------------- Start
 
 
