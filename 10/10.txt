@@ -1,0 +1,75 @@
+1) Real Numbers
+
+Euclid's Division Lemma
+1.1) Any +ve int a can be divided by another +ve integer b(except 1)  in such a way that it leaves a remainder r which is equal or smaller than b
+for E\each pairof +ve integers a and b , we found whole numbers q and r satisfying  a = bq + r  where 0<= r <=b
+q and r are unique and only theses values satisfy the equation
+
+
+Natural Numbers: 	All counting numbers from 1 (1,2,3,4...) not fractions..
+Whole Number:	 	0+ Natural numbers
+Integers:		Whole numbers and their -ve from -infinity to +infinity
+Rational Numbers:	p/q where q<>0
+Irrational Number:	can not be expressed as p/q where q<>0
+Real Nmbers: 		Rational + Irrational numbers
+
+
+1.2) Every composite nuber can be expresses as products of primes in unique way 
+1.3) Rational Numbers : ?
+1.4) Irrational Numbers:  Root2
+1.5) Whole numbers: ?
+
+1.7) Any number can be written as product of its primes
+1.8) Fundamental Arthematic theorem: Every composite number can be epressed as product of power of primes
+1.9) HCF : product of smallest power of common primes
+1.10) LCM : product of highest power of prime involved in numbers.
+1.11) Rational and irrational numbers make real numbers  
+
+
+2) Polynomials
+In a ploynoial the power of variable shoule be +ve int only, not x^(1/2) or -1
+2.1) 4x + 2 is polynomial in x of degree 1,  .... Linear ploynomial
+2.2) y^2 + y +9 is ploynomial in variable y with degree2,  .... quadratic polynomial
+2.3) generic form a quadratic polynomial is ax^2 + bx + c , where a,b,c are real numbers and a<>0
+2.4) cubic polynomial, 2-x^3, underroot(2)*x^3  .... general form ax^3 + bx^2 + cx +d where a<>0
+2.5) we find the value of polynomial by replacing the value of x
+2.6) zero or linear polynomial ax+b is -b/a.... check if similar relation is there for quadratica and cubic polynomials or not?
+2.7) A linear polynomial has exactly one 0 as it is a straight line and will cut at x only at 1 point
+2.8) shape of quadratic ploynomial is a paraboly upwards or downwards.
+2.9) a quadratic polygone may or may not cut x axis or touch at a single point or cut at two points.
+2.10) There are at most 3 zeros of cubic polynomial 
+2.11) In general, a polynomical of n degrees will have at most n zeros.
+2.12) in general , for a quadratic equation ax^2 + 
+
+
+3) Pair of linear equation in 2 variables.
+3.1) Equation of line ... ax + by +c = 0
+
+
+4) Quadratic Equations  ... ax^2 + bx + c = 0
+4.1) 
+
+5) AP 
+5.1) A list of numbers where each term is obtaned by addind a fixed term to preceeding, except the first term.
+5.2) AP = a, a+d, a+2d, a+3d, .... a+ nd
+5.3) nth term of AP = a + (n-1)d
+5.4) Sum of first n terms of AP = (n/2)* [2a + (n-1)d]
+
+
+7) Trignometry (these are ratios)
+7.1) sin a = p/h ... cosec h/p
+7.2) cos a = b/h ... sec h/p
+7.3) tan a = p/b = sin a/ cos a  ... cot b/p
+7.4) sin a does not mean sin multiplied by a.. sin and a separately has no meaning... In a right triangle, for angle a, sin a is ratio or p/h
+As these are ratios, these do NOT vary for right angle triangles where angle A is same and the sides are of different lengths.
+7.5) sin(90 -A) = cosA  ... cosec(90 -A) = secA
+7.6) cos(90 -A) = sinA  ... sec (90 -A)  = cosecA
+7.7) tan(90 -A) = cotA  ... cot (90 -A) = tanA
+7.8) sin^2 A + cos^2 A =1
+7.9) 1 + tan^2 A = sec^2 A
+7.10) 1+ cot^2 A = cosec^2 A
+
+
+
+
+
