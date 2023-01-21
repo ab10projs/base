@@ -1,0 +1,8 @@
+1) Some Vis libraties are Matplotlib, Seaborn
+2) What is Plotly?
+2.1) Both a company and open source library
+2.2) Company focuses on data viz. The open source library by name plotly focuses on interactive plotting
+2.3) Using plotly, python library creates interactive plots as .html files. These plots can not connect with changes datasources
+2.4) Dash is used to make plots interactive.
+2.5) Instead of createing an .html file, Dash will create a dasboard web applocation. 127.0.0.1:8050
+2.6) To get comfortable with Dash, Plotly understanding is a must

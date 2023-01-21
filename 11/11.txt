@@ -66,9 +66,17 @@ sin (-x) = -sin x
 3.7) proof of cos(x+y) = cos x * cos y -(sin x * sin y)
 
 ### Distance formaula for two coordinaes (x1,y1) and (x2,y2) ... d= underroot[ (x2-x1)^2 + (y2-y1)^2 ]
-1) cos(x+y) = cos x * cos y -(sin x * sin y)
-2) cos(x-y) = cos x * cos y +(sin x * sin y)
-3) ... complete rest 
+
+1) sin (-x) = -sin(x) ... As -x is -ve angle, it moves to the clockwise and comes in quadrant 4, where sin is -ve
+2) cos (-x) = cos(x) ...  As -x is -ve angle, it moves to the clockwise and comes in quadrant 4, where cos is +ve
+3) cos(x+y) = cos x * cos y -(sin x * sin y)
+3) cos(x-y) = cos x * cos y +(sin x * sin y)
+4) cos(pi/2 -x) = sin x 
+5) sin (pi/2 -x) = cos x
+6) sin(x+y) = sin(x) * cos(y) + cos(x)*sin(y)
+7) sin(x-y) = sin(x) * cos(y) - cos(x)*sin(y)
+8)  
+
 
 3.8) Trignometric Equations
 Equations involving trignometric functions of a variable.
@@ -76,6 +84,32 @@ values of sin x , cos x repeat after an interval of 2pi and value of tan repeats
 
 3.8.1) Solution of trignometric equation for which 0<=x<=2pi is called general solution.   
 Z denotes integers
+
+7) Permutation and Combination
+In an event can happen in m different ways, followed by another event that can happen in n different ways, then total number of events in given order are m*n
+7.1) In permutation order of arrangements is important
+7.2) Different possible arrangements of word ROSE in permutation means: Arrangemen of 4 alphabets, all taken at a time. 
+7.3) 3 Different words that can be formed from words NUMBER without repeat means... Permutation of 6 different alphabets(as NUMBER has 6 alphabets), taken 3 at a time
+6*5*4 = 120 (without repeat) and 6*6*6 = 216 (with repeat)
+A permutation is an arrangement in definate order of some objects all taken at  time 
+("all taken at a time" means these objet's arrangemet should be considered together 
+
+7.4) ALL OBJECTS ARE DISTINCT 
+7.5) The number of permutaions of n distinct objects, taken r at a time where 0<=r<=n, is as below:
+IF REPETITION IS NOT ALLOWED
+nPr=  n(n-1)(n-2)(n-3)(n-r+1)
+7.6) n! = 1*2*3*4*5*...*(n-1)*n
+7.7) nPr = n!/(n-r)!   .................  Repetition is not allowed (and ALL OBJECTS ARE DISTINCT)
+7.8) 0! =1
+7.9) IF REPETITION IS ALLOWED
+permutation of n objects taken r at a time when repetition is allowed is nPOWERr .................... Here Repetition is allowed (and ALL OBJECTS ARE DISTINCT)
+7.10) Now consider case where ALL OBJECTS ARE NOT DISTINCT (example ROOT, where there are 2 Os, which are considered of same kind)
+7.11) 
+
+
+
+
+
 
 
 
