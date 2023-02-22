@@ -86,6 +86,7 @@ values of sin x , cos x repeat after an interval of 2pi and value of tan repeats
 Z denotes integers
 
 7) Permutation and Combination
+	
 In an event can happen in m different ways, followed by another event that can happen in n different ways, then total number of events in given order are m*n
 7.1) In permutation order of arrangements is important
 7.2) Different possible arrangements of word ROSE in permutation means: Arrangemen of 4 alphabets, all taken at a time. 
@@ -94,17 +95,28 @@ In an event can happen in m different ways, followed by another event that can h
 A permutation is an arrangement in definate order of some objects all taken at  time 
 ("all taken at a time" means these objet's arrangemet should be considered together 
 
+***  0! =1
+n!  = 1*2*3*4*5*...*(n-1)*n
 7.4) ALL OBJECTS ARE DISTINCT 
-7.5) The number of permutaions of n distinct objects, taken r at a time where 0<=r<=n, is as below:
-IF REPETITION IS NOT ALLOWED
-nPr=  n(n-1)(n-2)(n-3)(n-r+1)
-7.6) n! = 1*2*3*4*5*...*(n-1)*n
-7.7) nPr = n!/(n-r)!   .................  Repetition is not allowed (and ALL OBJECTS ARE DISTINCT)
-7.8) 0! =1
-7.9) IF REPETITION IS ALLOWED
-permutation of n objects taken r at a time when repetition is allowed is nPOWERr .................... Here Repetition is allowed (and ALL OBJECTS ARE DISTINCT)
-7.10) Now consider case where ALL OBJECTS ARE NOT DISTINCT (example ROOT, where there are 2 Os, which are considered of same kind)
-7.11) 
+	7.5) The number of permutaions of n distinct objects, taken r at a time where 0<=r<=n, is as below:
+		IF REPETITION IS NOT ALLOWED
+			nPr =  n(n-1)(n-2)(n-3)(n-r+1)
+			nPr = n!/(n-r)!   .................  Repetition is not allowed (and ALL OBJECTS ARE DISTINCT)
+ 
+		IF REPETITION IS ALLOWED
+			permutation of n objects taken r at a time when repetition is allowed is nPOWERr .................... 
+			Here Repetition is allowed (and ALL OBJECTS ARE DISTINCT)
+7.5) ALL OBJECTS ARE NOT DISTINCT (example ROOT, where there are 2 Os, which are considered of same kind). Here 2 objects are of same kind
+	Number of permutations of n objects , where p are of 'one-type' is --> (n!)/(p!)
+		If p1 are of 'one-type' , p2 are of second-type' and p3 of 'thrird type' ... --> (n!)/((p1 !)*(p2 !)* (p3 !)
+  
+
+A combination is an arrangement where order is NOT IMPORTANT
+	nPr = nCr * r!
+	so
+	nCr = nPr/r! = n!/((n-r)! *(r)!
+
+	
 
 
 
