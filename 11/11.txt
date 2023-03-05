@@ -1,14 +1,30 @@
 1)Sets
+
+Natural Numbers: 	All counting numbers from 1 (1,2,3,4...) not fractions..
+Whole Number:	 	0+ Natural numbers
+Integers:		Whole numbers and their -ve from -infinity to +infinity
+Rational Numbers:	p/q where q<>0
+Irrational Number:	can not be expressed as p/q where q<>0
+Real Nmbers: 		Rational + Irrational numbers	
+
+
 1.1) sets are used to define the concept of relations and functions
 1.2) sets are also used in sudy of geometry, sequences, probability
 1.3) collection of objects of a particular kind. A well defined collection of objects. 
 We can clearly define if a particular object belongs to that set.
 1.4) If a belongs to set A epsilon A
-1.5) {} is empty set
-1.6) subset
-1.7) set of all subsets of a set is called power of a set
-1.8) If a set has m elements, then the power of this set is 2^m
-1.9) Venn, union and intersections
+1.5) There are 2 ways of representing a set. (Roster or tabular form... and.... set-builder)
+1.6) Roster {1,2,3,4,5}.. Here the order in which elements appear does not matter.. so this set can be written as {2,1,3,4,5}
+1.7) In Roster form the elements are not repeated..
+1.8) In Setbuilder form, all elements of set have some common property... like all vowels. v= {x:x is a vowel}.
+1.9) {} is empty set.. or empty set or void set.
+1.10) if all elements of 2 sets are same, then the two sets are equal.
+1.11) The set of real numbers >a and <b is a open set, as the end points(a and b) are not included.{y: a< y <b }... [a,b]
+1.12) If both end points are included, then set is called closed .. { y: a<= y <=b }
+1.13) Set can be closed from one end and open from other  ... { y: a< y <=b }
+1.14) Power Set: a set of all subsets is power of a set.. For set A{1,2}, power P(A) = {null,{1},{2},{1,2}} ..
+1.15) Universal Set: The basic set is called Universal set. All its subsets are called A,B,C.. 
+
 
 2) Relations and Functions
 2.1) cartesian product of tw sets A and B is .. All elements of A multiplied by All elements of set B

@@ -1,3 +1,15 @@
+
+1.1) A well defined collection of objects is called a set.
+
+1.2)
+Natural Numbers: 	All counting numbers from 1 (1,2,3,4...) not fractions..
+Whole Number:	 	0+ Natural numbers
+Integers:		Whole numbers and their -ve from -infinity to +infinity
+Rational Numbers:	p/q where q<>0
+Irrational Number:	can not be expressed as p/q where q<>0
+Real Nmbers: 		Rational + Irrational numbers	
+
+
 1) Real Numbers
 
 Euclid's Division Lemma
@@ -6,12 +18,7 @@ for E\each pairof +ve integers a and b , we found whole numbers q and r satisfyi
 q and r are unique and only theses values satisfy the equation
 
 
-Natural Numbers: 	All counting numbers from 1 (1,2,3,4...) not fractions..
-Whole Number:	 	0+ Natural numbers
-Integers:		Whole numbers and their -ve from -infinity to +infinity
-Rational Numbers:	p/q where q<>0
-Irrational Number:	can not be expressed as p/q where q<>0
-Real Nmbers: 		Rational + Irrational numbers
+
 
 
 1.2) Every composite nuber can be expresses as products of primes in unique way 
