@@ -27,13 +27,16 @@ We can clearly define if a particular object belongs to that set.
 
 
 2) Relations and Functions
-2.1) cartesian product of tw sets A and B is .. All elements of A multiplied by All elements of set B
+2.1) cartesian product of two sets A and B is .. All elements of A multiplied by All elements of set B
 2.2) The order of pair formed by cartesian product is crucial. 
-(DL, MP, KA) * (1,2,3) will give (DL,1),(DL,2),(DL,3),(MP,1),(MP,2),MP3),(KA,1),(KA,2), (KA,3).. KA,3 <> 3,KA
+(DL, MP, KA) * (1,2,3) will give (DL,1),(DL,2),(DL,3),(MP,1),(MP,2),MP3),(KA,1),(KA,2), (KA,3).. KA,3 <> 3,KA 
 2.2.1) Two ordered pairs are equal, then first element is same in both pairs and also second element is same in both pairs
 2.2.2) if there are p elements in A and q elements in B, then there will be pq elements in AXB.
 2.2.3) orderd triplets {a,b,c} in AXAXA if all a,b and c belong to A
-Relation:
+
+
+
+
 
 3) Trignometric Functions
 3.1) Units of measurement of angles
