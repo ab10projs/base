@@ -135,6 +135,7 @@ A combination is an arrangement where order is NOT IMPORTANT
 	so
 	nCr = nPr/r! = n!/((n-r)! *(r)!
 
+
 	
 
 
