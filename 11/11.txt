@@ -40,8 +40,8 @@ We can clearly define if a particular object belongs to that set.
 
 3) Trignometric Functions
 3.1) Units of measurement of angles
-3.1.1) Degree:	1 Degree of full revolution = 1/360
-3.1.2) Radian:	A circle of 1 unit is the one that has 1 unit radius (1 cm, 1m etc).
+3.1.1) Degree:	1 Degree of full revolution = 1/360.  1 degree=(360/2*pi) radian
+3.1.2) Radian:	A circle of 1 unit is the one that has 1 unit radius (1 cm, 1m etc). A unit circle subtends 2*pi radians at centre,so 1 radian approx 57.69 degree.
 
 The circumference of a unit circle is 2*pi, so one complete rotation subtends 2*pi radians at center.
 As an arc of length r subtends 1 radian, an arc of length l will subtend l/r radians. 
@@ -133,7 +133,7 @@ n!  = 1*2*3*4*5*...*(n-1)*n
 A combination is an arrangement where order is NOT IMPORTANT
 	nPr = nCr * r!
 	so
-	nCr = nPr/r! = n!/((n-r)! *(r)!
+	nCr = nPr/r! = n!/[(n-r)! *(r)!]
 
 
 	
