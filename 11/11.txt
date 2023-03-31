@@ -1,5 +1,6 @@
 1)Sets
 
+
 Natural Numbers: 	All counting numbers from 1 (1,2,3,4...) not fractions..
 Whole Number:	 	0+ Natural numbers
 Integers:		Whole numbers and their -ve from -infinity to +infinity
