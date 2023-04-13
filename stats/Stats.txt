@@ -1,1 +1,27 @@
 1)
+2) Grouping and displaying
+2.1) Data Array
+2.2) Frequency distribution is a better way of data display w.r.t arrays
+2.2.1) Classes of some interval are created and the count of elements (frequency) is callacualed
+2.2.2) Relative frequency distribution has the % or values of class, and add to 100% for all classes
+2.2.2.1) Steps for frequency distribution
+a) Decide number of classes
+b) calculate the width of class
+c) sort the values and count number of entries per class
+d) Histograms and Frquency polygones.. Ogives show relative frequency
+
+
+3) Measures of entral Tendenccy and Dispersion in Frequency
+3.1) Central Tendency: Middle point of a distribution
+3.2) Dispersion is spread of data (level to which the values are scattered
+3.3) skewness: (Symmetrical or skewed). Skewed to left means long tail is on left side.
+3.4) Kurttois: Peakedness. 
+3.5) Charactersticts of samples are called statistics
+3.6) Charactersticts of population are called parameters
+3.7) mu = Sigma(x)/N (population)
+3.8) xbar = sigma(x)/n (sample)
+3.9) Disadvantages of Averages
+1) impacted by extream values
+2) tedious for large values
+3) not possible in open interval classes
+  

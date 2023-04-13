@@ -128,7 +128,7 @@ n!  = 1*2*3*4*5*...*(n-1)*n
 			Here Repetition is allowed (and ALL OBJECTS ARE DISTINCT)
 7.5) ALL OBJECTS ARE NOT DISTINCT (example ROOT, where there are 2 Os, which are considered of same kind). Here 2 objects are of same kind
 	Number of permutations of n objects , where p are of 'one-type' is --> (n!)/(p!)
-		If p1 are of 'one-type' , p2 are of second-type' and p3 of 'thrird type' ... --> (n!)/((p1 !)*(p2 !)* (p3 !)
+		If p1 are of 'one-type' , p2 are of second-type' and p3 of 'third type' ... --> (n!)/((p1 !)*(p2 !)* (p3 !)
   
 
 A combination is an arrangement where order is NOT IMPORTANT
