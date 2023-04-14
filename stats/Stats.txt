@@ -24,4 +24,6 @@ d) Histograms and Frquency polygones.. Ogives show relative frequency
 1) impacted by extream values
 2) tedious for large values
 3) not possible in open interval classes
+
+
   
