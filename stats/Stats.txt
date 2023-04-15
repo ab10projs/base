@@ -56,12 +56,27 @@ HM = 2*ab/(a+b)
 HM= n/[(1/r1)+(1/r2)+(1/r3)]
 
 Medean
+(n+1)/2
+
 Mode
+Mo= LowLimOfModalClass + (d1/(d1+d2))w 
+here w is width
+d1= frequecy of modal class - frequency of modela class directly below it
+d2= frequecy of modal class - frequency of modela class directly above it
 
 
+Range
+diffrece between lowest and highest value
+fractile divides all values in 3 parts
+quartile divides all values in 4 parts
+decile   divides all values in 10 parts
 
 #---------Grouped Data   ends -------------#
 σ
+
+DISPERSION
+It gives additional information of how reliable is the central tendency value. If the dispersion is wide, then central value is not very strong representative of data
+
 
 
 
