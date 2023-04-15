@@ -76,11 +76,13 @@ decile   divides all values in 10 parts
 
 DISPERSION
 It gives additional information of how reliable is the central tendency value. If the dispersion is wide, then central value is not very strong representative of data
+
+UNGROUPED DATA
 σ2 = Σ ( Xi – μ )2 / N
 σ = Population Standard Deviation
 z Population standard score = (x-μ)/σ
 
-Variance of Grouped data
+Variance of GROUPED DATA
 σ2 = Σf(x-μ)squared/N
 
 
@@ -88,9 +90,36 @@ SAMPLE Variance
 sPower2 = Σ (x-x̄)Power2  / n-1
 s = Sample Standard deviation
 
+Standard score tells how many standard deviations away is any value from its mean
+
+SDs of two samples cannot be compared, so we have to convert SD in terms if percentage.
+Cofficiant of variation expresses SD as percent of mean. It is a ratio so it does not have a unit.
 Population covariance = σ/μ
 
+#------------------------------------------------------------------------------------------------------------------------------
 
+#----------------------  Probability Ch4 starts ------------------------------------------------------
+There are two broad types of problems
+A) Deterministc (frequency distribution and or discriptive statistics is used)
+B) Probabilistic (Random)  (Probability and probability distributions are used)
+
+Sample Space: It is a set of all outcoms
+Event: A desirable outcome
+Experiment: An activity that produces an Event
+
+There are THREE TYPES OF CLASSIFYING PROBABILITIES
+1) CLASSICAL APPROACH (also know as priori)
+2) RELARIVE FREQUENCY APPROACH
+3) SUBJECTIVE APPROACH
+
+Classical Probability:
+Probability of an Event = (number of outcomes where event occured)/total number os events  ...  Here each outcome is equally likely
+It is also called prori as we can tell the answer without actually doing experiment. This approach assumes very orderly situations and may not be fit for many real life
+
+
+
+
+#----------------------  Probability Ch4   ends ------------------------------------------------------
 
 
   
