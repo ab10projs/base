@@ -72,12 +72,23 @@ quartile divides all values in 4 parts
 decile   divides all values in 10 parts
 
 #---------Grouped Data   ends -------------#
-σ
+
 
 DISPERSION
 It gives additional information of how reliable is the central tendency value. If the dispersion is wide, then central value is not very strong representative of data
+σ2 = Σ ( Xi – μ )2 / N
+σ = Population Standard Deviation
+z Population standard score = (x-μ)/σ
+
+Variance of Grouped data
+σ2 = Σf(x-μ)squared/N
 
 
+SAMPLE Variance
+sPower2 = Σ (x-x̄)Power2  / n-1
+s = Sample Standard deviation
+
+Population covariance = σ/μ
 
 
 
