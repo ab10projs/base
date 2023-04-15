@@ -142,6 +142,8 @@ Joint probability of two independent events:  P(AB) = P(A) * P(B)  ... Here P(AB
 
 CONDITIONAL PROBABILITIES UNDER STATSTICAL INDEPENDENCE:
 P(B|A)  .. Probability of event B given that event A has happened
+P(B|A) = P(B) if B and A are two independent events.
+
 
 #----------------------  Probability Ch4   ends ------------------------------------------------------
 
