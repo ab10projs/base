@@ -115,9 +115,33 @@ There are THREE TYPES OF CLASSIFYING PROBABILITIES
 Classical Probability:
 Probability of an Event = (number of outcomes where event occured)/total number os events  ...  Here each outcome is equally likely
 It is also called prori as we can tell the answer without actually doing experiment. This approach assumes very orderly situations and may not be fit for many real life
+Here WITH REPLACEMENT OR WITHOUT REPLACEMENT is important.
 
 
+RELATIVE FREQUENCY:
+If 'f' is the frequency of happening of an event in N trials, then relative frequency = f/N
+The observed relative frequecy of an event in very large number of trials. The proportion of times an event occurs in long run under stable conditions.
+The relative frequency becoes stable when number of experiments become very large.
+Here it is required to do large number of experiments.
+The cost of experiments may increase ,so we need to be careful.
+In this category, the assumption of all events being equally likely and mutually exclusive is not present.
+Disadvantage is that the event should repeat itself after some trials and it is not sure if event stabalizes after some experiments.
+In real life, events many not have occured many times and data may not be available to use it.
 
+SUBJECTIVE APPROACH:
+These are probabilities assigned to events by person based on educated guess or any evidence available.
+
+P(A) means probability of event A happening.  It is also called marginal or unconditional probability.
+ADDITIONAL RULE OF PROBABILISTIC EVENTS If two events are NOT mutually exclusive : P(A or B) = P(A) + P(B) - P(AB)  .. This -P(AB) is to remove double count
+ADDITIONAL RULE OF PROBABILISTIC EVENTS If two events ARE mutually exclusive : P(A or B) = P(A) + P(B)
+
+
+JOINT PROBABILITIES UNDER STATISTICAL INDEPENDENCE:
+The probability of two or more events happening together or in succession is product of their marginal probability.
+Joint probability of two independent events:  P(AB) = P(A) * P(B)  ... Here P(AB) is probability of event A and B happening together or in succession.
+
+CONDITIONAL PROBABILITIES UNDER STATSTICAL INDEPENDENCE:
+P(B|A)  .. Probability of event B given that event A has happened
 
 #----------------------  Probability Ch4   ends ------------------------------------------------------
 
