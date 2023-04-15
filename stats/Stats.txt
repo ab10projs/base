@@ -11,19 +11,60 @@ c) sort the values and count number of entries per class
 d) Histograms and Frquency polygones.. Ogives show relative frequency
 
 
-3) Measures of entral Tendenccy and Dispersion in Frequency
+3) Measures of entral Tendency and Dispersion in Frequency
 3.1) Central Tendency: Middle point of a distribution
 3.2) Dispersion is spread of data (level to which the values are scattered
 3.3) skewness: (Symmetrical or skewed). Skewed to left means long tail is on left side.
 3.4) Kurttois: Peakedness. 
 3.5) Charactersticts of samples are called statistics
 3.6) Charactersticts of population are called parameters
-3.7) mu = Sigma(x)/N (population)
-3.8) xbar = sigma(x)/n (sample)
+
+#---------Ungrouped Data starts -------------#
+3.7) μ = Σx/N (population) , where (N is number of elements in population)  and (Σx is sum of values of all observations)
+3.8) x̄ = Σx/n (sample)
 3.9) Disadvantages of Averages
 1) impacted by extream values
 2) tedious for large values
 3) not possible in open interval classes
+#---------Ungrouped Data   ends -------------#
+ 
+#---------Grouped Data starts -------------#
+3.10) When the number of observations are large, then for ease of calculation some accuracy is given up by gouping values in classes
+Step1) We decideon the number of classes in which all values are to be divided.
+Step2) We find mid point of each class
+Step3) We multiply mid point with frequency of each class, where frequency is the number of values in each class.
+x̄ = Σ(frequencyOfEachClass*midPointOfClass)/numberOfObservations             .. here numberOfObservations = ΣfrequencyOfEachClass
+
+Weighted mean given importance to each value based on its weight
+x̄weighted = Σ(w*x)/w    .. where w is weight assigned to each observation
+
+
+as we know .. If  aPOWERn = b  then  a = n√b
+Geometric Mean
+Sometimes values change over time. We need to know "average rate of change" .. like growth rate. 
+GM = n√(a1*a2*a3*.... an)
+used with ratios, %change, rate of change
+
+
+
+
+Harmonic mean
+square(GM) = AM * HM
+AM = (a+b)/2
+GM = √(a*b)
+HM = 2*ab/(a+b)
+HM= n/[(1/r1)+(1/r2)+(1/r3)]
+
+Medean
+Mode
+
+
+
+#---------Grouped Data   ends -------------#
+σ
+
+
+
 
 
   
