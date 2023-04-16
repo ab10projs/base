@@ -162,8 +162,14 @@ P(A)
 #----STATISTICAL DEPENDENCE   (conditional,joint, marginal)  ends-----------------------------------------------------------
 
 BAYES Theorem:
+offers powerful statistical method of evaluating new information and revising prior estimates.
+P(B|A) = P(BA)/P(A)   .. same as CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPENDENCE..
 
 #----------------------  Probability Ch4   ends ------------------------------------------------------
 
+#----------------------- Probability Distribution Ch 5 Starts --------------------------------------------
 
+
+
+#----------------------- Probability Distribution Ch 5 Ends   --------------------------------------------
   
