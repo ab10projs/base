@@ -168,6 +168,50 @@ P(B|A) = P(BA)/P(A)   .. same as CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPE
 #----------------------  Probability Ch4   ends ------------------------------------------------------
 
 #----------------------- Probability Distribution Ch 5 Starts --------------------------------------------
+Probability distribution is linked to frequency distribution. 
+Probability distribution can be thought to be theoritical frequency distribution.
+A frequency distribution is listing of "observed" frequencies of all outomes of an experiment that "actually" occured, whereas
+a probability distribution is a listing of all "possible" outcomes that "could" result if the experiment was "actually" done.
+
+Probability ditributions are classified as DISCRETE or CONTINOUS
+In discrete distribution, the number of possible output are fixed values and hence all possible values can be listed
+In continous distribution, infinite number of outputs are possible, so these can not be listed.
+Continous distribitions are convenient way of representation of discrete distributions that have millions of possible values.
+
+RANDOM VARIABLE:
+A varible that takes different values as a result of outcome of a random experiment.
+If this variable is allowed to take only limited values, then it is called discrete random variable
+If this variable is allowed to take any value wihin a range, then it is called continous random variable.
+ 
+PROBABILITY DISTRIBUTION OF DISCRETE RANDOM VARIABLE:
+The frequency of various outomes (like number of patients screened per day) for say last 100 days is considered as typical, 
+we can use these historical records to assign a probability to each frequency and get a probability distribution. Here we
+assume that the trend of these 100 days will repeat.
+
+Expected value of discrete random variable is obtained by multiplying each outcome by its %probability and summing it.
+Expected value of a discrete random variable is weighted average of each possible outcome, multiplied by probability of
+that outcome.
+
+USE OF EXPECTED VALUE IN DECISION MAKING
+cherry box and each day's demand example
+
+BINOMIAL DISTRIBUTION (BERNOULLI PROCESS):
+Used for discrete (not continous) random variables. 
+
+USE OF BERNOULLI PROCESS:
+1) Each trial has only 2 outcomes
+2) Probability of the outcome of any trial remains fixed over time
+3) Trials are statistically independent.
+p = probability of success
+q = probability of failure
+r = number of successes desired
+n = number of trial 
+
+Probability of r success in n trials  = [(n)!/r!*(n-r)!] * (p power(r)) * (q power (n-r))
+
+There is a binomial probability table where for p,n,r combination, the probability is found...
+
+CENTRAL TENDENCY AND DISPERSION FOR BINOMIAL DISTRIBUTION:
 
 
 
