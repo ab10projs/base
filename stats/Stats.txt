@@ -135,15 +135,33 @@ P(A) means probability of event A happening.  It is also called marginal or unco
 ADDITIONAL RULE OF PROBABILISTIC EVENTS If two events are NOT mutually exclusive : P(A or B) = P(A) + P(B) - P(AB)  .. This -P(AB) is to remove double count
 ADDITIONAL RULE OF PROBABILISTIC EVENTS If two events ARE mutually exclusive : P(A or B) = P(A) + P(B)
 
+#----STATISTICAL INDEPENDENCE  (conditional,joint, marginal) starts------------------------------------------------
+MARGINAL PROBABILITIES UNDER STATISTICAL INDEPENDENCE:
+P(A) , as it has no impact of previous or any other event
 
 JOINT PROBABILITIES UNDER STATISTICAL INDEPENDENCE:
 The probability of two or more events happening together or in succession is product of their marginal probability.
 Joint probability of two independent events:  P(AB) = P(A) * P(B)  ... Here P(AB) is probability of event A and B happening together or in succession.
+e.g probability of getting 3heads is 0.5*0.5*0.5 = 0.125
 
 CONDITIONAL PROBABILITIES UNDER STATSTICAL INDEPENDENCE:
 P(B|A)  .. Probability of event B given that event A has happened
-P(B|A) = P(B) if B and A are two independent events.
+Conditional: P(B|A) = P(B) if B and A are two independent events
+#----STATISTICAL INDEPENDENCE  (conditional,joint, marginal) ends--------------------------------------------------
 
+
+#----STATISTICAL DEPENDENCE  (conditional,joint, marginal) starts-----------------------------------------------------------
+CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPENDENCE:  
+P(B|A) = P(BA)/P(A) .... This means probability of B happening given A has occured is joint probability of AB divided by probability of A
+
+JOINT PROBABILITIES UNDER STATSTICAL DEPENDENCE:
+taking reference from formula of CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPENDENCE, which is  P(B|A) = P(BA)/P(A), we get --> P(BA) = P(B|A)*P(A)
+
+MARGINAL PROBABILITIES UNDER STATSTICAL DEPENDENCE:
+P(A)
+#----STATISTICAL DEPENDENCE   (conditional,joint, marginal)  ends-----------------------------------------------------------
+
+BAYES Theorem:
 
 #----------------------  Probability Ch4   ends ------------------------------------------------------
 
