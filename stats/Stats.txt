@@ -220,6 +220,7 @@ POISSION DISTRIBUTION:
 [(𝝺 power x ) * (e power -𝝺) ]/ x!
 
 
+
 NORMAL DISTRIBUTION:
 Continous random variable distribution.
 Has single peak
