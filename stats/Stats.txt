@@ -212,8 +212,80 @@ Probability of r success in n trials  = [(n)!/r!*(n-r)!] * (p power(r)) * (q pow
 There is a binomial probability table where for p,n,r combination, the probability is found...
 
 CENTRAL TENDENCY AND DISPERSION FOR BINOMIAL DISTRIBUTION:
+Mean of binomial distibution -->  μ = np
+σ = √npq
+
+
+POISSION DISTRIBUTION:
+[(𝝺 power x ) * (e power -𝝺) ]/ x!
+
+
+NORMAL DISTRIBUTION:
+Continous random variable distribution.
+Has single peak
+Mean, Median and Mode overlap
+Two tails never touch x 
+There are FAMILIES of Normal curves ...  not just one.
+μ and  σ are needed to describe a normal distribution
 
 
 
 #----------------------- Probability Distribution Ch 5 Ends   --------------------------------------------
+
+
+#---------------------- Sampling and Sampling distribution starts ------------------------------------------
+when all population elements are studied, it is called census. or complete enumeration
+Sampeling is used when al elements can not be studied.
+Sample is a portion of population
+Sample----statstics is characterstics of sample and Parameter is characterstics of population.
+Two types of Sampeling (NonRandom OR Judgemental)    AND   (Random or probability)
+
+Biased Samples: When sample is selected that is not proper representaton of population
+There are 4 types of Random Sampling:
+a) Simple Random sampling: each sample has equal probability of selection and each element has equal prob of getting selected in a sample
+b) systematic random sampling: Selected at uniform interval.. may have low cost BUT may inject bias.
+c) Stratified sampling:Population is divided into homogenous groups called strata. 	
+d) clustered sampling
+
+
+If we take various samples from a populaton and find the mean and sd of each sample. then the sd and mean of each would be different. A probability distribution of
+"all possible means" of the "samples" is a "distribution of sample mean".  It is called sampling distribution of mean.
+
+We can also find sampling distribution of proportions.
+STANDARD ERROR:
+Standard deviation of distribution of standard means is called standard error of means.
+Siilarly, standard deviation of distribution of proportions  is called standard error of proportion.
+Standard error gives an idea about that accuracy we are likely to get if we use sample statistices to estimate population parameters.
+e.g (standard error of mean, standard error of proportion, standard error of median
+
+SAMPLING FROM NORMAL POPULATIONS:
+Say the population mean = 100 and SD =25
+If we take samples of 5 items each, then the chances of sample mean to be above population mean is equal to chance of it beimg below population mean.
+We would get less spread in sample means then the spread of individual items.
+In other words standard error of "Sampling distribution of means" is less than standard deviation of individual items in the population.
+
+
+
+
+#---------------------- Sampling and Sampling distribution   ends ------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
