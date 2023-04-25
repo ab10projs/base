@@ -223,12 +223,15 @@ POISSION DISTRIBUTION:
 
 NORMAL DISTRIBUTION:
 Continous random variable distribution.
-Has single peak
-Mean, Median and Mode overlap
-Two tails never touch x 
+Properties of Normal Distribution:
+	Has single peak
+	Mean, Median and Mode overlap
+	Two tails never touch x 
+
 There are FAMILIES of Normal curves ...  not just one.
 μ and  σ are needed to describe a normal distribution
 
+NOrmal distribution can be approximated for binomial where n is up to 20 and both np and nq are atleast 5
 
 
 #----------------------- Probability Distribution Ch 5 Ends   --------------------------------------------
