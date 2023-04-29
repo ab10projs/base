@@ -178,25 +178,32 @@ example: two die with .4 and .7 chances of showing 1 dot
 
 #----------------------- Probability Distribution Starts --------------------------------------------
 Probability distribution can be thought to be theoritical frequency distribution. A theoritical frequency distribution is how outputs are EXPECTED to appear.
-(e
-Probability distribution is linked to frequency distribution. 
-A frequency distribution is listing of "observed" frequencies of all outomes of an experiment that "actually" occured, whereas
-a probability distribution is a listing of all "possible" outcomes that "could" result if the experiment was "actually" done.
+(example , if we take two coin and plot the frequency distribution of H, then (TT,TH,HT,HH) for 0(1occurance),1(2occurance),2(1occurance) is probability distribution.
+That means, a probability distribution is a listing of all "possible" outcomes that "could" result if the experiment was "actually" done.
 
+Probability distribution is linked to frequency distribution. 
+A frequency distribution is listing of ALL "observed" frequencies of all outomes of an experiment that "actually" occured, whereas probability distribution is a listing
+of probabilities of all possible outcomes that COULD theoritically result.
+
+
+TYPES OF PROBABILITY DISTRIBUTIONS:
 Probability ditributions are classified as DISCRETE or CONTINOUS
 In discrete distribution, the number of possible output are fixed values and hence all possible values can be listed
-	In continous distribution, infinite number of outputs are possible, so these can not be listed.
+
+In continous distribution, infinite number of outputs are possible, so these can not be listed.
 Continous distribitions are convenient way of representation of discrete distributions that have millions of possible values.
 
 RANDOM VARIABLE:
-A varible that takes different values as a result of outcome of a random experiment.
+A varible that takes different values as a result of outcome of a random experiment in NO PREDICTABLE SEQUENCE.
 If this variable is allowed to take only limited values, then it is called discrete random variable
 If this variable is allowed to take any value wihin a range, then it is called continous random variable.
+
  
 PROBABILITY DISTRIBUTION OF DISCRETE RANDOM VARIABLE:
 The frequency of various outomes (like number of patients screened per day) for say last 100 days is considered as typical, 
 we can use these historical records to assign a probability to each frequency and get a probability distribution. Here we
-assume that the trend of these 100 days will repeat.
+assume that the trend of these 100 days will repeat. Here 100 observaions are taken. The frequency of each value of "number of patients" is used to get %age of that
+number and sumtotal of all these frequencies is = 100
 
 Expected value of discrete random variable is obtained by multiplying each outcome by its %probability and summing it.
 Expected value of a discrete random variable is weighted average of each possible outcome, multiplied by probability of
