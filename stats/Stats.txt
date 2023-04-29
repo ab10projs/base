@@ -286,9 +286,9 @@ b) for binomial distribution, if (np =>5 AND nq <= 5, then Normal distribution c
 
 #---------------------- Sampling and Sampling distribution starts ------------------------------------------
 when all population elements are studied, it is called census. or complete enumeration
-Sampeling is used when al elements can not be studied.
+Sampling is used when al elements can not be studied.
 Sample is a portion of population
-Sample----statstics is characterstics of sample and Parameter is characterstics of population.
+Sample----STATISTICS is characterstics of sample and PARAMETER is characterstics of population.
 Two types of Sampeling (NonRandom OR Judgemental)    AND   (Random or probability)
 
 Biased Samples: When sample is selected that is not proper representaton of population
@@ -303,10 +303,11 @@ If we take various samples from a populaton and find the mean and sd of each sam
 "all possible means" of the "samples" is a "distribution of sample mean".  It is called sampling distribution of mean.
 
 We can also find sampling distribution of proportions.
-STANDARD ERROR:
-Standard deviation of distribution of standard means is called standard error of means.
+STANDARD ERROR (σx̄ = σ/√(n)):
+Standard deviation of distribution of standard means is called STANDARD ERROR OF MEANS.  
 Siilarly, standard deviation of distribution of proportions  is called standard error of proportion.
-Standard error gives an idea about that accuracy we are likely to get if we use sample statistices to estimate population parameters.
+Standard error gives an idea about that accuracy we are likely to get if we use sample statistices to estimate population parameters. For populations
+which have small spread, the sample means are likely to be having small spread and hence accruately estimate population.
 e.g (standard error of mean, standard error of proportion, standard error of median
 
 SAMPLING FROM NORMAL POPULATIONS:
@@ -314,7 +315,13 @@ Say the population mean = 100 and SD =25
 If we take samples of 5 items each, then the chances of sample mean to be above population mean is equal to chance of it beimg below population mean.
 We would get less spread in sample means then the spread of individual items.
 In other words standard error of "Sampling distribution of means" is less than standard deviation of individual items in the population.
+1) we calculate standard error as ..σx̄ = σ/√(n)
+2) we calculate z = (x-μ)/σx̄ 
+3) we then calculate the area under the curve to get the probability
 
+
+
+SAMPLING FROM NON-NORMAL POPULATIONS:
 
 
 
