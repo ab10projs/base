@@ -212,10 +212,11 @@ that outcome.
 USE OF EXPECTED VALUE IN DECISION MAKING
 cherry box and each day's demand example
 
+
 BINOMIAL DISTRIBUTION (BERNOULLI PROCESS):
 Used for discrete (not continous) random variables. 
 
-USE OF BERNOULLI PROCESS:
+CONDITIONS WHEN BERNOULLI PROCESS CAN BE USED:
 1) Each trial has only 2 outcomes
 2) Probability of the outcome of any trial remains fixed over time
 3) Trials are statistically independent.
@@ -225,17 +226,42 @@ r = number of successes desired
 n = number of trial 
 
 Probability of r success in n trials  = [(n)!/r!*(n-r)!] * (p power(r)) * (q power (n-r))
+(example: 0,1,2,3,4,5 employees coming late)
 
-There is a binomial probability table where for p,n,r combination, the probability is found...
+Graphical observations of binomial distribution:
+a) when p is small (.1), the distribution is scewed to right (long tail at right)
+b) when p increases to .3, the scew is less noticable
+c) when p=.5, the distribution is symetrical
+d) when p is large ,  the distribution is scewed to left
+
+There is a binomial probability TABLE where for p,n,r combination, the probability is found...
 
 CENTRAL TENDENCY AND DISPERSION FOR BINOMIAL DISTRIBUTION:
 Mean of binomial distibution -->  μ = np
-σ = √npq
+σ = √(npq)
 
 
 POISSION DISTRIBUTION:
-[(𝝺 power x ) * (e power -𝝺) ]/ x!
 
+
+(example: number of patients arriving in an interval of time)
+properties of POISSON distribution
+a) mean number of events occuring per interval of time can be obtained from historic data
+b) If the time is divided into very small interval(say 1 sec) then below are true:
+b.1) The probability of event happening per sec(small interval) is constant and only 1 event can happen in this interval (e.g only 1 patient can come per sec)
+b.2) The probability of 2 patiests comming per sec is so small that it is assigned 0
+b.3) The number of patients coming per sec are independent of when that 1 sec happens in full duration of 1 hr
+b.4) The number of patients arriving per sec are independent of number of patients arriving at any other second
+
+p(x) =  [(𝝺 power x ) * (e power -𝝺) ]/ x!
+
+p(x) = probability of exactly x occcurances
+𝝺 = mean number of occurances per unit time 
+(
+ex: if 5 accidents happen per month at a crossing, then 𝝺 =5 and x=0
+probability of 0 accident = p(0) = [ (5 power 0)*(e power -5)]/0!
+probability of 2 accident = p(2) = [ (5 power 2)*(e power -5)]/2! 
+)
 
 
 NORMAL DISTRIBUTION:
@@ -248,7 +274,11 @@ Properties of Normal Distribution:
 There are FAMILIES of Normal curves ...  not just one.
 μ and  σ are needed to describe a normal distribution
 
-NOrmal distribution can be approximated for binomial where n is up to 20 and both np and nq are atleast 5
+
+SOME QUICK POINTS
+a) for binomial distribution, if (n =>20 AND np <=0.5, then POISSON can be approximated
+b) for binomial distribution, if (np =>5 AND nq <= 5, then Normal distribution cane be used with μ=np and σ = √(npq)
+
 
 
 #----------------------- Probability Distribution Ends   --------------------------------------------
