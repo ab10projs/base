@@ -177,7 +177,8 @@ example: two die with .4 and .7 chances of showing 1 dot
 #----------------------  Probability ends ------------------------------------------------------
 
 #----------------------- Probability Distribution Starts --------------------------------------------
-Probability distribution can be thought to be theoritical frequency distribution.
+Probability distribution can be thought to be theoritical frequency distribution. A theoritical frequency distribution is how outputs are EXPECTED to appear.
+(e
 Probability distribution is linked to frequency distribution. 
 A frequency distribution is listing of "observed" frequencies of all outomes of an experiment that "actually" occured, whereas
 a probability distribution is a listing of all "possible" outcomes that "could" result if the experiment was "actually" done.
