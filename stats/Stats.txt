@@ -98,14 +98,16 @@ Population covariance = σ/μ
 
 #------------------------------------------------------------------------------------------------------------------------------
 
-#----------------------  Probability Ch4 starts ------------------------------------------------------
-There are two broad types of problems
-A) Deterministc (frequency distribution and or discriptive statistics is used)
+#----------------------  Probability starts ------------------------------------------------------
+There are two broad types of PROBLEMS
+A) Deterministc (frequency distribution or discriptive statistics is used)
 B) Probabilistic (Random)  (Probability and probability distributions are used)
 
 Sample Space: It is a set of all outcoms
 Event: A desirable outcome
 Experiment: An activity that produces an Event
+Mutually Exclusive: When only one of the events can occur, and other can not.
+Collectively Exhaustive: All possible outcomes
 
 There are THREE TYPES OF CLASSIFYING PROBABILITIES
 1) CLASSICAL APPROACH (also know as priori)
@@ -119,17 +121,19 @@ Here WITH REPLACEMENT OR WITHOUT REPLACEMENT is important.
 
 
 RELATIVE FREQUENCY:
-If 'f' is the frequency of happening of an event in N trials, then relative frequency = f/N
+If an even is capable of repeating itself with a frequency of 'f' in sufficiently large(N) trials, then relative frequency = f/N
 The observed relative frequecy of an event in very large number of trials. The proportion of times an event occurs in long run under stable conditions.
-The relative frequency becoes stable when number of experiments become very large.
+The relative frequency becomes stable when number of experiments become very large.
 Here it is required to do large number of experiments.
 The cost of experiments may increase ,so we need to be careful.
 In this category, the assumption of all events being equally likely and mutually exclusive is not present.
-Disadvantage is that the event should repeat itself after some trials and it is not sure if event stabalizes after some experiments.
+Disadvantage is that this approach assumes the event should repeat itself after some trials and the environmental conditions should be same(which is not realistic).
+It is also not possble to know that after how many occurances, the event stabalizes.
 In real life, events many not have occured many times and data may not be available to use it.
 
 SUBJECTIVE APPROACH:
 These are probabilities assigned to events by person based on educated guess or any evidence available.
+
 
 P(A) means probability of event A happening.  It is also called marginal or unconditional probability.
 ADDITIONAL RULE OF PROBABILISTIC EVENTS If two events are NOT mutually exclusive : P(A or B) = P(A) + P(B) - P(AB)  .. This -P(AB) is to remove double count
@@ -158,24 +162,29 @@ JOINT PROBABILITIES UNDER STATSTICAL DEPENDENCE:
 taking reference from formula of CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPENDENCE, which is  P(B|A) = P(BA)/P(A), we get --> P(BA) = P(B|A)*P(A)
 
 MARGINAL PROBABILITIES UNDER STATSTICAL DEPENDENCE:
-P(A)
+P(A) ... Sum all probabilities of joint events where A happened.
 #----STATISTICAL DEPENDENCE   (conditional,joint, marginal)  ends-----------------------------------------------------------
 
 BAYES Theorem:
 offers powerful statistical method of evaluating new information and revising prior estimates.
 P(B|A) = P(BA)/P(A)   .. same as CONDITIONAL PROBABILITIES UNDER STATSTICAL DEPENDENCE..
 
-#----------------------  Probability Ch4   ends ------------------------------------------------------
+REVISING PRIOR ESTIMATES WITH BAYES THEOREM
+Additional information may result in need to revise probabilities. These new probabilites are called POSTERIOR probabilities
+It makes possible to avoid collection of massive data over period of time to make good decision based on probability.
+  
+example: two die with .4 and .7 chances of showing 1 dot
+#----------------------  Probability ends ------------------------------------------------------
 
-#----------------------- Probability Distribution Ch 5 Starts --------------------------------------------
-Probability distribution is linked to frequency distribution. 
+#----------------------- Probability Distribution Starts --------------------------------------------
 Probability distribution can be thought to be theoritical frequency distribution.
+Probability distribution is linked to frequency distribution. 
 A frequency distribution is listing of "observed" frequencies of all outomes of an experiment that "actually" occured, whereas
 a probability distribution is a listing of all "possible" outcomes that "could" result if the experiment was "actually" done.
 
 Probability ditributions are classified as DISCRETE or CONTINOUS
 In discrete distribution, the number of possible output are fixed values and hence all possible values can be listed
-In continous distribution, infinite number of outputs are possible, so these can not be listed.
+	In continous distribution, infinite number of outputs are possible, so these can not be listed.
 Continous distribitions are convenient way of representation of discrete distributions that have millions of possible values.
 
 RANDOM VARIABLE:
@@ -234,7 +243,7 @@ There are FAMILIES of Normal curves ...  not just one.
 NOrmal distribution can be approximated for binomial where n is up to 20 and both np and nq are atleast 5
 
 
-#----------------------- Probability Distribution Ch 5 Ends   --------------------------------------------
+#----------------------- Probability Distribution Ends   --------------------------------------------
 
 
 #---------------------- Sampling and Sampling distribution starts ------------------------------------------
