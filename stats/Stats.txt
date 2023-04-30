@@ -322,12 +322,122 @@ In other words standard error of "Sampling distribution of means" is less than s
 
 
 SAMPLING FROM NON-NORMAL POPULATIONS:
+if we have small sample size (say 5 entries), the also, we can take combinations out of these 5 and average them to get 20 entries. 
+If we plot these, we will see normal distribution.
+
+CENTRAL LIMIT THEOREM
+a) mean of sampling distribution of means will equal to population mean
+b) as sample size increases, distribution becomes normal, regardless of shape of population.
+
+statisticians use normal distribution as pproximation to sampling distribution whenever sample size is 30 or more
+Central limit theorm lets us use sample statistics to estimate population paramenters without knowing anything about population
+
+SAMPLING DISTRIBUTION OF PROPORTIONS
+^p = x/n   (^p is sample proportion, x is total occurances and n is sample size)
+
+As per binomial distribution, Mean = np   and  σx = √(npq)
+so Mean of sample proportion ^p = np/n = p
+and sd of proporion σ^p = √(npq)/n  OR  √(pq/n)
+z or proportion =  (^p - p)/ ( √(pq/n) )      
 
 
-
+FINITE POPULATION MULTIPLIER
+FINITE population:
+σx̄ = σ/√(n) * [(N-n)/(N-1)]
 #---------------------- Sampling and Sampling distribution   ends ------------------------------------------
 
+#---------------------- Estimation starts ---------------------------------#
+TYPES OF ESTIMATES:
 
+POINT: Single number to estimate population parameter. It is either correct or incorrect.
+INTERVAL:  A range of values to estimate population parameter.
+
+ESTIMATOR AND ESTIMATES:
+ESTIMATOR: sample statistics that is used to estimate population parameter. e.g sample mean.
+ESTIMATE: specific observed value. (Unbiased, efficient, consitent, Sufficient)
+
+VARIANCE OF SAMPLE MEAN: Σ(x-x̄)power2/(n-1)
+STANDARD DEVIATION of SAMPLE MEAN: √[ Σ(x-x̄)power2/(n-1) ]
+
+	 
+INTERVAL ESTIMATE:
+A range of values in which the population parameter is likely to lie.
+1) calculate the standard error
+2) calculate the sample mean
+3) sample meanPlus minus "standard error" gives the interval estimate (with 68.3% confidence)
+
+The probability of 95.5 means that is we take 1000 samples, and construct intervals of plusminus 2 SD around mean, then 995 of these intervals will 
+include the population mean.
+
+A statement "we are 95% confident that the life of battries is between 38 and 42 months" DOES NOT mean that "chance is 95% that mean life of ALL battries fall within
+interval established from this one sample" .... Rather , it means: If we take MANY samples of same size and construct confidence interval of each sample, then in
+95% of the samples the interval will contain population mean.
+
+
+CALCULATING INTERVAL MEAN FROM LARGE SAMPLES WHERE POPULATION SD(σ) IS KNOWN
+when n>30, we can assume normal distribution and  then:
+1) calculate standard error from population SD (which is known).
+2) use sample mean plusminus StandardError to get confidence interval
+
+
+WHEN POPULATION STANDARD DEVIATION IS UNKNOWN (σ is unknown)
+here n(sample size>30), x̄ (sample mean) and, s(sample sd) are known
+1) since n>30, normal distribution is assumed.
+2) derive population SD from sample ^σ = s = √[ Σ(x-x̄)power2/(n-1) ]
+3) we calculate Estimated standard error of mean of finite population  = ^σx̄ =  Σ(x-x̄)power2/(n-1)  * [(N-n)/(N-1)]
+4) use x̄ plusminus 1.64*(^σx̄)  to get 95% confidence interval
+
+
+
+INTERVAL ESTIMATE OF PROPORTIONS
+samples are used to know proportion of occurances in population.(example. proportion of unemployed people in population.
+Binomial distribution is correct distribution for proportion
+If np and nq are >= 5 then normal distribution can be a good approximation of binomial distribution.
+for a sample: 
+μ(p̄) = p
+σ(p̄) = √((pq)/n)
+^σ(p̄) = √((p̄q̂)/n)
+
+confidence interval = p̄ plusminus (^σ(p̄))
+
+
+t DISTRIBUTION (WHEN N <30 AND population Standard Deviation is unknown  AND population is assumed to be normal)
+t distribution is flatter than normal distribution. It is lower at mean and higher at tails
+as n increases, t distribution tends to become normal distribution.
+#---------------------- Estimation   ends ---------------------------------#
+
+
+# -------------------- Hypotheses testing -- 1 sample test -----------------------------#
+Hypotheses begins with an assumption about population parameter. Then sample statistics are collected and it is seen how likely is that the 
+population parameter assumption is correct based on the sample statistics.
+
+The decision to chose acceptable range (i.e. 2% or 5%) depends on if we can accept the risk or rejecting a correct population hypotheses.There is no risk-free tradeoff
+
+TESTING HYPOTHESES
+1) State the assumed hypotheses  H0 called "Null Hypotheses".. example H0:μ= 500   (population mean is 500)
+2) "Alternate hypotheses" H1 called is decided. It can be H1:μ !=500 ,  OR   H1:μ<500   OR   H1:μ>500
+3) The chance of occurance of difference between sample mean and hypothesized mean is found (say 4.5%). This 4.5% is called "Significance level"
+If hypotheses is true, then significance level indicates % of samples having means outside the acceptance limit. At 5% of significance level, the 
+area under BOTH tails will be 2.5% each if two tail test is done.
+There is no universal standard significance level.
+
+NOTE: Even if the sample mean is lies in acceptable region, then it DOES NOT PROVE H0 IS TRUE. IT MEANS THERE IS NO STATISTICAL EVIDENCE TO REJECT IT
+
+HIGHER THE SIGNIFICANCE LEVEL, HIGHER IS THE CHANCE OF REJECTING IT WHEN H0 IS INFACT TRUE.
+Type 1 ERROR: Reject H0 when it is true (alpha).. Once we decide significance level(alpha) we can not do anything about type1
+Type 2 Error: Accept H0 when it is false (beta)
+
+4) Now decide which distribution should be used (Normal, or t).
+
+POWER OF HYPOTHESES TEST
+
+
+ 
+
+
+
+
+# -------------------- Hypothesis testing -- 1 sample test -----------------------------#
 
 
 
