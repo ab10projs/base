@@ -424,21 +424,52 @@ There is no universal standard significance level.
 NOTE: Even if the sample mean is lies in acceptable region, then it DOES NOT PROVE H0 IS TRUE. IT MEANS THERE IS NO STATISTICAL EVIDENCE TO REJECT IT
 
 HIGHER THE SIGNIFICANCE LEVEL, HIGHER IS THE CHANCE OF REJECTING IT WHEN H0 IS INFACT TRUE.
-Type 1 ERROR: Reject H0 when it is true (alpha).. Once we decide significance level(alpha) we can not do anything about type1
-Type 2 Error: Accept H0 when it is false (beta)
+Type 1 ERROR: Reject H0 when it is true and its probability is called alpha(or significance level).. Once we decide significance level(alpha) we can not do anything about type1
+Type 2 Error: Accept H0 when it is false and its probability is called beta
+TO get low beta, we have to make alpha high.
 
 4) Now decide which distribution should be used (Normal, or t).
 
 POWER OF HYPOTHESES TEST
-
-
- 
-
-
+(1- beta) on Y   V/s  Various population means on X
 
 
 # -------------------- Hypothesis testing -- 1 sample test -----------------------------#
 
+# -------------------- Hypothesis testing -- 2 sample test -----------------------------#
+To know if parameters from two populations are alike ? Here the RELATION is of interest and not actual value.
+As we are interested in studing two populations, sampling distribution is "sampling distribution of difference of sample means (x̄1 -x̄2)"
+
+POPULATION1: (μ1 mean , σ1 SD , σx̄1 Standard Error , x̄1 sample mean)...  (μx̄1 is "distribution of all possible values of x̄1").... μx̄1 =  μ1   
+POPULATION2: (μ2 mean , σ2 SD , σx̄2 Standard Error , x̄2 sample mean)...  (μx̄2 is "distribution of all possible values of x̄2").... μx̄2 =  μ2 
+
+We plot Sampling distribution of "difference between sample means"(x̄1-x̄2)
+Mean of "sampling distribution of difference between sample means is" :  μ(x̄1 -x̄2)
+Also, μ(x̄1 -x̄2) = μ(x̄1) - μ(x̄2) = μ1 - μ2
+
+Variation of population1 : (σ²1/n1)
+Variation of population2 : (σ²2/n2)
+So σ(x̄1 -x̄2) =  √( (σ²1/n1) + (σ²2/n2) ) 
+
+standard error of "difference between sample means" is represented by σ(x̄1 -x̄2)
+
+σ²
+s²
+ 
+
+# -------------------- Hypothesis testing -- 2 sample test -----------------------------#
+# -------------------- Chi Square and Analysis of Varaiance ANOVA ---------------------------#
+If we want to know if more that 2 population proportions can be considered equal, we use chi-square test
+chi-square can do much more than comparing if more than two proportions can be considered equal
+If we classify the population into several categories based on two attributes(age, performance), we can use chi-square to check if these two attribures are
+independent of each other.
+If we have more that two population means, then ANOVA enables us to test if more than 2 population means can be considered equal.
+
+CHI-SQUARE, A TEST OF INDEPENDENCE
+If we are interested in knowing if differences in several sample proportions are significant or just matter of chance.
+
+
+# -------------------- Chi Square and Analysis of Varaiance ANOVA ---------------------------#
 
 
 
