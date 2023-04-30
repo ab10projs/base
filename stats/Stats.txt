@@ -468,6 +468,22 @@ If we have more that two population means, then ANOVA enables us to test if more
 CHI-SQUARE, A TEST OF INDEPENDENCE
 If we are interested in knowing if differences in several sample proportions are significant or just matter of chance.
 
+TEST OF GOODNESS FIT:
+chi-square test helps in finding if normal, binomial, poisson distribution is is appropriate. Whether there is a signifiant disfference between an observed
+refquency distribution and theoritical frequency distribution.
+
+
+DoF Degree of freedom:
+find number of classes (k), then k-1 is DoF. After this, if population mean is also to be estimated from sample mean, then subtract 1 more. After this, if 
+the population SD is also to be estimated from sample sd, then subtract 1 more from DoF.
+
+
+AVOVA: Significance of variance among more than 2 sample means
+We can find if our samples are drawn from same population or not.
+
+
+
+
 
 # -------------------- Chi Square and Analysis of Varaiance ANOVA ---------------------------#
 
