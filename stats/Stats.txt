@@ -494,10 +494,16 @@ when populations are not same, between-column variance > withon-column variance 
 
 # ----------------- Simple Regression and correlation----------------------#
 To learn specific relation between wo or more variables
-To use regression analysis to find the relation between two variables
+To use regression analysis to estimate the relation between two variables
 Use least square estimating equation to predict future values of a varaible
 How correlation analysis describes degree to which two variables are related to each other
 Use coefficient of determination to find the streangth or relation between two variables.
+We want to learn: How to determine relation between two variables.
+Chi-square tells if there exists a relation between two variables, but it does not tell what relation exists. Regression and correlation tell us both the 
+nature and strength of relation between two variables.
+
+In regression analysis we will establish an "estimating equation"
+
 
 
 
