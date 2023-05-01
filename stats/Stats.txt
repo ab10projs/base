@@ -493,7 +493,7 @@ when populations are not same, between-column variance > withon-column variance 
 # -------------------- Chi Square and Analysis of Varaiance ANOVA ---------------------------#
 
 # ----------------- Simple Regression and correlation----------------------#
-To learn specific relation between wo or more variables
+To learn specific relation between two or more variables
 To use regression analysis to estimate the relation between two variables
 Use least square estimating equation to predict future values of a varaible
 How correlation analysis describes degree to which two variables are related to each other
@@ -508,30 +508,98 @@ variables can be two or more.
 In regression equation we can have MORE THAN 1 INDEPENDENT VARIABLES and there will be ONLY 1 DEPENDENT VARIABLE. often when we add independent varibles we
 improve accuracy of prediction.
 we often find A CAUSAL RELATION between variable. i.e.  independent variables cause the dependent variable to change.
+We should consider relations found by regression analysis as RELATIONS OR ASSOCIATION and not cause and effect (as sales of diamond and gold may be related
+but sales of gold may not have caused sale of diamond, and both many have been due to high income).. unless you have reasons and logic of cause
+
+SCATTER DIAGRAM: is first step to see if there is a relation between two variables.
+If we are able to see a trend and can draw a straight line that best fits these points, then we say there is a linear relation. The relation can also take 
+shape of a CURVE (curvilinear).
+
+
+ESTIMATION USING REGRESSION LINE
+Y = a + bX     (Y:dependent variable , X:independent variable, a:Y intercept, b:slope, which means how much per unit change in Y is caused by per unit chnage in X)
+both a and b are numerical constants.
+b = (Y2-Y1)/(X2-X1) ... where (X2,Y2)  and (X1,Y1) are coordinates of two points
+-ve slope means "decrease".. As X increases, Y decreases
+
+METHOD OF LEAST SQUARE
+good fit minimizes the errors 
+
+Y-hat are individual values of estimated points.(points that lie on the estimating line , i.e. the regression line)
+So Estimating line is: Y-hat = a + bX
+
+
+SLOPE OF BEST FITTING REGRESSION LINE FORMULA:
+
+b= [Σ(xy) -n(ȲX̄)] / [Σx² - n(X̄)^2]  <----------------------- SLOPE OF BEST FITTING REGRESSION LINE (equation 1)
+b= slope of best fitting line of estimate
+X = independent variable
+Y = Dependent variable
+X̄ = mean of values of independent variable
+Ȳ = mean of values of dependent variable
+n = number of data points
+
+a = Ȳ -bX̄   <------------------------------- Y intercept of (equation 2)
+
+With these two equations we can find the values of Y for varius X
+
+
+STANDARD ERROR OF ESTIMATE:
+tells the reliability of estimating equation. It is similar to SD, as both are measure of dispersion.
+
+Se (Standard error of estimate) measures the SCATTER of observed values around regression line (as SD measures scatter around mean).
+Se = Standard error of estimate ==  √ [ (Σ(Y-Yhat)^2 ] /(n-2)
+
+SHORTCUT METHOD OF CALCULATING Se
+Se = √ [Σ(Y^2  - aΣY - bΣXY)] / (n-2)
+
+INTERPRETING Se: near 0 Se value is better estimator.
+Yhat = a + bX PlusMunusSe(from 1 to 3)
+
+To find the inerval between which 68% of estimated values of Y are expected to lie = Yhat plusminus1Se .... Here n>30 and normal distribution is assumed. if sample
+size is small, use t distribution for Se calculation.
+
+
+CORRELATION ANALYSIS:
+degree to which one variable is linearly related to another.
+There are two measures:
+a) Coefficient of determination : Strength
+b) Coefficient of correlation : Direction of relation (direct or inverse)
+As we use sample data, we say "sample coefficient of determination"
+
+sample coefficient of determination is developed from relations between two kind of variales(a:the fitted regression line, b:their own mean)
+
+Variation of Y around regression line = Σ(Y-Yhat)^2
+Variation of Y around ist mean = Σ(Y-Ȳ)^2
+
+
+So, Sample coefficient of determination r² =  1- [Σ(Y-Yhat)^2] / [Σ(Y-Ȳ)^2]   
+Σ(Y-Yhat)^2] is unexplained variation. AND [Σ(Y-Ȳ)^2] is total variation.  The numerator and denominatior mean unexplained over total variation.
+and 1 - unexplained/total  means Explained variation.
+
+r² = 1 when there is perfect correlation.
+r² = 0 when there is no correlation.
+
+Coefficient of correlation: when slope is -ve, r is -ve and it mean inverse relation.
+
+MAKING INFERENCE ABOUT POPULATION PARAMETERS:
+data of sample represents only a small part of population. The sample regression line can be thought of as ESTIMATE of an UNKNOWN population regression line
+of the form  Y= A + BX    <----- Population regression line..
+
+As all points will not lie exactly on Population regression line, we get population regression line with random disturbance.
+Y= A + BX + e , where e is random disturbance. On average, e =0. 
+As e averages out to 0, sample regression line (Yhat = a + bX ) estimates population regression line (Y= A + BX).. We now have to calculate the Population Slope B
+
+POPULATION SLOPE B:
+1) calculate the sample slope b
+2) make a hypothese that B = some value.
+3) Select a level of significance,
+4) consider DoF and use t distribution for DoF and signoficance level
+5) check the acceptable region 
+# ----------------- Simple Regression and correlation ----------------------#  
+
+# ----------------- Multiple Regression and Modeling -----------------------#
 
 
 
-
-
-
-
-
-# ----------------- Simple Regression and correlation ----------------------#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
+# ----------------- Multiple Regression and Modeling -----------------------#
