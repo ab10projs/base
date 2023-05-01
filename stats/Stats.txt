@@ -502,7 +502,16 @@ We want to learn: How to determine relation between two variables.
 Chi-square tells if there exists a relation between two variables, but it does not tell what relation exists. Regression and correlation tell us both the 
 nature and strength of relation between two variables.
 
-In regression analysis we will establish an "estimating equation"
+In regression analysis we will establish an "estimating equation" that erlates a known variable to unknown variable. Then we apply correlation analysis to
+find the strength of relation. Correlation analysis tells us "how well" the the estimating equation describes the realtion.
+variables can be two or more.
+In regression equation we can have MORE THAN 1 INDEPENDENT VARIABLES and there will be ONLY 1 DEPENDENT VARIABLE. often when we add independent varibles we
+improve accuracy of prediction.
+we often find A CAUSAL RELATION between variable. i.e.  independent variables cause the dependent variable to change.
+
+
+
+
 
 
 
