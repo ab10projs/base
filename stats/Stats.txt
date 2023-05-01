@@ -481,11 +481,27 @@ the population SD is also to be estimated from sample sd, then subtract 1 more f
 AVOVA: Significance of variance among more than 2 sample means
 We can find if our samples are drawn from same population or not.
 
-
-
+1) We calculate Between column variance
+2) Calculate within column variance
+3) F = (between-column variance)/(within column varaince)
+when populations are not same, between-column variance > withon-column variance , which results in rejection of null-hypotheses
+4) Calculate degree of freedom = number of columns -1
+5) Use F table to find the value with significance level beyond which area under curve is in rejection region.
+  
 
 
 # -------------------- Chi Square and Analysis of Varaiance ANOVA ---------------------------#
+
+# ----------------- Simple Regression and correlation----------------------#
+To learn specific relation between wo or more variables
+To use regression analysis to find the relation between two variables
+Use least square estimating equation to predict future values of a varaible
+How correlation analysis describes degree to which two variables are related to each other
+Use coefficient of determination to find the streangth or relation between two variables.
+
+
+
+# ----------------- Simple Regression and correlation ----------------------#
 
 
 
