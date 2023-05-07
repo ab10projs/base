@@ -599,7 +599,39 @@ POPULATION SLOPE B:
 # ----------------- Simple Regression and correlation ----------------------#  
 
 # ----------------- Multiple Regression and Modeling -----------------------#
+use more than one explanatory variable for dependent variable we want to predict
+use qualitative variables in regression equations
+fit curves into data
+undestand residuals in regression analysis
+It is a 3 step process:
+1) Describe multi-regression equation
+2) Examin multi-regression standard error of estimate
+3) Use multiple-correlation analysis to determine how well regression equation describes observed data.
+
+Individual variable can also be tested to see if it contributes significantly to the way regression equation describes data.
+By using dummy variables, we can include qualitative factors like gender in regression equation.
+Dummy variables and curve fitting are two of the MANY modeling techniques.
+
+FINDING MULTIPLE REGRESSION EQUATION (WE WILL USE ONLY TWO INDEPENDENT VARIABLES in this example).
+In this example, two independent variables (field-audit-labor-hours<X1> , AND computer-hours<X2>) are two independent variables to predict Actual-Unpaid-Taxes<Y>
+
+ESTIMATING EQUATION FOR MULTIPLE REGRESSION:
+Yhat = a + b1X1 + b2X2
+here b1 and b2 are slopes associated with X1 and X2 respectively
+A 2 variable multiple regression line can be imagned as a plane (a + b1X1 + b2X2). Here a is y intercept. Here we have a 3 dimensional shape(plane) having length 
+width and depth. Some points lie above some below the plane and some may lie on the plane. We have to get the best fitting plane. We will use least square concept.
+
+NORMAL EQUATIONS:
+1) ΣY = na + b1ΣX1 + b2ΣX2  			--- eq1 
+2) ΣX1Y = aΣX1 +  b1ΣX1^2   + b2ΣX1X2    	--- eq2
+3) ΣX2Y = aΣX2 +  b1ΣX1X2   + b2ΣX2^2		--- eq2
+
+Put the values and solve to get a, b1 and b2.. Then make equation Yhat = a + b1X1 + b2X2 by substituting values of a, b1 and b2
 
 
+ASSUMPTIONS OF CLASSICAL LINEAR REGRESSION MODEL (CLRM) :
+1) The regression model is linear in parameter... Y =  β0 + β1X1 + β2X2 +u
+2) independent variables are assumed to be non random
+3) 
 
 # ----------------- Multiple Regression and Modeling -----------------------#
