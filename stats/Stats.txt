@@ -438,7 +438,7 @@ POWER OF HYPOTHESES TEST
 
 # -------------------- Hypothesis testing -- 2 sample test -----------------------------#
 To know if parameters from two populations are alike ? Here the RELATION is of interest and not actual value.
-As we are interested in studing two populations, sampling distribution is "sampling distribution of difference of sample means (x̄1 -x̄2)"
+As we are interested in studing two populations, sampling distribution is "sampling distribution of DIFFERENCE of sample means (x̄1 -x̄2)"
 
 POPULATION1: (μ1 mean , σ1 SD , σx̄1 Standard Error , x̄1 sample mean)...  (μx̄1 is "distribution of all possible values of x̄1").... μx̄1 =  μ1   
 POPULATION2: (μ2 mean , σ2 SD , σx̄2 Standard Error , x̄2 sample mean)...  (μx̄2 is "distribution of all possible values of x̄2").... μx̄2 =  μ2 
@@ -635,3 +635,10 @@ ASSUMPTIONS OF CLASSICAL LINEAR REGRESSION MODEL (CLRM) :
 3) 
 
 # ----------------- Multiple Regression and Modeling -----------------------#
+
+
+
+
+# ---------------- Time Series Forecasting ----------------------------------#
+
+# ---------------- Time Series Forecasting ----------------------------------#
