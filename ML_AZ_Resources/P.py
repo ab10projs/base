@@ -4,10 +4,10 @@ import pandas as pd
 
 # Importing the dataset
 dataset = pd.read_csv('Data.csv')
-print(dataset)
+#print(dataset)
 x= dataset.iloc[:,:-1].values
 y= dataset.iloc[:,-1].values
-print(y)
+#print(y)
 
 from sklearn.impute import SimpleImputer  #import module SimpleImputer
 imputer = SimpleImputer(missing_values=np.nan, strategy='mean') # create an instance and tell to use mean
@@ -33,4 +33,28 @@ x = np.array ( ct.fit_transform(x))
 from sklearn.preprocessing import LabelEncoder
 lbl_encdr = LabelEncoder()
 y = np.array(lbl_encdr.fit_transform(y))
-print(y)
+#print(y)
+
+#Here 4 sets are created as we need both x and y for test and train
+# random_state = 1 sets a seed so that the values are same for all who run this split on their machine.
+from sklearn.model_selection import  train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=.2, random_state=1)
+print(x_train)
+print(x_test)
+print(y_train)
+print(y_test)
+
+
+#here first the StandardScaler class is called from module preprocessing
+from sklearn.preprocessing import StandardScaler
+std_sclr = StandardScaler() # an instance of StandardScaler is created
+x_train[:,3:]  = std_sclr.fit_transform(x_train[:,3:]) # Here fit and transform is done on train set
+x_test[:,3:]   = std_sclr.transform(x_test[:,3:]) # here only transform is done on test set(not fit) as the fit of train is to be used in test also
+#and on applying fit again, a new scaler will be generated for test, which will differ from training, which we don't want
+
+
+print("----")
+print(x_train)
+print("----")
+print(x_test)
+print("----")
