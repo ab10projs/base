@@ -1,0 +1,5 @@
+1) order is:
+ a) ID
+ b) Class Name
+ c) Tag name , CSS selector
+ d) Xpath
