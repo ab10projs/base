@@ -1,0 +1,17 @@
+﻿  hiredis.lib(hiredis.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  Generating code
+  Finished generating code
+hiredis.lib(hiredis.obj) : warning LNK4099: PDB '' was not found with 'hiredis.lib(hiredis.obj)' or at ''; linking object as if no debug info
+hiredis.lib(net.obj) : warning LNK4099: PDB '' was not found with 'hiredis.lib(net.obj)' or at ''; linking object as if no debug info
+hiredis.lib(sds.obj) : warning LNK4099: PDB '' was not found with 'hiredis.lib(sds.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_Error.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_Error.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_FDAPI.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_FDAPI.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_fdapi_crt.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_fdapi_crt.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_variadicFunctor.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_variadicFunctor.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(win32_rfdmap.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(win32_rfdmap.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_ANSI.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_ANSI.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_Common.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_Common.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_RedisLog.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_RedisLog.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_Time.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_Time.obj)' or at ''; linking object as if no debug info
+Win32_Interop.lib(Win32_EventLog.obj) : warning LNK4099: PDB '' was not found with 'Win32_Interop.lib(Win32_EventLog.obj)' or at ''; linking object as if no debug info
+  ConsoleApplication1.vcxproj -> C:\Users\aadya\OneDrive\Desktop\hiredis_test\ConsoleApplication1\x64\Release\ConsoleApplication1.exe

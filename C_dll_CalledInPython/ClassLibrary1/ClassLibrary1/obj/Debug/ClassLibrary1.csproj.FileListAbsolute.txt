@@ -1,0 +1,6 @@
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\bin\Debug\ClassLibrary1.dll
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.csproj.AssemblyReference.cache
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.csproj.CoreCompileInputs.cache
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+C:\anupam\VisualStodio22Projects\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
