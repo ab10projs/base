@@ -8,7 +8,7 @@ pl.Config.set_tbl_width_chars(1000)
 loadDate = '07022025'
 
 filename= glob.glob("C://pythonprojects//nse//basedata//*")  #firstTime
-# filename= "C:/pythonprojects/nse/cleanbase/" # When old value is to be appended
+
 
 list1= ['ADANIPORTS','ASHOKLEY','BEL','BHARATFORG','HAL','HINDCOPPER','IRCTC','JSWSTEEL','NESTLEIND']
 
