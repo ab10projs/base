@@ -1,0 +1,27 @@
+7-- Introduction
+1) At the core of Azure Databricks is opensource Distributed compute processing engine called Apache spark
+2) Databricks is a company created by founders of Apache Spark to make it easier to work with Spark
+3) Azure databricks --> Spark, Databricks, Azure
+	3.1) Spark: Distributed compute processing engine (yahoo, ebay, netflick) multiple petabytes of data, 1000s of nodes
+			: 100 times faster than Hadoop , has in-memory
+			: Runs on distributed computed platform
+			: Unified engine which supports SQL, Streaming, ML, etc..
+			: Spark core (RDD)<---> Python, R ...., takes care taskSchedling,MmryMgmt., fault rec, StorageInterction, Main programming abstraction 				API called RDD... RDDs are collection of various compute items distributed across various nodes
+			: Spark introduced SQL engine that has (Catalyst Optimizer and Tungsten)
+			: Catalyst Optimized: converts a computational query--> highly optimized execution plan.
+			: Tungsten: Memory Management and CPU efficiency. 
+			: High level abstractions like DF APIs make it easier to develop apps, So use DF API, as it uses SQL optimizations, rather than RDDAPI
+			: Spark has a standalone resource manager, But you can chose other resource managers like Yarn, Apache Mesos, Kubernetes
+
+	3.2) Databricks	: Makes it easier to work with spark, as to work with Spark we need to manage clusters, security, 3rd party products.
+			: We need to create cluster and install software to work with spark.
+			: Databricks gives to ability to create clusters in a few clicks. chose runtime 
+			: Has Jupyter type Notebooks
+			: Provides Administration controls
+			: Optimized runtime (5x faster than vanilla Apache Spark), and ability to create tables	
+			: Open Source Project Delta Lake for Analysis, and also SQL Analytics, ML flow
+			: Also provides integration with other Microsoft services
+				
+7-- Introduction
+8-- Create Databricks Sevice in Azure
+8-- Create Databricks Sevice in Azure
