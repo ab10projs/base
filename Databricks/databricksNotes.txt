@@ -66,4 +66,135 @@
 	-- create cluster
 	-- pricing
 	-- cost control
+	-- cluster pools
+	-- cluster policy
 11-- Databricks Clusters
+
+13-- Azure Databricks cluster types
+	-- A collection of vms
+	-- One driver node and multiple worker nodes
+	-- cluster allows us to treat these nodes as a single computer engine by driver node.
+	-- Two types (ALL purpose) and (Job Cluster) 
+		-- All purpose
+			-- created manually by GUI/CLI or API
+			-- persistent, can be terminated and restarted at any point of time
+			-- suitable for interactive workloads
+			-- can be shared among users
+			-- expensive
+		-- Job Cluster
+			-- created by jobs when job starts to execute and job is configured to use job cluster
+			-- Terminated at end of the job. they can not be restarted. No longer reusable once job is completed.
+			-- suitable for automated work loads
+			-- isolated, just for the job
+			-- cheap
+	-- how to create cluster
+		-- go to cluster and launch it.
+			-- click on Compute
+				-- you will see 4 tabs (all purpose, job, policies, pool)
+				-- cluster pools give to ready to use compute capacity to create all purpose cluster quickly.
+				-- usually it take 5 to 6 minutes to spinup a cluser, if you have a pool or resources, then it can be quick.
+				-- There are a lot of cluster configuration settings. Policies help preconfigure some of these settings and can
+					control the max size and cost of cluster under control
+13-- Azure Databricks cluster types
+
+
+14-- Azure Databricks cluster configuration
+	-- single/ multi node cluster  
+	-- Multi (horizontally scale, suitable for large workloads)
+	-- access mode
+		-- Single user (only 1 user)
+		-- Shared (only python and sql workloads).. Provides process isolation, each process gets its environment, so one process can't see data 
+			of other process.
+		-- No Isolation Shared ... it doesn't provide any process isolation. Failure in one user process may effect other users.
+	-- Runtime libraries
+		-- set of core libraries that run on databrick cluster. There are 4 types of runtimes
+			-- Databricks Runtime (spark, Scala, R, Python, Ubuntu, GPU, Delta lake)
+			-- Databricks Runtime ML (Databricks Runtime + ML)
+			-- Photon Runtime (Databricks Runtime + Photon engine for faster SQL )
+			-- Databricks Runtime Light (for automated workloads)
+	-- Auto Termination
+		-- cost control.. 
+		-- terminate cluster after x minutes of use.
+		-- specify default minutes of use to avoid running when not needed
+	-- Auto Scaling (min and max worker nodes)
+		-- add or remove worker nodes depending on workload
+	-- Cluster VM Types/ Size  (many easy to uderstand groups)
+		-- Memory optimized Instance type .. for memory intensive .. e.g ML workload that caches lot of data in memory
+		-- Compute optimized Instance types .. where processing rate > input rate.. Also for distributed analytics and data science
+		-- Storage optimized (high disk throughput and IO). 
+		-- General purpose (in memory cashing)
+		-- GPU
+	-- Cluster policy
+		-- It simplifies user interface
+		-- No need for administrators
+		-- cost control, by restricting max size of cluster
+14-- Azure Databricks cluster configuration
+
+15-- Create cluser in Azure Databricks
+	-- Edit the name as ClusterGivenName
+	-- Policy --> Unrestricted
+15-- Create cluser in Azure Databricks
+
+16-- Azure Databricks Pricing
+	-- Depends on many factors
+		-- type of workload (All Purpose, Job, SQL, Photon)
+		-- Tier (premium or standard)
+		-- vm type (general purpose/GPU/Optimized)
+		-- Actual price .. look for two things (DBUs and VMs, count worker and master nodes)... small charges for IP, 
+		-- Set budget alert
+			
+16-- Azure Databricks Pricing
+
+20-- Databricks Notebook
+	-- what is a notebook
+	-- creating a notebook
+	-- Magic commands
+	-- Databricks Utilities
+	-- Import project solution Notebooks
+20-- Databricks Notebook
+
+21-- Databricks Notebooks creation
+	-- launch workspace
+		-- go to user/ create a new folder and name it dbc-course
+		-- start the cluster from compute
+21-- Databricks Notebooks creation
+
+22-- Magic commands
+	-- %sql
+	-- %fs
+	   ls	
+	-- %md
+	-- %sh
+	   ps 
+22-- Magic commands
+
+23-- Utilities
+	-- combine different types of tasks in single notebook
+	-- File system utilities
+		-- databricls filesystem from notebook
+	-- Secret utilities
+		-- Azure key vault
+	-- Widget utilities
+		-- to pass parameters at runtime in pipeline, making notebook reusable
+	-- Notebook work utilities
+		-- Invoke one notebook from another and chain notebooks
+
+		-- 	%fs
+			ls /databricks-datasets
+			----	
+			dbutils.fs.ls('/')
+			----
+			for i in dbutils.fs.ls('/databricks-datasets/COVID/'):
+    				if i.name.endswith('/'):
+        				print(i.name)
+			----
+			dbutils.help()
+			----
+			dbutils.fs.help('ls')
+			----
+23-- Utilities
+
+
+24-- import dbc files
+	--- 
+24-- import dbc files
