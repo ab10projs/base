@@ -198,3 +198,37 @@
 24-- import dbc files
 	--- 
 24-- import dbc files
+
+26-- Azure Data Lake
+	-- how to access data from data storage
+	-- we generally use ADLS Gen2
+	-- ASA token Shared Access Signature
+	-- Service Principal
+	-- If used in Notebook, this will work till the time notebook session is active
+	-- Other option is to authenticate from cluster (valid till the time cluster is active).
+	-- Other is AAD , or Azure Active Directory authentication
+	-- Other is Unity Catalog.. Here Access is defined using unity catalog
+26-- Azure Data Lake
+
+27-- Create Azure Data Lake Gen2 Storage
+	-- Search Storage account
+	-- select resource group dbc-rg and name the storage as storageaccounttestdl
+	-- leave performance as standard
+	-- redundancy can be local as it is low cost
+	-- Under Advance, the checkbox for hierarchical namespace is checked.  
+	-- Keep default
+	-- Create containers
+		-- Under DataStorage
+			-- Containers (synonimus with folders or directories to hold the files)
+			-- We will have three containers (Raw, Processed and Presentation)
+			-- nested folders can be created inside containers
+			-- 
+27-- Create Azure Data Lake Gen2 Storage
+
+29-- Azure Data Lake Gen2 access using access key
+	-- when you create azure storage account, azure generates 2 512 bits access keys. Super user.
+	-- one key can be used
+	-- one key is provided to databricks to authenticate ADLS gen2. 
+	-- spark.conf.set("fs.azure.account.key.storageaccounttestdl.dfs.core.winows.net", "the 512 bit key")
+
+29-- Azure Data Lake Gen2 access using access key
