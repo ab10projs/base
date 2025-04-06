@@ -24,4 +24,46 @@
 				
 7-- Introduction
 8-- Create Databricks Sevice in Azure
-8-- Create Databricks Sevice in Azure
+	Azure Portal
+		-- Create Resource
+			-- Azuere databrics
+				-- create resourceGroup, workspace. 
+				-- Network , take no options
+				-- leave encryption to default
+				-- tag 
+				-- Deploy and check status.. in 4 minutes it will become active... 
+				-- Pin and then new dashboard Launch workspace.
+8-- Create Databricks Service in Azure
+
+9-- Databricks User Interface Overview
+	-- At this stage, from home you will see Databricks workspace (dbc-ws) that you created. Its type is Azure Databricks Services. click on it.
+	-- After launching the databricks, you will see menu items.
+	-- left Nav has multiple products (Data Warehousing, Data Engineering and ML)
+	-- Top part has common functionalities.
+	-- SQL has Databricks SQL... For SQL Data Warehouses on Lakehouse
+	-- Data Engineering and ML
+	-- New (Notebook, Query, Dashboard, job, DTL Pipeline, Alert, Model )
+	-- Workspace is a container for holding folders and files. 
+		-- each user has a workspace and a shared workspace also  
+		-- Repo -- for GIT and other version control
+	-- Catalog is for creating tables in databricks
+	-- Workflows .. jobs, Jobruns, Delta live tables (ETL)
+	-- Compute .. to create clusters
+	-- Data Engineering has repeate of Workflows
+	-- Advance serach at top searches everywhere in workspace.. You can also switch workspaces.
+9-- Databricks User Interface Overview
+
+10-- Azure Databricks Architecture
+	-- Control Plane (Databricks Subscription) {clusterManager, Databrick UX, DBFS, Metadata about clusters, files mounted}
+	-- Data Plane (Customer Subscription) 4 resources created {VertualNetwork-VNet, NetworkSecurityGroup,NSG, AzureBlockStorage,DatabricksWorkspace}
+	-- Our data always resides and processed in our subscription
+10-- Azure Databricks Architecture
+
+11-- Databricks Clusters
+	-- what is cluster
+	-- two types of clusters
+	-- configuration options
+	-- create cluster
+	-- pricing
+	-- cost control
+11-- Databricks Clusters
