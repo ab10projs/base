@@ -221,7 +221,7 @@
 		-- Under DataStorage
 			-- Containers (synonimus with folders or directories to hold the files)
 			-- We will have three containers (Raw, Processed and Presentation)
-			-- nested folders can be created inside containers
+			-- nested folders can be created inside containers	
 			-- 
 27-- Create Azure Data Lake Gen2 Storage
 
@@ -230,5 +230,8 @@
 	-- one key can be used
 	-- one key is provided to databricks to authenticate ADLS gen2. 
 	-- spark.conf.set("fs.azure.account.key.storageaccounttestdl.dfs.core.winows.net", "the 512 bit key")
-
 29-- Azure Data Lake Gen2 access using access key
+
+30-- Accessing Azure Deta Lake using SAS token
+	--
+30-- Accessing Azure Deta Lake using SAS token
