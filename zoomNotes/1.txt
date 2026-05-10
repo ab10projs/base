@@ -1,0 +1,1489 @@
+########################## Trading Analysis Dashboard - Visualizations ##########################
+import polars as pl
+import pandas as pd
+import datetime
+import sys
+import os
+
+# Configure UTF-8 encoding for Windows console
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+
+# Configure Polars
+pl.Config.set_tbl_cols(100)
+pl.Config.set_tbl_width_chars(1000)
+pl.Config.set_tbl_rows(1000)
+pl.Config.set_float_precision(4)
+
+# Dash imports
+from dash import Dash, dcc, html, Input, Output, callback, State
+import dash_bootstrap_components as dbc
+import plotly.graph_objs as go
+import plotly.express as px
+from plotly.subplots import make_subplots
+
+# Redis Integration
+try:
+    import redis
+    import json
+    import pickle
+    REDIS_AVAILABLE = True
+    # Initialize Redis connection
+    try:
+        redis_client = redis.Redis(
+            host='localhost',
+            port=6379,
+            db=0,
+            decode_responses=False  # We'll handle encoding manually for pickle
+        )
+        # Test connection
+        redis_client.ping()
+        print("✓ Redis connection established")
+    except (redis.ConnectionError, redis.TimeoutError) as e:
+        print(f"⚠ Redis connection failed: {e}")
+        print("   Continuing without Redis caching...")
+        REDIS_AVAILABLE = False
+        redis_client = None
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis_client = None
+    print("Redis not available. Install with: pip install redis")
+    print("   Continuing without Redis caching...")
+
+# AI Integration
+try:
+    import openai
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+    # Check if new API format is available (will test in function)
+    OPENAI_NEW_API = hasattr(OpenAI, 'chat')
+except ImportError:
+    OPENAI_AVAILABLE = False
+    OPENAI_NEW_API = False
+    print("OpenAI not available. Install with: pip install openai")
+
+#############  Parameters ########################
+inputPath = "E:/inputFiles/"
+
+# Load and prepare data
+print("Loading data...")
+df = pl.read_parquet(f'{inputPath}jul_25.parquet')
+
+# Calculate P&L metrics
+df = df.with_columns([
+    ((pl.col('ExitPrice') - pl.col('EntryPrice')) * pl.col('EntryQty')).alias('PnL'),
+    (((pl.col('ExitPrice') - pl.col('EntryPrice')) / pl.col('EntryPrice')) * 100).alias('ReturnPct'),
+    (pl.col('ExitDate') - pl.col('EntryDate')).dt.total_days().alias('TradeDurationDays')
+])
+
+# Apply LongStatus multiplier
+df = df.with_columns([
+    (pl.col('PnL') * pl.when(pl.col('LongStatus') == True).then(1).otherwise(-1)).alias('PnL_Adjusted')
+])
+
+print("Data loaded and processed!")
+
+# Redis Helper Functions
+def redis_get(key, default=None):
+    """Get value from Redis cache"""
+    if not REDIS_AVAILABLE or redis_client is None:
+        return default
+    try:
+        data = redis_client.get(key)
+        if data:
+            return pickle.loads(data)
+        return default
+    except Exception as e:
+        print(f"Redis get error for {key}: {e}")
+        return default
+
+def redis_set(key, value, expire=3600):
+    """Set value in Redis cache with expiration (default 1 hour)"""
+    if not REDIS_AVAILABLE or redis_client is None:
+        return False
+    try:
+        data = pickle.dumps(value)
+        redis_client.setex(key, expire, data)
+        return True
+    except Exception as e:
+        print(f"Redis set error for {key}: {e}")
+        return False
+
+def redis_delete(key):
+    """Delete key from Redis"""
+    if not REDIS_AVAILABLE or redis_client is None:
+        return False
+    try:
+        redis_client.delete(key)
+        return True
+    except Exception as e:
+        print(f"Redis delete error for {key}: {e}")
+        return False
+
+def get_conversation_history(session_id='default'):
+    """Get conversation history from Redis"""
+    key = f"chat_history:{session_id}"
+    return redis_get(key, [])
+
+def save_conversation_history(session_id, history, max_messages=20):
+    """Save conversation history to Redis"""
+    # Keep only last max_messages
+    if len(history) > max_messages:
+        history = history[-max_messages:]
+    key = f"chat_history:{session_id}"
+    redis_set(key, history, expire=86400)  # 24 hours
+    return True
+
+# Function to calculate drawdown for combinations
+def calculate_combination_drawdown(df, group_cols, min_trades=50):
+    """Calculate drawdown metrics for combinations"""
+    daily_pnl = df.group_by(['EntryDate'] + group_cols).agg([
+        pl.sum('PnL_Adjusted').alias('DailyPnL')
+    ]).sort(['EntryDate'] + group_cols)
+    
+    results = []
+    combinations = df.group_by(group_cols).agg([
+        pl.len().alias('TotalTrades')
+    ]).filter(pl.col('TotalTrades') >= min_trades)
+    
+    for row in combinations.iter_rows(named=True):
+        filters = [pl.col(col) == row[col] for col in group_cols]
+        filter_expr = filters[0]
+        for f in filters[1:]:
+            filter_expr = filter_expr & f
+        
+        combo_daily = daily_pnl.filter(filter_expr).sort('EntryDate')
+        
+        if len(combo_daily) < 5:
+            continue
+        
+        combo_daily = combo_daily.with_columns([
+            pl.col('DailyPnL').cum_sum().alias('CumulativePnL')
+        ])
+        
+        combo_daily = combo_daily.with_columns([
+            pl.col('CumulativePnL').cum_max().alias('PeakPnL')
+        ])
+        
+        combo_daily = combo_daily.with_columns([
+            (pl.col('CumulativePnL') - pl.col('PeakPnL')).alias('Drawdown')
+        ])
+        
+        max_peak = combo_daily['PeakPnL'].max()
+        max_dd = combo_daily['Drawdown'].min()
+        max_dd_pct = (max_dd / abs(max_peak) * 100) if max_peak != 0 else 0
+        
+        stats = combo_daily.select([
+            pl.sum('DailyPnL').cast(pl.Float64).alias('TotalPnL'),
+            pl.mean('DailyPnL').cast(pl.Float64).alias('AvgDailyPnL'),
+            pl.std('DailyPnL').cast(pl.Float64).alias('DailyVolatility'),
+            pl.len().cast(pl.Int64).alias('TradingDays')
+        ])
+        
+        stats = stats.with_columns([
+            pl.lit(max_dd, dtype=pl.Float64).alias('MaxDrawdown'),
+            pl.lit(max_dd_pct, dtype=pl.Float64).alias('MaxDrawdownPct'),
+            (pl.col('AvgDailyPnL') / pl.col('DailyVolatility')).cast(pl.Float64).alias('SharpeRatio')
+        ])
+        
+        for col in group_cols:
+            col_type = df[col].dtype
+            stats = stats.with_columns([
+                pl.lit(row[col], dtype=col_type).alias(col)
+            ])
+        
+        results.append(stats)
+    
+    if results:
+        return pl.concat(results)
+    return None
+
+# Prepare data for visualizations
+print("Preparing visualization data...")
+
+# Overall stats
+overall_stats = df.select([
+    pl.len().alias('TotalTrades'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    pl.std('PnL_Adjusted').alias('StdPnL'),
+    (pl.col('PnL_Adjusted') > 0).sum().alias('WinningTrades'),
+    (pl.col('PnL_Adjusted') < 0).sum().alias('LosingTrades'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).to_pandas()
+
+# Daily performance
+daily_perf = df.group_by('EntryDate').agg([
+    pl.sum('PnL_Adjusted').alias('DailyPnL'),
+    pl.count().alias('TradeCount')
+]).sort('EntryDate').to_pandas()
+
+# Calculate cumulative and drawdown
+daily_perf['CumulativePnL'] = daily_perf['DailyPnL'].cumsum()
+daily_perf['PeakPnL'] = daily_perf['CumulativePnL'].cummax()
+daily_perf['Drawdown'] = daily_perf['CumulativePnL'] - daily_perf['PeakPnL']
+daily_perf['DrawdownPct'] = (daily_perf['Drawdown'] / daily_perf['PeakPnL'].abs() * 100).fillna(0)
+
+# Portfolio performance
+portfolio_perf = df.group_by('PortfolioID').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    pl.std('PnL_Adjusted').alias('StdPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).filter(pl.col('TradeCount') >= 1000).with_columns([
+    (pl.col('TotalPnL') / pl.col('StdPnL').abs()).alias('StabilityScore')
+]).sort('StabilityScore', descending=True).head(15).to_pandas()
+
+# Strategy performance
+strategy_perf = df.group_by('StrategyID').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    pl.std('PnL_Adjusted').alias('StdPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).filter(pl.col('TradeCount') >= 100).with_columns([
+    (pl.col('TotalPnL') / pl.col('StdPnL').abs()).alias('StabilityScore')
+]).sort('StabilityScore', descending=True).head(15).to_pandas()
+
+# Security performance
+security_perf = df.group_by('SecID').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    pl.std('PnL_Adjusted').alias('StdPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).filter(pl.col('TradeCount') >= 100).with_columns([
+    (pl.col('TotalPnL') / pl.col('StdPnL').abs()).alias('StabilityScore')
+]).sort('StabilityScore', descending=True).head(15).to_pandas()
+
+# Portfolio + Strategy combinations
+portfolio_strategy = df.group_by(['PortfolioID', 'StrategyID']).agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).filter(pl.col('TradeCount') >= 50).to_pandas()
+
+ps_drawdown = calculate_combination_drawdown(df, ['PortfolioID', 'StrategyID'], min_trades=50)
+if ps_drawdown is not None:
+    ps_drawdown = ps_drawdown.to_pandas()
+    ps_drawdown['PortfolioID'] = ps_drawdown['PortfolioID'].astype(int)
+    ps_drawdown['StrategyID'] = ps_drawdown['StrategyID'].astype(int)
+    ps_combined = portfolio_strategy.merge(
+        ps_drawdown[['PortfolioID', 'StrategyID', 'MaxDrawdownPct', 'SharpeRatio']],
+        on=['PortfolioID', 'StrategyID'],
+        how='inner'
+    )
+    ps_combined['PnLToDrawdownRatio'] = ps_combined['TotalPnL'] / ps_combined['MaxDrawdownPct'].abs().replace(0, 1)
+    ps_combined = ps_combined.sort_values('PnLToDrawdownRatio', ascending=False).head(20)
+else:
+    ps_combined = pd.DataFrame()
+
+# Long vs Short
+long_short = df.group_by('LongStatus').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).to_pandas()
+long_short['PositionType'] = long_short['LongStatus'].map({True: 'Long', False: 'Short'})
+
+# Intraday vs Overnight
+intraday = df.group_by('IntraDayStatus').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate')
+]).to_pandas()
+intraday['TradeType'] = intraday['IntraDayStatus'].map({True: 'Intraday', False: 'Overnight'})
+
+# Strategy Similarity Analysis Data
+print("Preparing strategy similarity data...")
+import numpy as np
+
+# Try to get cached correlation matrix
+cache_key = "strategy_correlation_matrix"
+correlation_matrix = redis_get(cache_key)
+
+if correlation_matrix is None:
+    print("  Computing correlation matrix (this may take a moment)...")
+    # Get strategies with sufficient trades
+    strategy_list = df.group_by('StrategyID').agg([
+        pl.len().alias('TradeCount')
+    ]).filter(pl.col('TradeCount') >= 50)['StrategyID'].to_list()
+
+    # Get daily P&L for each strategy
+    strategy_daily_pnl = df.group_by(['EntryDate', 'StrategyID']).agg([
+        pl.sum('PnL_Adjusted').alias('DailyPnL')
+    ]).filter(pl.col('StrategyID').is_in(strategy_list))
+
+    strategy_daily_pnl_pd = strategy_daily_pnl.to_pandas()
+    strategy_pivot = strategy_daily_pnl_pd.pivot_table(
+        index='EntryDate', 
+        columns='StrategyID', 
+        values='DailyPnL',
+        fill_value=0
+    )
+
+    # Calculate correlation matrix (limit to top 30 strategies for performance)
+    top_strategies_by_trades = df.group_by('StrategyID').agg([
+        pl.len().alias('TradeCount')
+    ]).filter(pl.col('TradeCount') >= 50).sort('TradeCount', descending=True).head(30)['StrategyID'].to_list()
+
+    strategy_pivot_top = strategy_pivot[top_strategies_by_trades]
+    correlation_matrix = strategy_pivot_top.corr()
+    
+    # Cache the result (expires in 1 hour)
+    redis_set(cache_key, correlation_matrix, expire=3600)
+    print("  ✓ Correlation matrix computed and cached")
+else:
+    print("  ✓ Using cached correlation matrix")
+    # Get top strategies list from cache or compute
+    top_strategies_by_trades = redis_get("top_strategies_list")
+    if top_strategies_by_trades is None:
+        top_strategies_by_trades = df.group_by('StrategyID').agg([
+            pl.len().alias('TradeCount')
+        ]).filter(pl.col('TradeCount') >= 50).sort('TradeCount', descending=True).head(30)['StrategyID'].to_list()
+        redis_set("top_strategies_list", top_strategies_by_trades, expire=3600)
+
+# Find highly correlated pairs
+high_corr_pairs = []
+for i in range(len(correlation_matrix.columns)):
+    for j in range(i+1, len(correlation_matrix.columns)):
+        strat1 = correlation_matrix.columns[i]
+        strat2 = correlation_matrix.columns[j]
+        corr_value = correlation_matrix.iloc[i, j]
+        if corr_value > 0.6:  # Lower threshold for visualization
+            high_corr_pairs.append({
+                'Strategy1': int(strat1),
+                'Strategy2': int(strat2),
+                'Correlation': corr_value
+            })
+
+high_corr_df = pd.DataFrame(high_corr_pairs).sort_values('Correlation', ascending=False)
+
+# Performance metrics similarity
+strategy_metrics = df.group_by('StrategyID').agg([
+    pl.len().alias('TradeCount'),
+    pl.sum('PnL_Adjusted').alias('TotalPnL'),
+    pl.mean('PnL_Adjusted').alias('AvgPnL'),
+    pl.std('PnL_Adjusted').alias('StdPnL'),
+    ((pl.col('PnL_Adjusted') > 0).sum() / pl.len() * 100).alias('WinRate'),
+    pl.mean('ReturnPct').alias('AvgReturnPct')
+]).filter(pl.col('TradeCount') >= 50).to_pandas()
+
+# Normalize and calculate similarity for top strategies
+top_strategies_metrics = strategy_metrics[strategy_metrics['StrategyID'].isin(top_strategies_by_trades)].copy()
+metric_cols = ['TradeCount', 'TotalPnL', 'AvgPnL', 'StdPnL', 'WinRate', 'AvgReturnPct']
+
+# Normalize metrics
+for col in metric_cols:
+    col_mean = top_strategies_metrics[col].mean()
+    col_std = top_strategies_metrics[col].std()
+    if col_std > 0:
+        top_strategies_metrics[f'{col}_norm'] = (top_strategies_metrics[col] - col_mean) / col_std
+    else:
+        top_strategies_metrics[f'{col}_norm'] = 0
+
+# Calculate cosine similarity
+metrics_array = top_strategies_metrics[[f'{col}_norm' for col in metric_cols]].values
+similarity_matrix = np.zeros((len(metrics_array), len(metrics_array)))
+for i in range(len(metrics_array)):
+    for j in range(len(metrics_array)):
+        dot_product = np.dot(metrics_array[i], metrics_array[j])
+        norm_i = np.linalg.norm(metrics_array[i])
+        norm_j = np.linalg.norm(metrics_array[j])
+        if norm_i > 0 and norm_j > 0:
+            similarity_matrix[i, j] = dot_product / (norm_i * norm_j)
+
+# Cache similarity matrix computation
+similarity_cache_key = "strategy_similarity_matrix"
+similarity_matrix_cached = redis_get(similarity_cache_key)
+
+if similarity_matrix_cached is not None:
+    similarity_matrix = similarity_matrix_cached
+    print("  ✓ Using cached similarity matrix")
+else:
+    print("  Computing similarity matrix...")
+    # Calculate cosine similarity
+    metrics_array = top_strategies_metrics[[f'{col}_norm' for col in metric_cols]].values
+    similarity_matrix = np.zeros((len(metrics_array), len(metrics_array)))
+    for i in range(len(metrics_array)):
+        for j in range(len(metrics_array)):
+            dot_product = np.dot(metrics_array[i], metrics_array[j])
+            norm_i = np.linalg.norm(metrics_array[i])
+            norm_j = np.linalg.norm(metrics_array[j])
+            if norm_i > 0 and norm_j > 0:
+                similarity_matrix[i, j] = dot_product / (norm_i * norm_j)
+    redis_set(similarity_cache_key, similarity_matrix, expire=3600)
+    print("  ✓ Similarity matrix computed and cached")
+
+# Find similar pairs
+similar_pairs = []
+for i in range(len(top_strategies_metrics)):
+    for j in range(i+1, len(top_strategies_metrics)):
+        strat1 = top_strategies_metrics.iloc[i]['StrategyID']
+        strat2 = top_strategies_metrics.iloc[j]['StrategyID']
+        sim_value = similarity_matrix[i, j]
+        if sim_value > 0.8:
+            similar_pairs.append({
+                'Strategy1': int(strat1),
+                'Strategy2': int(strat2),
+                'Similarity': sim_value
+            })
+
+similar_df = pd.DataFrame(similar_pairs).sort_values('Similarity', ascending=False)
+
+# Security overlap analysis
+strategy_securities = df.group_by(['StrategyID', 'SecID']).agg([
+    pl.count().alias('TradeCount')
+]).filter(pl.col('StrategyID').is_in(top_strategies_by_trades))
+
+# Calculate Jaccard similarity for top strategies
+def get_security_set(strategy_id, df_grouped):
+    return set(df_grouped.filter(pl.col('StrategyID') == strategy_id)['SecID'].to_list())
+
+security_similar_pairs = []
+for i, strat1 in enumerate(top_strategies_by_trades[:20]):  # Limit for performance
+    set1 = get_security_set(strat1, strategy_securities)
+    for strat2 in top_strategies_by_trades[i+1:20]:
+        set2 = get_security_set(strat2, strategy_securities)
+        if len(set1) == 0 and len(set2) == 0:
+            continue
+        intersection = len(set1.intersection(set2))
+        union = len(set1.union(set2))
+        jaccard = intersection / union if union > 0 else 0
+        if jaccard > 0.3:
+            security_similar_pairs.append({
+                'Strategy1': int(strat1),
+                'Strategy2': int(strat2),
+                'JaccardSimilarity': jaccard
+            })
+
+security_sim_df = pd.DataFrame(security_similar_pairs).sort_values('JaccardSimilarity', ascending=False)
+
+print("Strategy similarity data preparation complete!")
+print("Data preparation complete!")
+
+# Prepare data context for AI
+def prepare_data_context():
+    """Prepare summary context about the trading data for AI"""
+    context = f"""
+Trading Data Summary:
+- Total Trades: {overall_stats['TotalTrades'].iloc[0]:,.0f}
+- Total P&L: ${overall_stats['TotalPnL'].iloc[0]:,.2f}
+- Win Rate: {overall_stats['WinRate'].iloc[0]:.2f}%
+- Average P&L per Trade: ${overall_stats['AvgPnL'].iloc[0]:.2f}
+
+Top Portfolios (by Stability):
+{portfolio_perf[['PortfolioID', 'TotalPnL', 'WinRate', 'StabilityScore']].head(5).to_string()}
+
+Top Strategies (by Stability):
+{strategy_perf[['StrategyID', 'TotalPnL', 'WinRate', 'StabilityScore']].head(5).to_string()}
+
+Top Securities (by Stability):
+{security_perf[['SecID', 'TotalPnL', 'WinRate', 'StabilityScore']].head(5).to_string()}
+
+Date Range: {daily_perf['EntryDate'].min()} to {daily_perf['EntryDate'].max()}
+
+Key Insights:
+- Short positions perform better: {long_short[long_short['PositionType']=='Short']['WinRate'].iloc[0]:.1f}% win rate
+- Intraday trades: {intraday[intraday['TradeType']=='Intraday']['WinRate'].iloc[0]:.1f}% win rate
+- Best combinations have zero drawdown and high win rates
+"""
+    return context
+
+# AI Chat Function
+def get_ai_response(user_query, conversation_history=[]):
+    """Get AI response about trading data"""
+    if not OPENAI_AVAILABLE:
+        return "OpenAI API not available. Please install openai package and set your API key."
+    
+    try:
+        # Get API key from environment or use placeholder
+        api_key = os.getenv('OPENAI_API_KEY', '')
+        if not api_key:
+            return "⚠️ OpenAI API key not found. Please set OPENAI_API_KEY environment variable.\n\nFor now, here's a basic response based on your data:\n\n" + get_basic_response(user_query)
+        
+        # Prepare context
+        data_context = prepare_data_context()
+        
+        # Build messages
+        messages = [
+            {
+                "role": "system",
+                "content": f"""You are a trading data analyst assistant. You help users understand their trading performance data.
+
+Here is the current trading data context:
+{data_context}
+
+Answer questions about the trading data, provide insights, and suggest improvements based on the data shown above."""
+            }
+        ]
+        
+        # Add conversation history
+        messages.extend(conversation_history)
+        
+        # Add current query
+        messages.append({
+            "role": "user",
+            "content": user_query
+        })
+        
+        # Call OpenAI API (try new API format first, fallback to old)
+        try:
+            # Try new API format (OpenAI v1.0+)
+            client = OpenAI(api_key=api_key)
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=messages,
+                max_tokens=500,
+                temperature=0.7
+            )
+            return response.choices[0].message.content
+        except (AttributeError, TypeError):
+            # Fallback to old API format
+            openai.api_key = api_key
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=messages,
+                max_tokens=500,
+                temperature=0.7
+            )
+            return response.choices[0].message.content
+        
+    except Exception as e:
+        return f"Error calling AI: {str(e)}\n\n" + get_basic_response(user_query)
+
+def get_basic_response(user_query):
+    """Provide basic responses when AI is not available"""
+    query_lower = user_query.lower()
+    
+    if 'best' in query_lower and 'strategy' in query_lower:
+        top_strat = strategy_perf.iloc[0]
+        return f"Best strategy by stability: Strategy {int(top_strat['StrategyID'])} with ${top_strat['TotalPnL']:,.2f} total P&L and {top_strat['WinRate']:.2f}% win rate."
+    
+    elif 'best' in query_lower and 'portfolio' in query_lower:
+        top_port = portfolio_perf.iloc[0]
+        return f"Best portfolio by stability: Portfolio {int(top_port['PortfolioID'])} with ${top_port['TotalPnL']:,.2f} total P&L and {top_port['WinRate']:.2f}% win rate."
+    
+    elif 'correlation' in query_lower or 'similar' in query_lower:
+        if len(high_corr_df) > 0:
+            top_pair = high_corr_df.iloc[0]
+            return f"Most correlated strategy pair: Strategy {int(top_pair['Strategy1'])} and Strategy {int(top_pair['Strategy2'])} with correlation {top_pair['Correlation']:.3f}."
+        return "No highly correlated pairs found in the data."
+    
+    elif 'win rate' in query_lower:
+        return f"Overall win rate: {overall_stats['WinRate'].iloc[0]:.2f}%\nShort positions: {long_short[long_short['PositionType']=='Short']['WinRate'].iloc[0]:.1f}%\nLong positions: {long_short[long_short['PositionType']=='Long']['WinRate'].iloc[0]:.1f}%"
+    
+    elif 'drawdown' in query_lower:
+        max_dd = daily_perf['Drawdown'].min()
+        max_dd_pct = (max_dd / daily_perf['PeakPnL'].max() * 100) if daily_perf['PeakPnL'].max() > 0 else 0
+        return f"Maximum drawdown: ${max_dd:,.2f} ({max_dd_pct:.2f}%)\nDate range: {daily_perf['EntryDate'].min()} to {daily_perf['EntryDate'].max()}"
+    
+    else:
+        return f"I can help you analyze your trading data. Try asking about:\n- Best strategies or portfolios\n- Win rates\n- Drawdown analysis\n- Strategy correlations\n- Performance metrics\n\nYour data shows {overall_stats['TotalTrades'].iloc[0]:,.0f} trades with {overall_stats['WinRate'].iloc[0]:.2f}% win rate."
+
+# Initialize Dash app
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+# Define app layout
+app.layout = dbc.Container([
+    # Redis Alert Display (H3 at top)
+    dbc.Row([
+        dbc.Col([
+            html.H3(id="redis-alert", className="text-center mb-3", style={'color': 'red', 'font-weight': 'bold'})
+        ], width=12)
+    ]),
+    
+    # Interval component to check Redis every 10 seconds
+    dcc.Interval(
+        id='redis-interval',
+        interval=10*1000,  # 10 seconds in milliseconds
+        n_intervals=0
+    ),
+    
+    dbc.Row([
+        dbc.Col([
+            html.H1("📊 Trading Performance Dashboard", className="text-center mb-4"),
+            html.Hr(),
+            # Redis Status Indicator
+            dbc.Alert([
+                html.Small([
+                    "Redis Cache: ",
+                    html.Strong("✓ Active", className="text-success") if REDIS_AVAILABLE and redis_client else 
+                    html.Strong("✗ Inactive", className="text-warning"),
+                    " | ",
+                    dbc.Button("Clear Cache", id="clear-cache-btn", color="link", size="sm", className="p-0", n_clicks=0),
+                    html.Span("", id="cache-status")
+                ])
+            ], color="light", className="mb-2")
+        ])
+    ]),
+    
+    # Key Metrics Cards
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4("Total Trades", className="card-title"),
+                    html.H2(f"{overall_stats['TotalTrades'].iloc[0]:,.0f}", className="text-primary")
+                ])
+            ], className="mb-3")
+        ], width=3),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4("Total P&L", className="card-title"),
+                    html.H2(f"${overall_stats['TotalPnL'].iloc[0]:,.0f}", 
+                           className="text-success" if overall_stats['TotalPnL'].iloc[0] > 0 else "text-danger")
+                ])
+            ], className="mb-3")
+        ], width=3),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4("Win Rate", className="card-title"),
+                    html.H2(f"{overall_stats['WinRate'].iloc[0]:.2f}%", className="text-info")
+                ])
+            ], className="mb-3")
+        ], width=3),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4("Avg P&L/Trade", className="card-title"),
+                    html.H2(f"${overall_stats['AvgPnL'].iloc[0]:.2f}", 
+                           className="text-success" if overall_stats['AvgPnL'].iloc[0] > 0 else "text-danger")
+                ])
+            ], className="mb-3")
+        ], width=3),
+    ]),
+    
+    html.Br(),
+    
+    # Daily Performance and Drawdown
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("📈 Daily Cumulative P&L & Drawdown"),
+                dbc.CardBody([
+                    dcc.Graph(id='daily-cumulative-chart')
+                ])
+            ])
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+    # Best Combinations
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("🏆 Best Portfolio + Strategy Combinations (Low Drawdown)"),
+                dbc.CardBody([
+                    dcc.Graph(id='best-combinations-chart')
+                ])
+            ])
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+    # Top Components
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("⭐ Top Portfolios by Stability"),
+                dbc.CardBody([
+                    dcc.Graph(id='top-portfolios-chart')
+                ])
+            ])
+        ], width=4),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("⭐ Top Strategies by Stability"),
+                dbc.CardBody([
+                    dcc.Graph(id='top-strategies-chart')
+                ])
+            ])
+        ], width=4),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("⭐ Top Securities by Stability"),
+                dbc.CardBody([
+                    dcc.Graph(id='top-securities-chart')
+                ])
+            ])
+        ], width=4),
+    ]),
+    
+    html.Br(),
+    
+    # Performance Comparisons
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("📊 Long vs Short Performance"),
+                dbc.CardBody([
+                    dcc.Graph(id='long-short-chart')
+                ])
+            ])
+        ], width=6),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("📊 Intraday vs Overnight Performance"),
+                dbc.CardBody([
+                    dcc.Graph(id='intraday-chart')
+                ])
+            ])
+        ], width=6),
+    ]),
+    
+    html.Br(),
+    
+    # Strategy Similarity Analysis Section
+    dbc.Row([
+        dbc.Col([
+            html.H2("🔗 Strategy Similarity Analysis", className="text-center mb-4"),
+            html.Hr(),
+        ], width=12)
+    ]),
+    
+    # Correlation Heatmap
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("📊 Strategy Correlation Heatmap (Daily P&L)"),
+                dbc.CardBody([
+                    dcc.Graph(id='strategy-correlation-heatmap')
+                ])
+            ])
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+    # Similar Strategy Pairs
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("🔗 Highly Correlated Strategy Pairs (Correlation > 0.6)"),
+                dbc.CardBody([
+                    dcc.Graph(id='correlated-pairs-chart')
+                ])
+            ])
+        ], width=6),
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("📈 Similar Performance Profile Pairs (Similarity > 0.8)"),
+                dbc.CardBody([
+                    dcc.Graph(id='similar-performance-chart')
+                ])
+            ])
+        ], width=6),
+    ]),
+    
+    html.Br(),
+    
+    # Security Overlap
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader("🎯 Strategies with Similar Security Usage (Jaccard > 0.3)"),
+                dbc.CardBody([
+                    dcc.Graph(id='security-overlap-chart')
+                ])
+            ])
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+    # AI Chat Assistant Section
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader([
+                    html.H4("🤖 AI Trading Data Assistant", className="mb-0"),
+                    html.Small("Ask questions about your trading data, strategies, and performance", className="text-muted")
+                ]),
+                dbc.CardBody([
+                    # Chat history display
+                    html.Div(
+                        id='chat-history',
+                        style={
+                            'height': '400px',
+                            'overflow-y': 'auto',
+                            'border': '1px solid #dee2e6',
+                            'border-radius': '5px',
+                            'padding': '15px',
+                            'margin-bottom': '15px',
+                            'background-color': '#f8f9fa'
+                        },
+                        children=[
+                            html.Div([
+                                html.Strong("AI Assistant: "),
+                                html.Span("Hello! I can help you analyze your trading data. Ask me about strategies, portfolios, performance metrics, correlations, or any insights you need.", 
+                                         className="text-muted")
+                            ], className="mb-3")
+                        ]
+                    ),
+                    # Input area
+                    dbc.InputGroup([
+                        dbc.Input(
+                            id='chat-input',
+                            placeholder="Ask a question about your trading data... (e.g., 'What are the best strategies?', 'Show me correlated strategies', 'What's the win rate?')",
+                            type="text",
+                            debounce=True
+                        ),
+                        dbc.Button(
+                            "Send",
+                            id='send-button',
+                            color="primary",
+                            n_clicks=0
+                        )
+                    ]),
+                    html.Small([
+                        html.Br(),
+                        "💡 Tip: Ask about best strategies, portfolio performance, correlations, win rates, drawdowns, or any trading insights.",
+                        html.Br(),
+                        "Note: For full AI features, set OPENAI_API_KEY environment variable. Basic responses available without API key."
+                    ], className="text-muted mt-2")
+                ])
+            ])
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+    # Recommendations Section
+    dbc.Row([
+        dbc.Col([
+            dbc.Alert([
+                html.H4("💡 Key Recommendations for Stable Drawdown", className="alert-heading"),
+                html.Hr(),
+                html.P([
+                    html.Strong("1. Focus on Portfolio 1113 Combinations:"), 
+                    " Multiple zero-drawdown strategy combinations with 83-100% win rates."
+                ]),
+                html.P([
+                    html.Strong("2. Prefer Short Positions:"), 
+                    f" Short positions show {long_short[long_short['PositionType']=='Short']['WinRate'].iloc[0]:.1f}% win rate vs {long_short[long_short['PositionType']=='Long']['WinRate'].iloc[0]:.1f}% for long."
+                ]),
+                html.P([
+                    html.Strong("3. Consider Intraday Trades:"), 
+                    f" {intraday[intraday['TradeType']=='Intraday']['WinRate'].iloc[0]:.1f}% win rate with better consistency."
+                ]),
+                html.P([
+                    html.Strong("4. Target Combinations with:"), 
+                    " MaxDrawdownPct = 0%, Win Rate > 80%, Sharpe Ratio > 1.0"
+                ]),
+            ], color="info")
+        ], width=12)
+    ]),
+    
+    html.Br(),
+    
+], fluid=True)
+
+# Callback for Redis Alert (checks every 10 seconds)
+@app.callback(
+    Output('redis-alert', 'children'),
+    Input('redis-interval', 'n_intervals')
+)
+def check_redis_alert(n_intervals):
+    """Check Redis for 'keyAlert' key every 10 seconds and display value in red"""
+    if not REDIS_AVAILABLE or redis_client is None:
+        return ""  # Return empty if Redis not available
+    
+    try:
+        # Ping Redis to check connection
+        redis_client.ping()
+        
+        # Check for 'keyAlert' key
+        alert_value = redis_client.get('keyAlert')
+        
+        if alert_value:
+            # Decode the value (assuming it's a string)
+            try:
+                # Try to decode as UTF-8 string
+                if isinstance(alert_value, bytes):
+                    alert_text = alert_value.decode('utf-8')
+                else:
+                    alert_text = str(alert_value)
+                
+                # Return the alert text in red
+                return f"🚨 ALERT: {alert_text}"
+            except Exception as e:
+                # If decoding fails, return raw value
+                return f"🚨 ALERT: {str(alert_value)}"
+        else:
+            # No alert found, return empty
+            return ""
+            
+    except (redis.ConnectionError, redis.TimeoutError) as e:
+        # Redis connection lost
+        return f"⚠️ Redis Connection Lost: {str(e)}"
+    except Exception as e:
+        # Other errors
+        return f"⚠️ Redis Error: {str(e)}"
+
+# Callback for daily cumulative chart
+@app.callback(
+    Output('daily-cumulative-chart', 'figure'),
+    Input('daily-cumulative-chart', 'id')
+)
+def update_daily_chart(_):
+    fig = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=('Cumulative P&L Over Time', 'Drawdown Over Time'),
+        vertical_spacing=0.1,
+        row_heights=[0.6, 0.4]
+    )
+    
+    # Cumulative P&L
+    fig.add_trace(
+        go.Scatter(
+            x=daily_perf['EntryDate'],
+            y=daily_perf['CumulativePnL'],
+            mode='lines',
+            name='Cumulative P&L',
+            line=dict(color='#2ecc71', width=2),
+            fill='tozeroy',
+            fillcolor='rgba(46, 204, 113, 0.1)'
+        ),
+        row=1, col=1
+    )
+    
+    fig.add_trace(
+        go.Scatter(
+            x=daily_perf['EntryDate'],
+            y=daily_perf['PeakPnL'],
+            mode='lines',
+            name='Peak P&L',
+            line=dict(color='#3498db', width=2, dash='dash')
+        ),
+        row=1, col=1
+    )
+    
+    # Drawdown
+    fig.add_trace(
+        go.Scatter(
+            x=daily_perf['EntryDate'],
+            y=daily_perf['Drawdown'],
+            mode='lines',
+            name='Drawdown',
+            line=dict(color='#e74c3c', width=2),
+            fill='tozeroy',
+            fillcolor='rgba(231, 76, 60, 0.2)'
+        ),
+        row=2, col=1
+    )
+    
+    fig.update_xaxes(title_text="Date", row=2, col=1)
+    fig.update_yaxes(title_text="P&L ($)", row=1, col=1)
+    fig.update_yaxes(title_text="Drawdown ($)", row=2, col=1)
+    
+    fig.update_layout(
+        height=600,
+        showlegend=True,
+        hovermode='x unified'
+    )
+    
+    return fig
+
+# Callback for best combinations chart
+@app.callback(
+    Output('best-combinations-chart', 'figure'),
+    Input('best-combinations-chart', 'id')
+)
+def update_combinations_chart(_):
+    if len(ps_combined) == 0:
+        return go.Figure().add_annotation(text="No data available")
+    
+    fig = go.Figure()
+    
+    # Create labels
+    labels = [f"P{int(row['PortfolioID'])}-S{int(row['StrategyID'])}" 
+              for _, row in ps_combined.iterrows()]
+    
+    fig.add_trace(go.Bar(
+        x=labels,
+        y=ps_combined['TotalPnL'],
+        name='Total P&L',
+        marker_color='#3498db',
+        text=[f"${x:,.0f}" for x in ps_combined['TotalPnL']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Best Portfolio + Strategy Combinations by P&L to Drawdown Ratio",
+        xaxis_title="Portfolio-Strategy Combination",
+        yaxis_title="Total P&L ($)",
+        height=500,
+        showlegend=False,
+        xaxis={'tickangle': -45}
+    )
+    
+    return fig
+
+# Callback for top portfolios
+@app.callback(
+    Output('top-portfolios-chart', 'figure'),
+    Input('top-portfolios-chart', 'id')
+)
+def update_portfolios_chart(_):
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=[f"P{int(x)}" for x in portfolio_perf['PortfolioID']],
+        y=portfolio_perf['StabilityScore'],
+        marker_color='#9b59b6',
+        text=[f"{x:,.0f}" for x in portfolio_perf['StabilityScore']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 15 Portfolios",
+        xaxis_title="Portfolio ID",
+        yaxis_title="Stability Score",
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for top strategies
+@app.callback(
+    Output('top-strategies-chart', 'figure'),
+    Input('top-strategies-chart', 'id')
+)
+def update_strategies_chart(_):
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=[f"S{int(x)}" for x in strategy_perf['StrategyID']],
+        y=strategy_perf['StabilityScore'],
+        marker_color='#e67e22',
+        text=[f"{x:,.0f}" for x in strategy_perf['StabilityScore']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 15 Strategies",
+        xaxis_title="Strategy ID",
+        yaxis_title="Stability Score",
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for top securities
+@app.callback(
+    Output('top-securities-chart', 'figure'),
+    Input('top-securities-chart', 'id')
+)
+def update_securities_chart(_):
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=[f"Sec{int(x)}" for x in security_perf['SecID']],
+        y=security_perf['StabilityScore'],
+        marker_color='#1abc9c',
+        text=[f"{x:,.0f}" for x in security_perf['StabilityScore']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 15 Securities",
+        xaxis_title="Security ID",
+        yaxis_title="Stability Score",
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for long vs short
+@app.callback(
+    Output('long-short-chart', 'figure'),
+    Input('long-short-chart', 'id')
+)
+def update_long_short_chart(_):
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=('Total P&L', 'Win Rate'),
+        specs=[[{"type": "bar"}, {"type": "bar"}]]
+    )
+    
+    colors = ['#e74c3c' if x < 0 else '#2ecc71' for x in long_short['TotalPnL']]
+    
+    fig.add_trace(
+        go.Bar(
+            x=long_short['PositionType'],
+            y=long_short['TotalPnL'],
+            name='Total P&L',
+            marker_color=colors,
+            text=[f"${x:,.0f}" for x in long_short['TotalPnL']],
+            textposition='outside'
+        ),
+        row=1, col=1
+    )
+    
+    fig.add_trace(
+        go.Bar(
+            x=long_short['PositionType'],
+            y=long_short['WinRate'],
+            name='Win Rate',
+            marker_color=['#3498db', '#9b59b6'],
+            text=[f"{x:.1f}%" for x in long_short['WinRate']],
+            textposition='outside'
+        ),
+        row=1, col=2
+    )
+    
+    fig.update_yaxes(title_text="P&L ($)", row=1, col=1)
+    fig.update_yaxes(title_text="Win Rate (%)", row=1, col=2)
+    
+    fig.update_layout(
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for intraday
+@app.callback(
+    Output('intraday-chart', 'figure'),
+    Input('intraday-chart', 'id')
+)
+def update_intraday_chart(_):
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=('Total P&L', 'Win Rate'),
+        specs=[[{"type": "bar"}, {"type": "bar"}]]
+    )
+    
+    colors = ['#e74c3c' if x < 0 else '#2ecc71' for x in intraday['TotalPnL']]
+    
+    fig.add_trace(
+        go.Bar(
+            x=intraday['TradeType'],
+            y=intraday['TotalPnL'],
+            name='Total P&L',
+            marker_color=colors,
+            text=[f"${x:,.0f}" for x in intraday['TotalPnL']],
+            textposition='outside'
+        ),
+        row=1, col=1
+    )
+    
+    fig.add_trace(
+        go.Bar(
+            x=intraday['TradeType'],
+            y=intraday['WinRate'],
+            name='Win Rate',
+            marker_color=['#f39c12', '#16a085'],
+            text=[f"{x:.1f}%" for x in intraday['WinRate']],
+            textposition='outside'
+        ),
+        row=1, col=2
+    )
+    
+    fig.update_yaxes(title_text="P&L ($)", row=1, col=1)
+    fig.update_yaxes(title_text="Win Rate (%)", row=1, col=2)
+    
+    fig.update_layout(
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for strategy correlation heatmap
+@app.callback(
+    Output('strategy-correlation-heatmap', 'figure'),
+    Input('strategy-correlation-heatmap', 'id')
+)
+def update_correlation_heatmap(_):
+    # Create heatmap
+    fig = go.Figure(data=go.Heatmap(
+        z=correlation_matrix.values,
+        x=[f"S{int(x)}" for x in correlation_matrix.columns],
+        y=[f"S{int(x)}" for x in correlation_matrix.columns],
+        colorscale='RdBu',
+        zmid=0,
+        text=correlation_matrix.values.round(2),
+        texttemplate='%{text}',
+        textfont={"size": 8},
+        colorbar=dict(title="Correlation")
+    ))
+    
+    fig.update_layout(
+        title="Strategy Correlation Matrix (Daily P&L)",
+        xaxis_title="Strategy ID",
+        yaxis_title="Strategy ID",
+        height=700,
+        width=900
+    )
+    
+    return fig
+
+# Callback for correlated pairs
+@app.callback(
+    Output('correlated-pairs-chart', 'figure'),
+    Input('correlated-pairs-chart', 'id')
+)
+def update_correlated_pairs(_):
+    if len(high_corr_df) == 0:
+        return go.Figure().add_annotation(text="No highly correlated pairs found", xref="paper", yref="paper", x=0.5, y=0.5)
+    
+    # Create network-style visualization
+    fig = go.Figure()
+    
+    # Get top 20 pairs
+    top_pairs = high_corr_df.head(20)
+    
+    # Create edge list for network
+    edges = []
+    for _, row in top_pairs.iterrows():
+        edges.append({
+            'from': f"S{int(row['Strategy1'])}",
+            'to': f"S{int(row['Strategy2'])}",
+            'weight': row['Correlation']
+        })
+    
+    # Create bar chart of correlations
+    labels = [f"S{int(row['Strategy1'])}-S{int(row['Strategy2'])}" for _, row in top_pairs.iterrows()]
+    
+    fig.add_trace(go.Bar(
+        x=labels,
+        y=top_pairs['Correlation'],
+        marker=dict(
+            color=top_pairs['Correlation'],
+            colorscale='Viridis',
+            showscale=True,
+            colorbar=dict(title="Correlation")
+        ),
+        text=[f"{x:.3f}" for x in top_pairs['Correlation']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 20 Correlated Strategy Pairs",
+        xaxis_title="Strategy Pair",
+        yaxis_title="Correlation",
+        height=500,
+        xaxis={'tickangle': -45}
+    )
+    
+    return fig
+
+# Callback for similar performance
+@app.callback(
+    Output('similar-performance-chart', 'figure'),
+    Input('similar-performance-chart', 'id')
+)
+def update_similar_performance(_):
+    if len(similar_df) == 0:
+        return go.Figure().add_annotation(text="No similar performance pairs found", xref="paper", yref="paper", x=0.5, y=0.5)
+    
+    # Get top 20 pairs
+    top_pairs = similar_df.head(20)
+    
+    labels = [f"S{int(row['Strategy1'])}-S{int(row['Strategy2'])}" for _, row in top_pairs.iterrows()]
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=labels,
+        y=top_pairs['Similarity'],
+        marker=dict(
+            color=top_pairs['Similarity'],
+            colorscale='Plasma',
+            showscale=True,
+            colorbar=dict(title="Similarity")
+        ),
+        text=[f"{x:.3f}" for x in top_pairs['Similarity']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 20 Similar Performance Profile Pairs",
+        xaxis_title="Strategy Pair",
+        yaxis_title="Similarity Score",
+        height=500,
+        xaxis={'tickangle': -45}
+    )
+    
+    return fig
+
+# Callback for security overlap
+@app.callback(
+    Output('security-overlap-chart', 'figure'),
+    Input('security-overlap-chart', 'id')
+)
+def update_security_overlap(_):
+    if len(security_sim_df) == 0:
+        return go.Figure().add_annotation(text="No security overlap pairs found", xref="paper", yref="paper", x=0.5, y=0.5)
+    
+    # Get top 20 pairs
+    top_pairs = security_sim_df.head(20)
+    
+    labels = [f"S{int(row['Strategy1'])}-S{int(row['Strategy2'])}" for _, row in top_pairs.iterrows()]
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=labels,
+        y=top_pairs['JaccardSimilarity'],
+        marker=dict(
+            color=top_pairs['JaccardSimilarity'],
+            colorscale='Blues',
+            showscale=True,
+            colorbar=dict(title="Jaccard Similarity")
+        ),
+        text=[f"{x:.3f}" for x in top_pairs['JaccardSimilarity']],
+        textposition='outside'
+    ))
+    
+    fig.update_layout(
+        title="Top 20 Strategies with Similar Security Usage",
+        xaxis_title="Strategy Pair",
+        yaxis_title="Jaccard Similarity (Security Overlap)",
+        height=500,
+        xaxis={'tickangle': -45}
+    )
+    
+    return fig
+
+# Store conversation history (in-memory fallback)
+conversation_history = {}
+
+# Callback for AI chat
+@app.callback(
+    [Output('chat-history', 'children'),
+     Output('chat-input', 'value')],
+    [Input('send-button', 'n_clicks'),
+     Input('chat-input', 'n_submit')],
+    [State('chat-input', 'value'),
+     State('chat-history', 'children')]
+)
+def update_chat(n_clicks, n_submit, user_input, current_history):
+    """Handle chat interactions with Redis persistence"""
+    if not user_input or (not n_clicks and not n_submit):
+        return current_history or [], ""
+    
+    # Use default session ID (could be enhanced with user sessions)
+    session_id = 'default'
+    
+    # Get conversation history from Redis or memory
+    if session_id not in conversation_history:
+        conversation_history[session_id] = get_conversation_history(session_id)
+    
+    # Get current history or initialize
+    if current_history is None:
+        history_divs = []
+    else:
+        history_divs = current_history if isinstance(current_history, list) else [current_history]
+    
+    # Add user message
+    user_msg = html.Div([
+        html.Strong("You: "),
+        html.Span(user_input)
+    ], className="mb-3 text-end", style={'text-align': 'right', 'color': '#0066cc'})
+    history_divs.append(user_msg)
+    
+    # Get AI response
+    try:
+        # Check Redis cache for common queries
+        query_cache_key = f"ai_response:{hash(user_input.lower().strip())}"
+        cached_response = redis_get(query_cache_key)
+        
+        if cached_response:
+            ai_response = cached_response
+            print(f"  ✓ Using cached AI response")
+        else:
+            ai_response = get_ai_response(user_input, conversation_history[session_id])
+            # Cache the response for 1 hour
+            redis_set(query_cache_key, ai_response, expire=3600)
+        
+        # Add to conversation history for context
+        conversation_history[session_id].append({"role": "user", "content": user_input})
+        conversation_history[session_id].append({"role": "assistant", "content": ai_response})
+        
+        # Keep only last 10 exchanges to avoid token limits
+        if len(conversation_history[session_id]) > 20:
+            conversation_history[session_id] = conversation_history[session_id][-20:]
+        
+        # Save to Redis
+        save_conversation_history(session_id, conversation_history[session_id])
+        
+    except Exception as e:
+        ai_response = f"Error: {str(e)}"
+    
+    # Add AI response
+    ai_msg = html.Div([
+        html.Strong("AI Assistant: "),
+        html.Span(ai_response, style={'white-space': 'pre-wrap'})
+    ], className="mb-3", style={'color': '#28a745'})
+    history_divs.append(ai_msg)
+    
+    # Clear input
+    return history_divs, ""
+
+# Callback to clear Redis cache
+@app.callback(
+    Output('cache-status', 'children'),
+    Input('clear-cache-btn', 'n_clicks'),
+    prevent_initial_call=True
+)
+def clear_cache(n_clicks):
+    """Clear all Redis cache"""
+    if not REDIS_AVAILABLE or redis_client is None:
+        return " (Redis not available)"
+    
+    try:
+        # Clear specific cache keys
+        cache_keys = [
+            "strategy_correlation_matrix",
+            "strategy_similarity_matrix",
+            "top_strategies_list"
+        ]
+        cleared_count = 0
+        for key in cache_keys:
+            if redis_delete(key):
+                cleared_count += 1
+        
+        # Clear all chat history
+        try:
+            keys = redis_client.keys("chat_history:*")
+            if keys:
+                redis_client.delete(*keys)
+                cleared_count += len(keys)
+        except:
+            pass
+        
+        # Clear AI response cache
+        try:
+            ai_keys = redis_client.keys("ai_response:*")
+            if ai_keys:
+                redis_client.delete(*ai_keys)
+                cleared_count += len(ai_keys)
+        except:
+            pass
+        
+        return f" → Cleared {cleared_count} keys ✓"
+    except Exception as e:
+        return f" → Error: {str(e)}"
+
+if __name__ == '__main__':
+    print("\n" + "="*80)
+    print("Starting Dash Dashboard...")
+    print("="*80)
+    print("\nDashboard will be available at: http://127.0.0.1:8050")
+    print("Press Ctrl+C to stop the server\n")
+    app.run_server(debug=True, host='127.0.0.1', port=8050)

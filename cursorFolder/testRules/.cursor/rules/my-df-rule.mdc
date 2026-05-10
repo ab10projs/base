@@ -1,0 +1,46 @@
+---
+description: Python files — prefer Polars for DataFrames; add # my-df-rule used once per file
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Python dataframes (my-df-rule)
+
+Requirements (apply whenever this rule is in scope for `**/*.py`):
+
+1. **Scope** — Use this guidance whenever **Python code** is **created or changed** in a `.py` file (rule matches all Python sources via globs).
+2. **DataFrames** — **Prefer Polars** over other libraries when introducing or building DataFrame-style tabular code.
+3. **Marker** — In every such file, include this exact comment text once (Python line comment): `# my-df-rule used`. Do not duplicate if it already exists.
+
+## Library choice
+
+- Prefer **Polars** (`import polars as pl`) for tabular data and DataFrame-style work.
+- Avoid introducing **pandas** for new code unless the user explicitly asks for pandas, an existing file is pandas-only, or Polars cannot meet a stated constraint (e.g. required third-party API).
+- Use `pl.DataFrame`, `pl.LazyFrame`, and Polars expressions/lazy APIs where appropriate.
+
+## Marker comment
+
+When **creating** a new Python file or **editing** an existing one while this rule applies, ensure the file contains this exact comment (ASCII) somewhere appropriate:
+
+`# my-df-rule used`
+
+- Prefer placing it near the top of the file: immediately after the module docstring (if any) and optional `from __future__` imports, and before other imports—unless the file structure makes a different single location clearly better.
+- Add it only once per file unless the user asks otherwise.
+- If the file already contains this exact comment, do not duplicate it.
+
+## Examples
+
+```python
+# my-df-rule used
+import polars as pl
+
+df = pl.DataFrame({"a": [1, 2], "b": [3, 4]})
+```
+
+```python
+"""Package entry."""
+# my-df-rule used
+from __future__ import annotations
+
+import polars as pl
+```
