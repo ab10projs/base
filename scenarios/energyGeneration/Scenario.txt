@@ -1,0 +1,14 @@
+Energy is traded in exchange where generating companies participate to sell the energy they generate.
+The spot price is based on the bid and ask price submitted.
+For a generation company, the profitability is dependent on their ability to bid as low as possible, however
+maintaining the profitability.
+
+
+Here we are assuming the generating compay has wind, solar , coal, gas as source electricity generation capabilities.
+
+To bid low, the generating company should be able to predict the demand every hour and also predict the how much they can 
+generate using cheaper options (like solar, wind) and fulfill the remaining gap using coal and gas, minimizing opportunity 
+lost and over production. 
+
+
+

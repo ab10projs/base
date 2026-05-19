@@ -39,7 +39,8 @@ for date in allDates:
         redis_value.append(str(df['Close_Price'][0]) + "_" + file.split('.')[0].split('.')[0])
         
     # print(redis_value)
-    r.set(str(date), json.dumps(redis_value), ex=2)
+    # r.set(str(date), json.dumps(redis_value), ex=2)
+    r.set(str(date), json.dumps(redis_value))
 
     count = len(allFiles)
 
