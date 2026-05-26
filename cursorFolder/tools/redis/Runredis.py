@@ -11,7 +11,7 @@ import time
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 
-path = "C:\\cursorFolder\\tok\\files"
+path = "C:\\Anupam\\GIT\\base\\cursorFolder\\tools\\files"
 
 allFiles = os.listdir(path)
 allDF = {}
@@ -25,7 +25,7 @@ for file in allFiles:
     
 allDates = allDates.sort(descending=False)
 
-# print(allDates)
+print(allDates)
 
 for date in allDates:
     print(date)
@@ -46,7 +46,8 @@ for date in allDates:
 
     for i in range(count):
         print(json.loads( r.get(str(date)))[i])
-        
+        print(json.loads( r.get(str(date)))[i].split('_')[0])
+    
         
     time.sleep(1)
     print("--------------------------------")
