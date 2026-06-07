@@ -83,6 +83,7 @@ GRID_GREY = "#e6e6e6"
 
 app.layout = html.Div([
     dcc.Graph(id="scatter-chart"),
+    dcc.Graph(id="line-chart"),
     # Fires every second
     dcc.Interval(
         id="interval-component",
@@ -94,6 +95,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output("scatter-chart", "figure"),
+    Output("line-chart", "figure"),
     Input("interval-component", "n_intervals")
 )
 
@@ -106,11 +108,13 @@ def update_chart(n_intervals):
     else:
         counter = n_intervals % len(xListDate)
  
-
+    #--- this filtered dataframe is common to all the plots starting from here----
     filtered = df.filter(
         pl.col("DATE1") == xListDate[counter]
     )
+    #--- this filtered dataframe is common to all the plots ending here----
 
+    #--- Fig1 is for scatter plot live simulation----
     fig1 = go.Figure(
         go.Scatter(
             x=filtered["SYMBOL"].to_list()[:5000],
@@ -147,9 +151,25 @@ def update_chart(n_intervals):
     fig1.update_layout(
     width=600,   # chart width in pixels
     height=400   # chart height in pixels
-)
+    )
+    #--- Fig1 is for scatter plot live simulation----
 
-    return fig1
+    #--- Fig 2 is line plot of a particular symbol----
+    filteredScrip1 = df.filter([(pl.col("SYMBOL") == "ACC") & (pl.col("DATE1") <= xListDate[counter])])
+    fig2 = go.Figure(
+        go.Line(
+            x=filteredScrip1["DATE1"].to_list(),
+            y=filteredScrip1["CLOSE_PRICE"].to_list(),
+            mode='markers'
+        )
+    )
+    fig2.update_layout(
+        width=600,   # chart width in pixels
+        height=400   # chart height in pixels
+    )
+    #--- Fig 2 is line plot of a particular symbol----
+
+    return fig1, fig2   
 
 if __name__ == "__main__":
     app.run(debug=True)
