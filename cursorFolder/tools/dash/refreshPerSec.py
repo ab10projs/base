@@ -160,12 +160,18 @@ def update_chart(n_intervals):
         go.Line(
             x=filteredScrip1["DATE1"].to_list(),
             y=filteredScrip1["CLOSE_PRICE"].to_list(),
-            mode='markers'
+            mode='markers',
+            marker=dict(size=3,
+                        color= filteredScrip1["CLOSE_PRICE"],
+                        colorscale="Viridis",  
+                        opacity=0.9, 
+                        line=dict(width=0.8)  
+                        ),
         )
     )
     fig2.update_layout(
         width=600,   # chart width in pixels
-        height=400   # chart height in pixels
+        height=300   # chart height in pixels
     )
     #--- Fig 2 is line plot of a particular symbol----
 
