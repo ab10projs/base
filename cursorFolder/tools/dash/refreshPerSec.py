@@ -81,21 +81,120 @@ TEXT_BLACK = "#000000"
 GRID_GREY = "#e6e6e6"
 
 
-app.layout = html.Div([
-    dcc.Graph(id="scatter-chart"),
-    dcc.Graph(id="line-chart"),
-    # Fires every second
-    dcc.Interval(
-        id="interval-component",
-        interval=350,  # milliseconds
-        n_intervals=0
-    )
-])
+app.layout = dbc.Container(
+    fluid=True,
+    className="p-3",
+    children=[
+
+        dbc.Row(
+            dbc.Col(
+                html.H2(
+                    "Live Data Streaming",
+                    className="text-center mb-4"
+                )
+            )
+        ),
+
+dbc.Row(
+    [
+        # Left Scatter Plot
+        dbc.Col(
+            dbc.Card(
+                dbc.CardBody(
+                    dcc.Graph(
+                        id="scatter-chart",
+                        style={"height": "350px"}
+                    )
+                )
+            ),
+            width=4,
+        ),
+
+        # Middle Column
+        dbc.Col(
+            [
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(
+                            id="line-chart-1",
+                            style={"height": "150px"}
+                        )
+                    ),
+                    className="mb-3",
+                ),
+
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(
+                            id="line-chart-2",
+                            style={"height": "150px"}
+                        )
+                    )
+                ),
+            ],
+            width=4,
+        ),
+
+        # Right Column
+        dbc.Col(
+            [
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(
+                            id="line-chart-3",
+                            style={"height": "150px"}
+                        )
+                    ),
+                    className="mb-3",
+                ),
+
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(
+                            id="line-chart-4",
+                            style={"height": "150px"}
+                        )
+                    )
+                ),
+            ],
+            width=4,
+        ),
+    ],
+    className="g-3",
+),
+
+        dcc.Interval(
+            id="interval-component",
+            interval=300,
+            n_intervals=0,
+        ),
+    ],
+)
+
+
+
+
+
+# #---- Old Layout Starts Here ----
+# app.layout = html.Div([
+#     dcc.Graph(id="scatter-chart"),
+#     dcc.Graph(id="line-chart"),
+#     # Fires every second
+#     dcc.Interval(
+#         id="interval-component",
+#         interval=350,  # milliseconds
+#         n_intervals=0
+#     )
+# ])
+# #---- Old Layout Ends Here ----
 
 
 @app.callback(
     Output("scatter-chart", "figure"),
-    Output("line-chart", "figure"),
+    Output("line-chart-1", "figure"),
+    Output("line-chart-2", "figure"),
+    Output("line-chart-3", "figure"),
+    Output("line-chart-4", "figure"),
     Input("interval-component", "n_intervals")
 )
 
@@ -147,11 +246,15 @@ def update_chart(n_intervals):
                             paper_bgcolor='white',
                             plot_bgcolor='white'
                         )
-
     fig1.update_layout(
-    width=600,   # chart width in pixels
-    height=400   # chart height in pixels
-    )
+    margin=dict(l=20, r=20, t=30, b=20),
+    template="plotly_white",
+)
+
+    # fig1.update_layout(
+    # width=600,   # chart width in pixels
+    # height=400   # chart height in pixels
+    # )
     #--- Fig1 is for scatter plot live simulation----
 
     #--- Fig 2 is line plot of a particular symbol----
@@ -170,12 +273,12 @@ def update_chart(n_intervals):
         )
     )
     fig2.update_layout(
-        width=600,   # chart width in pixels
-        height=300   # chart height in pixels
-    )
+    margin=dict(l=20, r=20, t=30, b=20),
+    template="plotly_white",
+)
     #--- Fig 2 is line plot of a particular symbol----
 
-    return fig1, fig2   
+    return fig1, fig2 , fig2  ,fig2, fig2
 
 if __name__ == "__main__":
     app.run(debug=True)
