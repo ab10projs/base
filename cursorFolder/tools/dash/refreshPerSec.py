@@ -92,18 +92,16 @@ app.layout = dbc.Container(
                 dbc.Tab(
                     label="Dashboard",
                     children=[
-
                         dbc.Row(
-                            dbc.Col(
-                                html.H2(
-                                    "Live Data Streaming",
-                                    className="text-center mb-4"
-                                )
-                            )
-                        ),
+                            [
+                                html.H3("About this Platform", className="mb-0")
+                            ],
+                        ),                     
+                        
 
                         dbc.Row(
                             [
+                                
                                 # Left Scatter Plot
                                 dbc.Col(
                                     dbc.Card(
@@ -226,7 +224,7 @@ def update_chart(n_intervals):
 
     #--- Fig1 is for scatter plot live simulation---- start
     fig1 = go.Figure(
-        go.Scatter(
+        go.Scattergl(
             x=filtered["SYMBOL"].to_list()[:5000],
             y=filtered["CLOSE_PRICE"].to_list(), mode='markers', 
                         marker=dict(size=2,
@@ -266,7 +264,7 @@ def update_chart(n_intervals):
 #--- Fig2 is for line plot of a particular symbol---- start
     filteredScrip1 = df.filter([(pl.col("SYMBOL") == "ICICIBANK") & (pl.col("DATE1") <= xListDate[counter])])
     fig2 = go.Figure(
-        go.Scatter(
+        go.Scattergl(
             x=filteredScrip1["DATE1"].to_list(),
             y=filteredScrip1["CLOSE_PRICE"].to_list(),
             mode='markers',
@@ -286,7 +284,7 @@ def update_chart(n_intervals):
 #--- Fig3 is for line plot of a particular symbol---- start
     filteredScrip3 = df.filter([(pl.col("SYMBOL") == "RELIANCE") & (pl.col("DATE1") <= xListDate[counter])])
     fig3 = go.Figure(
-        go.Scatter(
+        go.Scattergl(
             x=filteredScrip3["DATE1"].to_list(),
             y=filteredScrip3["CLOSE_PRICE"].to_list(),
             mode='markers',
@@ -306,7 +304,7 @@ def update_chart(n_intervals):
 #--- Fig4 is for line plot of a particular symbol---- start
     filteredScrip4 = df.filter([(pl.col("SYMBOL") == "BHEL") & (pl.col("DATE1") <= xListDate[counter])])
     fig4 = go.Figure(
-        go.Scatter(
+        go.Scattergl(
             x=filteredScrip4["DATE1"].to_list(),
             y=filteredScrip4["CLOSE_PRICE"].to_list(),
             mode='markers',
@@ -329,7 +327,7 @@ def update_chart(n_intervals):
 #--- Fig5 is for line plot of a particular symbol---- start
     filteredScrip5 = df.filter([(pl.col("SYMBOL") == "HAL") & (pl.col("DATE1") <= xListDate[counter])])
     fig5 = go.Figure(
-        go.Scatter(
+        go.Scattergl(
             x=filteredScrip5["DATE1"].to_list(),
             y=filteredScrip5["CLOSE_PRICE"].to_list(),
             mode='markers',
